@@ -46,7 +46,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </JFXButton>
-                  <JFXButton fx:id="btnPlayList" graphicTextGap="45.0" prefHeight="50.0" prefWidth="165.0" text="Playlist" textFill="WHITE">
+                  <JFXButton fx:id="btnPlayList" graphicTextGap="45.0" onAction="#desplegarPantallaPlayList" prefHeight="50.0" prefWidth="165.0" text="Playlist" textFill="WHITE">
                      <graphic>
                         <FontAwesomeIconView fill="WHITE" glyphName="PLAY" size="25" />
                      </graphic>
@@ -54,7 +54,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </JFXButton>
-                  <JFXButton graphicTextGap="40.0" prefHeight="50.0" prefWidth="165.0" text="Historial" textFill="WHITE">
+                  <JFXButton graphicTextGap="40.0" onAction="#desplegarPantallaHistorial" prefHeight="50.0" prefWidth="165.0" text="Historial" textFill="WHITE">
                      <graphic>
                         <FontAwesomeIconView fill="WHITE" glyphName="HISTORY" size="25" />
                      </graphic>
