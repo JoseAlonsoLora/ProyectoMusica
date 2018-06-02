@@ -19,7 +19,14 @@
          <children>
             <VBox prefHeight="630.0" prefWidth="1120.0">
                <children>
-                  <StackPane fx:id="pnlPrincipal" prefHeight="608.0" prefWidth="1120.0" style="-fx-background-color: #ecf0f1;" />
+                  <StackPane fx:id="pnlPrincipal" prefHeight="608.0" prefWidth="1120.0" style="-fx-background-color: #ecf0f1;">
+                     <children>
+                        <JFXButton onAction="#desplegarPantallaAgregarBiblioteca" style="-fx-background-color: #000000;" text="Nuevo álbum " textFill="WHITE">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </JFXButton>
+                     </children></StackPane>
                   <StackPane fx:id="pnlCancion" prefHeight="67.0" prefWidth="1120.0" style="-fx-background-color: #252525;" />
                </children>
             </VBox>

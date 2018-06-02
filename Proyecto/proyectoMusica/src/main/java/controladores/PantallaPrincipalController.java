@@ -6,7 +6,6 @@
 package controladores;
 
 import com.jfoenix.controls.JFXButton;
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -16,7 +15,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
 /**
@@ -63,6 +61,15 @@ public class PantallaPrincipalController implements Initializable {
         FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaHistorial.fxml"));
         Parent root = (Parent) loader.load();
         PantallaHistorialController pantallaHistorial = loader.getController();
+        pnlPrincipal.getChildren().clear();
+        pnlPrincipal.getChildren().add(root);
+    }
+    
+    @FXML
+    private void desplegarPantallaAgregarBiblioteca(javafx.event.ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaAgregarBiblioteca.fxml"));
+        Parent root = (Parent) loader.load();
+        PantallaAgregarBibliotecaController pantallaAgregarAlbum = loader.getController();
         pnlPrincipal.getChildren().clear();
         pnlPrincipal.getChildren().add(root);
     }
