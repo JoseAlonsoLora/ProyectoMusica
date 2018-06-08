@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author raymundo
+ * @author Irdevelo
  */
 @Entity
 @Table(name = "album")
@@ -54,14 +54,14 @@ public class Album implements Serializable {
     @JoinColumn(name = "artista_idArtista", referencedColumnName = "idArtista", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Artista artista;
+    @JoinColumn(name = "genero_idGenero", referencedColumnName = "idGenero", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Genero genero;
     @JoinColumns({
         @JoinColumn(name = "biblioteca_idBiblioteca", referencedColumnName = "idBiblioteca", insertable = false, updatable = false)
         , @JoinColumn(name = "biblioteca_usuario_nombreUsuario", referencedColumnName = "usuario_nombreUsuario", insertable = false, updatable = false)})
     @ManyToOne(optional = false)
     private Biblioteca biblioteca;
-    @JoinColumn(name = "genero_idGenero", referencedColumnName = "idGenero", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Genero genero;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "album")
     private List<Cancion> cancionList;
 
@@ -121,20 +121,20 @@ public class Album implements Serializable {
         this.artista = artista;
     }
 
-    public Biblioteca getBiblioteca() {
-        return biblioteca;
-    }
-
-    public void setBiblioteca(Biblioteca biblioteca) {
-        this.biblioteca = biblioteca;
-    }
-
     public Genero getGenero() {
         return genero;
     }
 
     public void setGenero(Genero genero) {
         this.genero = genero;
+    }
+
+    public Biblioteca getBiblioteca() {
+        return biblioteca;
+    }
+
+    public void setBiblioteca(Biblioteca biblioteca) {
+        this.biblioteca = biblioteca;
     }
 
     @XmlTransient

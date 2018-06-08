@@ -24,7 +24,7 @@ import modelo.CancionPK;
 
 /**
  *
- * @author raymundo
+ * @author Irdevelo
  */
 @Stateless
 @Path("modelo.cancion")
@@ -76,14 +76,14 @@ public class CancionFacadeREST extends AbstractFacade<Cancion> {
 
     @POST
     @Override
-    @Consumes({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Cancion entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void edit(@PathParam("id") PathSegment id, Cancion entity) {
         super.edit(entity);
     }
@@ -97,7 +97,7 @@ public class CancionFacadeREST extends AbstractFacade<Cancion> {
 
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Cancion find(@PathParam("id") PathSegment id) {
         modelo.CancionPK key = getPrimaryKey(id);
         return super.find(key);
@@ -105,14 +105,14 @@ public class CancionFacadeREST extends AbstractFacade<Cancion> {
 
     @GET
     @Override
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Cancion> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Cancion> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }

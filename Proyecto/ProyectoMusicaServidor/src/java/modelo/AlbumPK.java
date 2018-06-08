@@ -12,7 +12,7 @@ import javax.persistence.Embeddable;
 
 /**
  *
- * @author raymundo
+ * @author Irdevelo
  */
 @Embeddable
 public class AlbumPK implements Serializable {
