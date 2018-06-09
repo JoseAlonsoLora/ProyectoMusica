@@ -61,9 +61,9 @@ public class PantallaPrincipalController implements Initializable {
 
     @FXML
     private void desplegarPantallaPlayList(javafx.event.ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaCancionesPlayList.fxml"));
+        FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaListasReproduccion.fxml"));
         Parent root = (Parent) loader.load();
-        PantallaCancionesPlayListController pantallaPlayList = loader.getController();
+        PantallaListasReproduccionController pantallaPlayList = loader.getController();
         pnlPrincipal.getChildren().clear();
         pnlPrincipal.getChildren().add(root);
     }

@@ -1,30 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXListView?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane prefHeight="608.0" prefWidth="1120.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.PantallaListasReproduccionController">
    <center>
       <AnchorPane id="AnchorPane" prefHeight="434.0" prefWidth="915.0">
          <children>
-            <ScrollPane layoutY="59.0" prefHeight="403.0" prefWidth="905.0">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
-              </content>
-            </ScrollPane>
             <Label layoutX="374.0" layoutY="17.0" text="Listas de reproducción">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <JFXButton layoutX="866.0" layoutY="18.0" style="-fx-background-color: #252525;" text="">
+            <JFXListView fx:id="lstListas" layoutY="58.0" prefHeight="417.0" prefWidth="922.0" />
+            <JFXButton fx:id="btnNuvaLista" layoutX="866.0" layoutY="18.0" onAction="#crearNuevaLista" style="-fx-background-color: #252525;" text="">
                <graphic>
                   <FontAwesomeIconView fill="WHITE" glyphName="PLUS_CIRCLE" size="20" />
                </graphic>
