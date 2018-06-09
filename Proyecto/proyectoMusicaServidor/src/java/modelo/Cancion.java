@@ -52,7 +52,7 @@ public class Cancion implements Serializable {
     @Basic(optional = false)
     @Column(name = "nombreArchivo")
     private String nombreArchivo;
-    @JoinTable(name = "listareproduccion_has_cancion", joinColumns = {
+    @JoinTable(name = "listaReproduccion_has_cancion", joinColumns = {
         @JoinColumn(name = "cancion_idCancion", referencedColumnName = "idCancion")}, inverseJoinColumns = {
         @JoinColumn(name = "listaReproduccion_idlistaReproduccion", referencedColumnName = "idlistaReproduccion")})
     @ManyToMany
