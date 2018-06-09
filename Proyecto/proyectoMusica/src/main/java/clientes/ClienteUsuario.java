@@ -8,6 +8,8 @@ package clientes;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
+import modelo.Usuario;
 
 /**
  * Jersey REST client generated for REST resource:UsuarioFacadeREST
@@ -43,10 +45,10 @@ public class ClienteUsuario {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
-    public <T> T find(Class<T> responseType, String id) throws ClientErrorException {
+    public Usuario find(String id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(new GenericType<Usuario>(){});
     }
 
     public <T> T findRange(Class<T> responseType, String from, String to) throws ClientErrorException {

@@ -64,6 +64,7 @@ public class PantallaPrincipalController implements Initializable {
         FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaListasReproduccion.fxml"));
         Parent root = (Parent) loader.load();
         PantallaListasReproduccionController pantallaPlayList = loader.getController();
+        pantallaPlayList.setPanelPrincipal(pnlPrincipal);
         pnlPrincipal.getChildren().clear();
         pnlPrincipal.getChildren().add(root);
     }

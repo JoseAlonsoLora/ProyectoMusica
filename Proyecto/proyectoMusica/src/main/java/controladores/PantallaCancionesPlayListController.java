@@ -11,6 +11,8 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import modelo.Listareproduccion;
 
 /**
  * FXML Controller class
@@ -23,6 +25,8 @@ public class PantallaCancionesPlayListController implements Initializable {
     private Label lblPlaylist;
     @FXML
     private JFXButton btnDescargar;
+    private StackPane panelPrincipal;
+    private Listareproduccion lista;
 
     /**
      * Initializes the controller class.
@@ -31,5 +35,18 @@ public class PantallaCancionesPlayListController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+
+    public void setPanelPrincipal(StackPane panelPrincipal) {
+        this.panelPrincipal = panelPrincipal;
+    }
+
+    public void setLista(Listareproduccion lista) {
+        this.lista = lista;
+        lblPlaylist.setText(lista.getNombre());
+    }
+    
+    
+    
+    
     
 }
