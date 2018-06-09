@@ -1,0 +1,24 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 08-jun-2018, 22:54:49
+    Author     : alonso
+*/
+
+.button {
+    -jfx-button-type: RAISED;
+    -fx-background-color: #252525;
+    -fx-background-radius: 5em; 
+    -fx-min-width: 35px;
+    -fx-min-height: 35px; 
+    -fx-max-width: 35px; 
+    -fx-max-height: 35px;
+}
+
+.button:pressed{
+    -fx-rotate: 3;
+    -fx-translate-y: -2; 
+}

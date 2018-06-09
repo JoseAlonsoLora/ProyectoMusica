@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.StackPane?>
+<?import com.jfoenix.controls.JFXTabPane?>
+
+<StackPane id="AnchorPane" prefHeight="608.0" prefWidth="1120.0" stylesheets="@../styles/tabPaneCss.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.PantallaMiBibliotecaController">
+    <JFXTabPane fx:id="mainTabPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <tabs>
+            <Tab fx:id="tbCanciones" text="Canciones">
+                <content>
+                    <StackPane fx:id="pnlCanciones" prefHeight="400.0" prefWidth="1120.0"/>                        
+                </content>
+            </Tab>
+            <Tab fx:id="tbArtistas" text="Artistas">
+                <content>
+                    <StackPane fx:id="pnlArtistas" prefHeight="400.0" prefWidth="1120.0"/>                        
+                </content>
+            </Tab>                
+            <Tab fx:id="tbAlbum" text="Album">
+                <content>
+                    <StackPane fx:id="pnlAlbum" prefHeight="400.0" prefWidth="1120.0"/>                        
+                </content>
+            </Tab>
+            <Tab fx:id="tbGenero" text="Género">
+                <content>
+                    <StackPane fx:id="pnlGenero" prefHeight="400.0" prefWidth="1120.0"/>                        
+                </content>
+            </Tab>
+        </tabs>
+    </JFXTabPane>
+
+</StackPane>

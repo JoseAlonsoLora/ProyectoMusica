@@ -9,6 +9,9 @@ import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -44,7 +47,16 @@ public class PantallaPrincipalController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        pnlCancion.getStyleClass().add("pane");
+        try {
+            crearPantallaMiBiblioteca();
+            FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaReproducirCancion.fxml"));
+            Parent root = (Parent) loader.load();
+            pnlCancion.getChildren().clear();
+            pnlCancion.getChildren().add(root);
+        } catch (IOException ex) {
+            Logger.getLogger(PantallaPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @FXML
@@ -64,7 +76,7 @@ public class PantallaPrincipalController implements Initializable {
         pnlPrincipal.getChildren().clear();
         pnlPrincipal.getChildren().add(root);
     }
-    
+
     @FXML
     private void desplegarPantallaAgregarBiblioteca(javafx.event.ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaAgregarBiblioteca.fxml"));
@@ -73,4 +85,23 @@ public class PantallaPrincipalController implements Initializable {
         pnlPrincipal.getChildren().clear();
         pnlPrincipal.getChildren().add(root);
     }
+
+    @FXML
+    private void desplegarMiBiblioteca(ActionEvent event) {
+        crearPantallaMiBiblioteca();
+    }
+    
+    private void crearPantallaMiBiblioteca(){
+        FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaMiBiblioteca.fxml"));
+        Parent root;
+        try {
+            root = (Parent) loader.load();
+            pnlPrincipal.getChildren().clear();
+            pnlPrincipal.getChildren().add(root);
+        } catch (IOException ex) {
+            Logger.getLogger(PantallaPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
 }
