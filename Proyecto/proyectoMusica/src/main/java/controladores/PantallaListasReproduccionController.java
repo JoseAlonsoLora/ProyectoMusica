@@ -17,6 +17,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 import modelo.Listareproduccion;
 
 /**
@@ -41,7 +46,7 @@ public class PantallaListasReproduccionController implements Initializable {
     }
 
     public void mostrarListas() {
-        nombresListas = new ArrayList();
+        nombresListas = new ArrayList();        
         ClienteListaReproduccion clienteLista = new ClienteListaReproduccion();
         List<Listareproduccion> listas = clienteLista.findAll();
         for(Listareproduccion lista: listas){

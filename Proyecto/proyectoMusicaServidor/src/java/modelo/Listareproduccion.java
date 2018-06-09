@@ -78,7 +78,7 @@ public class Listareproduccion implements Serializable {
         this.nombre = nombre;
     }
 
-    @XmlTransient
+    
     public List<Cancion> getCancionList() {
         return cancionList;
     }
