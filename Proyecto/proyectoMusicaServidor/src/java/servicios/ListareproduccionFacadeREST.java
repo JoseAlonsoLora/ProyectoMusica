@@ -18,61 +18,61 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import modelo.Usuario;
+import modelo.Listareproduccion;
 
 /**
  *
  * @author raymundo
  */
 @Stateless
-@Path("modelo.usuario")
-public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
+@Path("modelo.listareproduccion")
+public class ListareproduccionFacadeREST extends AbstractFacade<Listareproduccion> {
 
-    @PersistenceContext(unitName = "ServidorProyectoMusicaPU")
+    @PersistenceContext(unitName = "proyectoMusicaServidorPU")
     private EntityManager em;
 
-    public UsuarioFacadeREST() {
-        super(Usuario.class);
+    public ListareproduccionFacadeREST() {
+        super(Listareproduccion.class);
     }
 
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_JSON})
-    public void create(Usuario entity) {
+    public void create(Listareproduccion entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") String id, Usuario entity) {
+    public void edit(@PathParam("id") Integer id, Listareproduccion entity) {
         super.edit(entity);
     }
 
     @DELETE
     @Path("{id}")
-    public void remove(@PathParam("id") String id) {
+    public void remove(@PathParam("id") Integer id) {
         super.remove(super.find(id));
     }
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Usuario find(@PathParam("id") String id) {
+    public Listareproduccion find(@PathParam("id") Integer id) {
         return super.find(id);
     }
 
     @GET
     @Override
     @Produces({MediaType.APPLICATION_JSON})
-    public List<Usuario> findAll() {
+    public List<Listareproduccion> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<Usuario> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    public List<Listareproduccion> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 

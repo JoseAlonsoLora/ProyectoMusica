@@ -9,8 +9,10 @@ import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -29,45 +31,43 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Listareproduccion.findAll", query = "SELECT l FROM Listareproduccion l")
-    , @NamedQuery(name = "Listareproduccion.findByIdlistaReproduccion", query = "SELECT l FROM Listareproduccion l WHERE l.listareproduccionPK.idlistaReproduccion = :idlistaReproduccion")
-    , @NamedQuery(name = "Listareproduccion.findByNombre", query = "SELECT l FROM Listareproduccion l WHERE l.nombre = :nombre")
-    , @NamedQuery(name = "Listareproduccion.findByUsuarionombreUsuario", query = "SELECT l FROM Listareproduccion l WHERE l.listareproduccionPK.usuarionombreUsuario = :usuarionombreUsuario")})
+    , @NamedQuery(name = "Listareproduccion.findByIdlistaReproduccion", query = "SELECT l FROM Listareproduccion l WHERE l.idlistaReproduccion = :idlistaReproduccion")
+    , @NamedQuery(name = "Listareproduccion.findByNombre", query = "SELECT l FROM Listareproduccion l WHERE l.nombre = :nombre")})
 public class Listareproduccion implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected ListareproduccionPK listareproduccionPK;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idlistaReproduccion")
+    private Integer idlistaReproduccion;
     @Basic(optional = false)
     @Column(name = "nombre")
     private String nombre;
     @ManyToMany(mappedBy = "listareproduccionList")
     private List<Cancion> cancionList;
-    @JoinColumn(name = "usuario_nombreUsuario", referencedColumnName = "nombreUsuario", insertable = false, updatable = false)
+    @JoinColumn(name = "usuario_nombreUsuario", referencedColumnName = "nombreUsuario")
     @ManyToOne(optional = false)
-    private Usuario usuario;
+    private Usuario usuarionombreUsuario;
 
     public Listareproduccion() {
     }
 
-    public Listareproduccion(ListareproduccionPK listareproduccionPK) {
-        this.listareproduccionPK = listareproduccionPK;
+    public Listareproduccion(Integer idlistaReproduccion) {
+        this.idlistaReproduccion = idlistaReproduccion;
     }
 
-    public Listareproduccion(ListareproduccionPK listareproduccionPK, String nombre) {
-        this.listareproduccionPK = listareproduccionPK;
+    public Listareproduccion(Integer idlistaReproduccion, String nombre) {
+        this.idlistaReproduccion = idlistaReproduccion;
         this.nombre = nombre;
     }
 
-    public Listareproduccion(int idlistaReproduccion, String usuarionombreUsuario) {
-        this.listareproduccionPK = new ListareproduccionPK(idlistaReproduccion, usuarionombreUsuario);
+    public Integer getIdlistaReproduccion() {
+        return idlistaReproduccion;
     }
 
-    public ListareproduccionPK getListareproduccionPK() {
-        return listareproduccionPK;
-    }
-
-    public void setListareproduccionPK(ListareproduccionPK listareproduccionPK) {
-        this.listareproduccionPK = listareproduccionPK;
+    public void setIdlistaReproduccion(Integer idlistaReproduccion) {
+        this.idlistaReproduccion = idlistaReproduccion;
     }
 
     public String getNombre() {
@@ -87,18 +87,18 @@ public class Listareproduccion implements Serializable {
         this.cancionList = cancionList;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public Usuario getUsuarionombreUsuario() {
+        return usuarionombreUsuario;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setUsuarionombreUsuario(Usuario usuarionombreUsuario) {
+        this.usuarionombreUsuario = usuarionombreUsuario;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (listareproduccionPK != null ? listareproduccionPK.hashCode() : 0);
+        hash += (idlistaReproduccion != null ? idlistaReproduccion.hashCode() : 0);
         return hash;
     }
 
@@ -109,7 +109,7 @@ public class Listareproduccion implements Serializable {
             return false;
         }
         Listareproduccion other = (Listareproduccion) object;
-        if ((this.listareproduccionPK == null && other.listareproduccionPK != null) || (this.listareproduccionPK != null && !this.listareproduccionPK.equals(other.listareproduccionPK))) {
+        if ((this.idlistaReproduccion == null && other.idlistaReproduccion != null) || (this.idlistaReproduccion != null && !this.idlistaReproduccion.equals(other.idlistaReproduccion))) {
             return false;
         }
         return true;
@@ -117,7 +117,7 @@ public class Listareproduccion implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.Listareproduccion[ listareproduccionPK=" + listareproduccionPK + " ]";
+        return "modelo.Listareproduccion[ idlistaReproduccion=" + idlistaReproduccion + " ]";
     }
     
 }

@@ -52,9 +52,9 @@ public class Usuario implements Serializable {
     @Basic(optional = false)
     @Column(name = "correo")
     private String correo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarionombreUsuario")
     private List<Biblioteca> bibliotecaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarionombreUsuario")
     private List<Listareproduccion> listareproduccionList;
 
     public Usuario() {

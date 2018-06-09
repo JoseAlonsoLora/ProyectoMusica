@@ -18,9 +18,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.PathSegment;
 import modelo.Biblioteca;
-import modelo.BibliotecaPK;
 
 /**
  *
@@ -30,29 +28,8 @@ import modelo.BibliotecaPK;
 @Path("modelo.biblioteca")
 public class BibliotecaFacadeREST extends AbstractFacade<Biblioteca> {
 
-    @PersistenceContext(unitName = "ServidorProyectoMusicaPU")
+    @PersistenceContext(unitName = "proyectoMusicaServidorPU")
     private EntityManager em;
-
-    private BibliotecaPK getPrimaryKey(PathSegment pathSegment) {
-        /*
-         * pathSemgent represents a URI path segment and any associated matrix parameters.
-         * URI path part is supposed to be in form of 'somePath;idBiblioteca=idBibliotecaValue;usuarionombreUsuario=usuarionombreUsuarioValue'.
-         * Here 'somePath' is a result of getPath() method invocation and
-         * it is ignored in the following code.
-         * Matrix parameters are used as field names to build a primary key instance.
-         */
-        modelo.BibliotecaPK key = new modelo.BibliotecaPK();
-        javax.ws.rs.core.MultivaluedMap<String, String> map = pathSegment.getMatrixParameters();
-        java.util.List<String> idBiblioteca = map.get("idBiblioteca");
-        if (idBiblioteca != null && !idBiblioteca.isEmpty()) {
-            key.setIdBiblioteca(new java.lang.Integer(idBiblioteca.get(0)));
-        }
-        java.util.List<String> usuarionombreUsuario = map.get("usuarionombreUsuario");
-        if (usuarionombreUsuario != null && !usuarionombreUsuario.isEmpty()) {
-            key.setUsuarionombreUsuario(usuarionombreUsuario.get(0));
-        }
-        return key;
-    }
 
     public BibliotecaFacadeREST() {
         super(Biblioteca.class);
@@ -68,23 +45,21 @@ public class BibliotecaFacadeREST extends AbstractFacade<Biblioteca> {
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") PathSegment id, Biblioteca entity) {
+    public void edit(@PathParam("id") Integer id, Biblioteca entity) {
         super.edit(entity);
     }
 
     @DELETE
     @Path("{id}")
-    public void remove(@PathParam("id") PathSegment id) {
-        modelo.BibliotecaPK key = getPrimaryKey(id);
-        super.remove(super.find(key));
+    public void remove(@PathParam("id") Integer id) {
+        super.remove(super.find(id));
     }
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Biblioteca find(@PathParam("id") PathSegment id) {
-        modelo.BibliotecaPK key = getPrimaryKey(id);
-        return super.find(key);
+    public Biblioteca find(@PathParam("id") Integer id) {
+        return super.find(id);
     }
 
     @GET

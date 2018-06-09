@@ -28,7 +28,7 @@ import modelo.Genero;
 @Path("modelo.genero")
 public class GeneroFacadeREST extends AbstractFacade<Genero> {
 
-    @PersistenceContext(unitName = "ServidorProyectoMusicaPU")
+    @PersistenceContext(unitName = "proyectoMusicaServidorPU")
     private EntityManager em;
 
     public GeneroFacadeREST() {

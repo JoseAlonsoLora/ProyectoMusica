@@ -26,44 +26,44 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author raymundo
  */
 @Entity
-@Table(name = "genero")
+@Table(name = "artista")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Genero.findAll", query = "SELECT g FROM Genero g")
-    , @NamedQuery(name = "Genero.findByIdGenero", query = "SELECT g FROM Genero g WHERE g.idGenero = :idGenero")
-    , @NamedQuery(name = "Genero.findByNombre", query = "SELECT g FROM Genero g WHERE g.nombre = :nombre")})
-public class Genero implements Serializable {
+    @NamedQuery(name = "Artista.findAll", query = "SELECT a FROM Artista a")
+    , @NamedQuery(name = "Artista.findByIdArtista", query = "SELECT a FROM Artista a WHERE a.idArtista = :idArtista")
+    , @NamedQuery(name = "Artista.findByNombre", query = "SELECT a FROM Artista a WHERE a.nombre = :nombre")})
+public class Artista implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "idGenero")
-    private Integer idGenero;
+    @Column(name = "idArtista")
+    private Integer idArtista;
     @Basic(optional = false)
     @Column(name = "nombre")
     private String nombre;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "genero")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "artistaidArtista")
     private List<Album> albumList;
 
-    public Genero() {
+    public Artista() {
     }
 
-    public Genero(Integer idGenero) {
-        this.idGenero = idGenero;
+    public Artista(Integer idArtista) {
+        this.idArtista = idArtista;
     }
 
-    public Genero(Integer idGenero, String nombre) {
-        this.idGenero = idGenero;
+    public Artista(Integer idArtista, String nombre) {
+        this.idArtista = idArtista;
         this.nombre = nombre;
     }
 
-    public Integer getIdGenero() {
-        return idGenero;
+    public Integer getIdArtista() {
+        return idArtista;
     }
 
-    public void setIdGenero(Integer idGenero) {
-        this.idGenero = idGenero;
+    public void setIdArtista(Integer idArtista) {
+        this.idArtista = idArtista;
     }
 
     public String getNombre() {
@@ -86,18 +86,18 @@ public class Genero implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idGenero != null ? idGenero.hashCode() : 0);
+        hash += (idArtista != null ? idArtista.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Genero)) {
+        if (!(object instanceof Artista)) {
             return false;
         }
-        Genero other = (Genero) object;
-        if ((this.idGenero == null && other.idGenero != null) || (this.idGenero != null && !this.idGenero.equals(other.idGenero))) {
+        Artista other = (Artista) object;
+        if ((this.idArtista == null && other.idArtista != null) || (this.idArtista != null && !this.idArtista.equals(other.idArtista))) {
             return false;
         }
         return true;
@@ -105,7 +105,7 @@ public class Genero implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.Genero[ idGenero=" + idGenero + " ]";
+        return "modelo.Artista[ idArtista=" + idArtista + " ]";
     }
     
 }
