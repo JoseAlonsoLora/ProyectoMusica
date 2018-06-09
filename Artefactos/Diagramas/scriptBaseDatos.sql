@@ -184,6 +184,13 @@ CREATE TABLE IF NOT EXISTS `proyectoMusica`.`listaReproduccion_has_cancion` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+-- -----------------------------------------------------
+-- User 'usuarioAredespacio'
+-- -----------------------------------------------------
+DROP USER IF EXISTS 'usuarioMusica'@'localhost';
+CREATE USER 'usuarioMusica'@'localhost' IDENTIFIED BY '#GdrtOP=)-$47"we';
+GRANT SELECT,INSERT, UPDATE, DELETE ON proyectoMusica . * TO 'usuarioMusica'@'localhost';
+FLUSH PRIVILEGES;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
