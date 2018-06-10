@@ -4,7 +4,7 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
@@ -12,13 +12,13 @@
 
 <BorderPane prefHeight="608.0" prefWidth="1120.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.PantallaCancionesPlayListController">
    <center>
-      <AnchorPane id="AnchorPane" style="-fx-background-color: #ecf0f1;">
+      <AnchorPane id="AnchorPane" prefHeight="485.0" prefWidth="1020.0" style="-fx-background-color: #ecf0f1;">
          <children>
             <Label fx:id="lblPlaylist" layoutX="429.0" layoutY="5.0" text="Nombre de la playlist">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font></Label>
-            <JFXButton fx:id="btnDescargar" layoutX="832.0" layoutY="10.0" text="">
+            <JFXButton fx:id="btnDescargar" layoutX="832.0" layoutY="10.0" onAction="#descargarPlayList" text="">
                <graphic>
                   <FontAwesomeIconView glyphName="DOWNLOAD" size="20" />
                </graphic>
@@ -26,11 +26,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </JFXButton>
-            <ScrollPane layoutX="90.0" layoutY="51.0" prefHeight="420.0" prefWidth="840.0">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
-              </content>
-            </ScrollPane>
+            <ListView fx:id="lstCanciones" layoutY="48.0" prefHeight="417.0" prefWidth="922.0" />
          </children>
       </AnchorPane>
    </center>
