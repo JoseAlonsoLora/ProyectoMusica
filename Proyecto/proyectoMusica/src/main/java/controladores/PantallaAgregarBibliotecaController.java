@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import static java.lang.Thread.sleep;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,19 +24,21 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 import modelo.Album;
+import modelo.AlbumPOST;
 import modelo.Artista;
 import modelo.Biblioteca;
 import modelo.Cancion;
 import modelo.Genero;
-import modelo.Listareproduccion;
 
 /**
  * FXML Controller class
@@ -66,6 +67,7 @@ public class PantallaAgregarBibliotecaController implements Initializable {
     @FXML
     private JFXTextField txtAlbum;
     private Biblioteca bibliotecaUsuario;
+    private File archivoSeleccionado;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -75,6 +77,7 @@ public class PantallaAgregarBibliotecaController implements Initializable {
         nombresCanciones = new ArrayList();
         nombresArtistas = new ArrayList();
         nombresGeneros = new ArrayList();
+        archivoSeleccionado = null;
         cargarDatos();
     }
 
@@ -98,13 +101,16 @@ public class PantallaAgregarBibliotecaController implements Initializable {
     @FXML
     private void seleccionarArchivo() {
         FileChooser explorador = new FileChooser();
-        File archivoSeleccionado = explorador.showOpenDialog(null);
+        archivoSeleccionado = explorador.showOpenDialog(null);
         if (archivoSeleccionado != null) {
             try {
                 ZipInputStream archivo = new ZipInputStream(new FileInputStream(archivoSeleccionado));
                 ZipEntry entrada;
+
                 while ((entrada = archivo.getNextEntry()) != null) {
-                    nombresCanciones.add(entrada.getName());
+                    if (!entrada.isDirectory()) {
+                        nombresCanciones.add(entrada.getName());
+                    }
                 }
                 ObservableList<String> items = FXCollections.observableArrayList();
                 items.addAll(nombresCanciones);
@@ -150,7 +156,7 @@ public class PantallaAgregarBibliotecaController implements Initializable {
     private void guardarAlbum(ActionEvent event) {
         ClienteAlbum clienteAlbum = new ClienteAlbum();
         List<Album> albumes = clienteAlbum.findAll();
-        int idAlbum = albumes.size()+1;
+        int idAlbum = albumes.get(albumes.size() - 1).getIdAlbum() + 1;
         ClienteBiblioteca clienteBiblioteca = new ClienteBiblioteca();
         List<Biblioteca> bibliotecas = clienteBiblioteca.findAll();
         for (Biblioteca biblioteca : bibliotecas) {
@@ -163,8 +169,19 @@ public class PantallaAgregarBibliotecaController implements Initializable {
         album.setArtistaidArtista(artistas.get(cmbArtistas.getSelectionModel().getSelectedIndex()));
         album.setGeneroidGenero(generos.get(cmbGeneros.getSelectionModel().getSelectedIndex()));
         album.setBibliotecaidBiblioteca(bibliotecaUsuario);
-        clienteAlbum.create(album);
-        guardarCanciones(album,idAlbum);
+        AlbumPOST albumPOST = new AlbumPOST();
+        albumPOST.setAlbum(album);
+        File archivoCanciones = new File(archivoSeleccionado.getAbsolutePath());
+        if (archivoCanciones.exists()) {
+            System.out.println("Existe");
+            albumPOST.setFile(archivoCanciones);
+            Client cliente = ClientBuilder.newClient();
+            WebTarget webTarget = cliente.target("http://localhost:8080/proyectoMusicaServidor/webresources/modelo.album");
+            webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(albumPOST, javax.ws.rs.core.MediaType.APPLICATION_JSON));
+        }
+
+        guardarCanciones(album, idAlbum);
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Información");
         alert.setHeaderText(null);
@@ -173,13 +190,17 @@ public class PantallaAgregarBibliotecaController implements Initializable {
     }
 
     public void guardarCanciones(Album album, int idAlbum) {
-        album.setIdAlbum(idAlbum);
-        Cancion cancion = new Cancion();
-        cancion.setNombre("kkkk");
-        cancion.setCalificacion(10);
-        cancion.setNombreArchivo("kkkk.mp3");
-        cancion.setAlbumidAlbum(album);
         ClienteCancion clienteCancion = new ClienteCancion();
-        clienteCancion.create(cancion);
+        Cancion cancion;
+        album.setIdAlbum(idAlbum);
+        for (String nombreCancion : nombresCanciones) {
+            cancion = new Cancion();
+            cancion.setNombre(nombreCancion);
+            cancion.setCalificacion(10);
+            cancion.setNombreArchivo(nombreCancion);
+            cancion.setAlbumidAlbum(album);
+            clienteCancion.create(cancion);
+        }
+
     }
 }

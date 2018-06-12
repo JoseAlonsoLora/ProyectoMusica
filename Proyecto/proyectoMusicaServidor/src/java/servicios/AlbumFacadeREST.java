@@ -5,7 +5,16 @@
  */
 package servicios;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,6 +28,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import modelo.Album;
+import modelo.AlbumPOST;
 
 /**
  *
@@ -36,10 +46,29 @@ public class AlbumFacadeREST extends AbstractFacade<Album> {
     }
 
     @POST
-    @Override
     @Consumes({MediaType.APPLICATION_JSON})
-    public void create(Album entity) {
-        super.create(entity);
+    public void create(AlbumPOST album) {
+        super.create(album.getAlbum());
+        //System.out.println(album.getFile().getAbsolutePath());
+//        File file = new File(System.getProperty("user.home" + "/Desktop"));
+//        byte[] buffer = new byte[1024];
+//        InputStream inStream = null;
+//        OutputStream outStream = null;
+//        try {
+//            inStream = new FileInputStream(album.getFile());
+//            outStream = new FileOutputStream(file);
+//            int length;
+//            while ((length = inStream.read(buffer)) > 0) {
+//                outStream.write(buffer, 0, length);
+//            }
+//            inStream.close();
+//            outStream.close();
+//        } catch (FileNotFoundException ex) {
+//            Logger.getLogger(AlbumFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (IOException ex) {
+//            Logger.getLogger(AlbumFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+
     }
 
     @PUT
@@ -87,5 +116,11 @@ public class AlbumFacadeREST extends AbstractFacade<Album> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
+//    @PUT
+//    @Path("{nombreArchivo}")
+//    @Consumes({MediaType.APPLICATION_JSON})
+//    public void subirArchivo(@PathParam("nombreArchivo") String nombreArchivo, File archivo) {
+//        System.out.println("-----------------------------------------------------------------" + archivo.getName());
+//    }
 }
