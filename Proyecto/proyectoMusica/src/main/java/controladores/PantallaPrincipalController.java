@@ -91,18 +91,19 @@ public class PantallaPrincipalController implements Initializable {
     private void desplegarMiBiblioteca(ActionEvent event) {
         crearPantallaMiBiblioteca();
     }
-    
-    private void crearPantallaMiBiblioteca(){
+
+    private void crearPantallaMiBiblioteca() {
         FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaMiBiblioteca.fxml"));
         Parent root;
         try {
             root = (Parent) loader.load();
+            PantallaMiBibliotecaController pantallaMiBiblioteca = loader.getController();
+            pantallaMiBiblioteca.setPnlPrincipal(pnlPrincipal);
             pnlPrincipal.getChildren().clear();
             pnlPrincipal.getChildren().add(root);
         } catch (IOException ex) {
             Logger.getLogger(PantallaPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
+
 }

@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -45,6 +46,7 @@ public class PantallaMiBibliotecaController implements Initializable {
     private StackPane pnlAlbum;
     @FXML
     private StackPane pnlGenero;
+    private StackPane pnlPrincipal;
 
     /**
      * Initializes the controller class.
@@ -66,6 +68,10 @@ public class PantallaMiBibliotecaController implements Initializable {
         });
     }
 
+    public void setPnlPrincipal(StackPane pnlPrincipal) {
+        this.pnlPrincipal = pnlPrincipal;
+    }    
+
     private void crearPantallaCanciones() {
         FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaCanciones.fxml"));
         Parent root;
@@ -77,6 +83,15 @@ public class PantallaMiBibliotecaController implements Initializable {
             Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    @FXML
+    private void crearNuevoAlbum(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaAgregarBiblioteca.fxml"));
+        Parent root = (Parent) loader.load();
+        PantallaAgregarBibliotecaController pantallaAgregarAlbum = loader.getController();
+        pnlPrincipal.getChildren().clear();
+        pnlPrincipal.getChildren().add(root);
     }
 
 }

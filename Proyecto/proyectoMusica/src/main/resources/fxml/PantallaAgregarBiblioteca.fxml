@@ -6,7 +6,7 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -43,17 +43,7 @@
                               <VBox alignment="TOP_CENTER" prefHeight="429.0" prefWidth="334.0" spacing="30.0">
                                  <children>
                                     <Label text="Canciones subidas" />
-                                    <ScrollPane fx:id="scroll" prefHeight="300.0" prefWidth="334.0">
-                                       <content>
-                                          <GridPane fx:id="grid" prefHeight="298.0" prefWidth="333.0">
-                                            <columnConstraints>
-                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                            </columnConstraints>
-                                            <rowConstraints>
-                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                            </rowConstraints>
-                                          </GridPane>
-                                       </content></ScrollPane>
+                                    <ListView fx:id="lstCanciones" prefHeight="323.0" prefWidth="334.0" />
                                     <JFXButton onAction="#seleccionarArchivo" prefHeight="32.0" prefWidth="95.0" style="-fx-background-color: #252525;" text="Subir archivo" textFill="WHITE">
                                        <VBox.margin>
                                           <Insets left="20.0" />
@@ -63,26 +53,28 @@
                               </VBox>
                               <VBox>
                                  <children>
-                                    <GridPane prefHeight="407.0" prefWidth="300.0">
+                                    <GridPane prefHeight="338.0" prefWidth="300.0">
                                       <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="73.0" />
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="162.0" minWidth="10.0" prefWidth="162.0" />
-                                          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="65.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="10.0" prefWidth="110.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="192.0" minWidth="10.0" prefWidth="155.0" />
+                                          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="35.0" />
                                       </columnConstraints>
                                       <rowConstraints>
                                           <RowConstraints maxHeight="76.0" minHeight="0.0" prefHeight="42.0" vgrow="SOMETIMES" />
                                         <RowConstraints maxHeight="101.0" minHeight="10.0" prefHeight="54.0" valignment="CENTER" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="141.0" minHeight="10.0" prefHeight="57.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="226.0" minHeight="2.0" prefHeight="72.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="141.0" minHeight="10.0" prefHeight="54.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="226.0" minHeight="10.0" prefHeight="54.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="226.0" minHeight="10.0" prefHeight="54.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="226.0" minHeight="10.0" prefHeight="54.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
                                           <Label text="Artista:" GridPane.rowIndex="1" />
                                           <Label text="Género:" GridPane.rowIndex="2" />
                                           <Label text="Álbum:" GridPane.rowIndex="3" />
-                                          <JFXComboBox prefHeight="25.0" prefWidth="162.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                          <JFXComboBox prefHeight="25.0" prefWidth="165.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                          <JFXTextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                          <JFXButton text="" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                          <JFXComboBox fx:id="cmbArtistas" prefHeight="25.0" prefWidth="162.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <JFXComboBox fx:id="cmbGeneros" prefHeight="25.0" prefWidth="165.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <JFXTextField fx:id="txtAlbum" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                          <JFXButton onAction="#agregarArtista" text="" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                              <graphic>
                                                 <FontAwesomeIconView fill="#252525" glyphName="PLUS_CIRCLE" size="20" />
                                              </graphic>
@@ -90,16 +82,20 @@
                                                 <Insets top="10.0" />
                                              </GridPane.margin>
                                           </JFXButton>
+                                          <Label text="Año de lanzamiento:" GridPane.rowIndex="4" />
+                                          <Label text="Compañia:" GridPane.rowIndex="5" />
+                                          <JFXTextField fx:id="txtAnio" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                          <JFXTextField fx:id="txtCompania" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                                        </children>
                                     </GridPane>
-                                    <HBox alignment="BOTTOM_CENTER" prefHeight="414.0" prefWidth="300.0" spacing="60.0">
+                                    <HBox alignment="BOTTOM_CENTER" prefHeight="89.0" prefWidth="300.0" spacing="60.0">
                                        <children>
-                                          <JFXButton prefHeight="32.0" prefWidth="99.0" style="-fx-background-color: #cacfd2;" text="Cancelar">
+                                          <JFXButton onAction="#cancelar" prefHeight="32.0" prefWidth="99.0" style="-fx-background-color: #cacfd2;" text="Cancelar">
                                              <HBox.margin>
                                                 <Insets bottom="23.0" />
                                              </HBox.margin>
                                           </JFXButton>
-                                          <JFXButton prefHeight="32.0" prefWidth="95.0" style="-fx-background-color: #252525;" text="Guardar" textFill="WHITE">
+                                          <JFXButton onAction="#guardarAlbum" prefHeight="32.0" prefWidth="95.0" style="-fx-background-color: #252525;" text="Guardar" textFill="WHITE">
                                              <HBox.margin>
                                                 <Insets bottom="23.0" />
                                              </HBox.margin>
