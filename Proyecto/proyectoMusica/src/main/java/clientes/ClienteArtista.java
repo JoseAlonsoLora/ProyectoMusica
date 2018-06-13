@@ -5,11 +5,13 @@
  */
 package clientes;
 
+import java.io.StringReader;
 import java.util.List;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 import modelo.Artista;
 
 /**
@@ -29,11 +31,11 @@ public class ClienteArtista {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/proyectoMusicaServidor/webresources";
+    private static final String BASE_URI = "http://localhost:9000/artista/";
 
     public ClienteArtista() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(BASE_URI).path("modelo.artista");
+        webTarget = client.target(BASE_URI);
     }
 
     public String countREST() throws ClientErrorException {
@@ -64,7 +66,10 @@ public class ClienteArtista {
 
     public List<Artista> findAll() throws ClientErrorException {
         WebTarget resource = webTarget;
+        //StringReader stringReader = new StringReader(webTarget.request(MediaType.APPLICATION_JSON).get(String.class));
+        //System.out.println(stringReader.toString());
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(new GenericType<List<Artista>>(){});
+        //return null;
     }
 
     public void remove(String id) throws ClientErrorException {

@@ -29,6 +29,7 @@ import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
+import javax.swing.text.html.parser.Entity;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -39,6 +40,8 @@ import modelo.Artista;
 import modelo.Biblioteca;
 import modelo.Cancion;
 import modelo.Genero;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * FXML Controller class
@@ -96,7 +99,6 @@ public class PantallaAgregarBibliotecaController implements Initializable {
         ObservableList<String> itemsGeneros = FXCollections.observableArrayList();
         itemsGeneros.addAll(nombresGeneros);
         cmbGeneros.setItems(itemsGeneros);
-        clienteArtista.close();
         clienteGenero.close();
     }
 
@@ -156,57 +158,50 @@ public class PantallaAgregarBibliotecaController implements Initializable {
 
     @FXML
     private void guardarAlbum(ActionEvent event) {
-        ClienteAlbum clienteAlbum = new ClienteAlbum();
-        List<Album> albumes = clienteAlbum.findAll();
-        int idAlbum = albumes.size() + 1;
-        clienteAlbum.close();
+//        ClienteAlbum clienteAlbum = new ClienteAlbum();
+//        List<Album> albumes = clienteAlbum.findAll();
+//        int idAlbum = albumes.size() + 1;
+//        clienteAlbum.close();
         ClienteBiblioteca clienteBiblioteca = new ClienteBiblioteca();
         List<Biblioteca> bibliotecas = clienteBiblioteca.findAll();
         for (Biblioteca biblioteca : bibliotecas) {
-            if (biblioteca.getUsuarionombreUsuario().getNombreUsuario().equals("RayPerez")) {
+            if (biblioteca.getUsuario_nombreusuario().getNombreUsuario().equals("RayPerez")) {
                 bibliotecaUsuario = biblioteca;
             }
         }
-        Album album = new Album();
-        album.setNombre(txtAlbum.getText());
-        album.setArtistaidArtista(artistas.get(cmbArtistas.getSelectionModel().getSelectedIndex()));
-        album.setGeneroidGenero(generos.get(cmbGeneros.getSelectionModel().getSelectedIndex()));
-        album.setBibliotecaidBiblioteca(bibliotecaUsuario);
-        AlbumPOST albumPOST = new AlbumPOST();
-        albumPOST.setAlbum(album);
+        
+        JSONObject albumJSON = new JSONObject();
+        albumJSON.put("nombre",txtAlbum.getText());        
+        albumJSON.put("anoLanzamiento",txtAnio.getText());
+        albumJSON.put("compania", txtCompania.getText());
+        albumJSON.put("idArtista", artistas.get(cmbArtistas.getSelectionModel()
+                .getSelectedIndex()).getIdartista());
+        albumJSON.put("idGenero", generos.get(cmbGeneros.getSelectionModel()
+                .getSelectedIndex()).getIdgenero());
+        albumJSON.put("idBiblioteca", bibliotecaUsuario.getIdBiblioteca());
+        JSONArray listaCanciones = new JSONArray();
+        for (String nombreCancion : nombresCanciones) {
+            JSONObject cancion = new JSONObject();
+            cancion.put("nombre",nombreCancion);
+            cancion.put("calificacion",10);
+            cancion.put("nombrearchivo",nombreCancion);
+            listaCanciones.put(cancion);
+        }
+        albumJSON.put("listaCanciones", listaCanciones);
+        
         File archivoCanciones = new File(archivoSeleccionado.getAbsolutePath());
         if (archivoCanciones.exists()) {
             System.out.println("Existe");
-            albumPOST.setFile(archivoCanciones);
             Client cliente = ClientBuilder.newClient();
-            WebTarget webTarget = cliente.target("http://localhost:8080/proyectoMusicaServidor/webresources/modelo.album");
-            webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(albumPOST, javax.ws.rs.core.MediaType.APPLICATION_JSON));
+            System.out.println(albumJSON.toString());
+            WebTarget webTarget = cliente.target("http://localhost:9000/crearAlbum/");
+            webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(albumJSON.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
         }
-
-        guardarCanciones(idAlbum);
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Información");
         alert.setHeaderText(null);
         alert.setContentText("Album creado exitosamente");
         alert.showAndWait();
-    }
-
-    public void guardarCanciones(int idAlbum) {
-        ClienteAlbum clienteAlbum = new ClienteAlbum();
-        Album album = clienteAlbum.find(String.valueOf(idAlbum));
-        clienteAlbum.close();
-        System.out.println(album.getIdAlbum()+"..................................................");
-        for (String nombreCancion : nombresCanciones) {
-            ClienteCancion clienteCancion = new ClienteCancion();
-            Cancion cancion = new Cancion();
-            cancion.setNombre(nombreCancion);
-            cancion.setCalificacion(10);
-            cancion.setNombreArchivo(nombreCancion);
-            cancion.setAlbumidAlbum(album);
-            clienteCancion.create(cancion);
-            clienteCancion.close();
-        }
-
     }
 }

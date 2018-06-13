@@ -12,28 +12,19 @@ import java.util.List;
  * @author raymundo
  */
 public class Genero {
-    private Integer idGenero;
+    private Integer idgenero;
     private String nombre;
     private List<Album> albumList;
 
     public Genero() {
     }
 
-    public Genero(Integer idGenero) {
-        this.idGenero = idGenero;
+    public Integer getIdgenero() {
+        return idgenero;
     }
 
-    public Genero(Integer idGenero, String nombre) {
-        this.idGenero = idGenero;
-        this.nombre = nombre;
-    }
-
-    public Integer getIdGenero() {
-        return idGenero;
-    }
-
-    public void setIdGenero(Integer idGenero) {
-        this.idGenero = idGenero;
+    public void setIdgenero(Integer idgenero) {
+        this.idgenero = idgenero;
     }
 
     public String getNombre() {
@@ -51,4 +42,6 @@ public class Genero {
     public void setAlbumList(List<Album> albumList) {
         this.albumList = albumList;
     }
+
+    
 }

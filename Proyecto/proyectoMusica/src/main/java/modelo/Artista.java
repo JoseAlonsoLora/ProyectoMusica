@@ -12,28 +12,16 @@ import java.util.List;
  * @author raymundo
  */
 public class Artista {
-    private Integer idArtista;
+    private Integer idartista;
     private String nombre;
     private List<Album> albumList;
 
-    public Artista() {
+    public Integer getIdartista() {
+        return idartista;
     }
 
-    public Artista(Integer idArtista) {
-        this.idArtista = idArtista;
-    }
-
-    public Artista(Integer idArtista, String nombre) {
-        this.idArtista = idArtista;
-        this.nombre = nombre;
-    }
-
-    public Integer getIdArtista() {
-        return idArtista;
-    }
-
-    public void setIdArtista(Integer idArtista) {
-        this.idArtista = idArtista;
+    public void setIdartista(Integer idartista) {
+        this.idartista = idartista;
     }
 
     public String getNombre() {
@@ -51,4 +39,8 @@ public class Artista {
     public void setAlbumList(List<Album> albumList) {
         this.albumList = albumList;
     }
+
+  
+
+    
 }

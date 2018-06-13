@@ -14,19 +14,9 @@ import java.util.List;
 public class Biblioteca {
     private Integer idBiblioteca;
     private short publica;
-    private Usuario usuarionombreUsuario;
-    private List<Album> albumList;
+    private Usuario usuario_nombreusuario;
 
     public Biblioteca() {
-    }
-
-    public Biblioteca(Integer idBiblioteca) {
-        this.idBiblioteca = idBiblioteca;
-    }
-
-    public Biblioteca(Integer idBiblioteca, short publica) {
-        this.idBiblioteca = idBiblioteca;
-        this.publica = publica;
     }
 
     public Integer getIdBiblioteca() {
@@ -45,19 +35,13 @@ public class Biblioteca {
         this.publica = publica;
     }
 
-    public Usuario getUsuarionombreUsuario() {
-        return usuarionombreUsuario;
+    public Usuario getUsuario_nombreusuario() {
+        return usuario_nombreusuario;
     }
 
-    public void setUsuarionombreUsuario(Usuario usuarionombreUsuario) {
-        this.usuarionombreUsuario = usuarionombreUsuario;
+    public void setUsuario_nombreusuario(Usuario usuario_nombreusuario) {
+        this.usuario_nombreusuario = usuario_nombreusuario;
     }
 
-    public List<Album> getAlbumList() {
-        return albumList;
-    }
-
-    public void setAlbumList(List<Album> albumList) {
-        this.albumList = albumList;
-    }
+    
 }
