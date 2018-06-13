@@ -44,10 +44,10 @@ public class ClienteAlbum {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
-    public <T> T find(Class<T> responseType, String id) throws javax.ws.rs.ClientErrorException {
+    public Album find(String id) throws javax.ws.rs.ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(new GenericType<Album>(){});
     }
 
     public <T> T findRange(Class<T> responseType, String from, String to) throws javax.ws.rs.ClientErrorException {

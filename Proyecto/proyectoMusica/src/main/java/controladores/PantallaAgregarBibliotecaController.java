@@ -156,7 +156,7 @@ public class PantallaAgregarBibliotecaController implements Initializable {
     private void guardarAlbum(ActionEvent event) {
         ClienteAlbum clienteAlbum = new ClienteAlbum();
         List<Album> albumes = clienteAlbum.findAll();
-        int idAlbum = albumes.get(albumes.size() - 1).getIdAlbum() + 1;
+        int idAlbum = albumes.size() + 1;
         ClienteBiblioteca clienteBiblioteca = new ClienteBiblioteca();
         List<Biblioteca> bibliotecas = clienteBiblioteca.findAll();
         for (Biblioteca biblioteca : bibliotecas) {
@@ -180,7 +180,7 @@ public class PantallaAgregarBibliotecaController implements Initializable {
             webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(albumPOST, javax.ws.rs.core.MediaType.APPLICATION_JSON));
         }
 
-        guardarCanciones(album, idAlbum);
+        guardarCanciones(idAlbum);
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Información");
@@ -189,12 +189,13 @@ public class PantallaAgregarBibliotecaController implements Initializable {
         alert.showAndWait();
     }
 
-    public void guardarCanciones(Album album, int idAlbum) {
+    public void guardarCanciones(int idAlbum) {
         ClienteCancion clienteCancion = new ClienteCancion();
-        Cancion cancion;
-        album.setIdAlbum(idAlbum);
+        ClienteAlbum clienteAlbum = new ClienteAlbum();
+        Album album = clienteAlbum.find(String.valueOf(idAlbum));
+        System.out.println(album.getIdAlbum()+"..................................................");
         for (String nombreCancion : nombresCanciones) {
-            cancion = new Cancion();
+            Cancion cancion = new Cancion();
             cancion.setNombre(nombreCancion);
             cancion.setCalificacion(10);
             cancion.setNombreArchivo(nombreCancion);
