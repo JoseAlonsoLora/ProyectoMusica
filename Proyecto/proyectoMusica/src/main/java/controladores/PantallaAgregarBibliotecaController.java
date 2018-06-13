@@ -96,6 +96,8 @@ public class PantallaAgregarBibliotecaController implements Initializable {
         ObservableList<String> itemsGeneros = FXCollections.observableArrayList();
         itemsGeneros.addAll(nombresGeneros);
         cmbGeneros.setItems(itemsGeneros);
+        clienteArtista.close();
+        clienteGenero.close();
     }
 
     @FXML
@@ -157,6 +159,7 @@ public class PantallaAgregarBibliotecaController implements Initializable {
         ClienteAlbum clienteAlbum = new ClienteAlbum();
         List<Album> albumes = clienteAlbum.findAll();
         int idAlbum = albumes.size() + 1;
+        clienteAlbum.close();
         ClienteBiblioteca clienteBiblioteca = new ClienteBiblioteca();
         List<Biblioteca> bibliotecas = clienteBiblioteca.findAll();
         for (Biblioteca biblioteca : bibliotecas) {
@@ -190,17 +193,19 @@ public class PantallaAgregarBibliotecaController implements Initializable {
     }
 
     public void guardarCanciones(int idAlbum) {
-        ClienteCancion clienteCancion = new ClienteCancion();
         ClienteAlbum clienteAlbum = new ClienteAlbum();
         Album album = clienteAlbum.find(String.valueOf(idAlbum));
+        clienteAlbum.close();
         System.out.println(album.getIdAlbum()+"..................................................");
         for (String nombreCancion : nombresCanciones) {
+            ClienteCancion clienteCancion = new ClienteCancion();
             Cancion cancion = new Cancion();
             cancion.setNombre(nombreCancion);
             cancion.setCalificacion(10);
             cancion.setNombreArchivo(nombreCancion);
             cancion.setAlbumidAlbum(album);
             clienteCancion.create(cancion);
+            clienteCancion.close();
         }
 
     }
