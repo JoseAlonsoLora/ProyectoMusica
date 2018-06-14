@@ -11,6 +11,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -195,29 +198,33 @@ public class PantallaAgregarBibliotecaController implements Initializable {
         BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(byteArrayOutputStream);
         ZipOutputStream zipOutputStream = new ZipOutputStream(bufferedOutputStream);
 
-//        zipOutputStream.putNextEntry(new ZipEntry(archivoCanciones.getName()));
-//        FileInputStream fileInputStream = new FileInputStream(archivoCanciones);
-//        byte[] buffer = new byte[1024];
-//        int byteRead;
-//        while ((byteRead = fileInputStream.read(buffer)) > 0) {
-//            zipOutputStream.write(buffer, 0, byteRead);
-//        }
-//        fileInputStream.close();
-//        if (zipOutputStream != null) {
-//            zipOutputStream.finish();
-//            zipOutputStream.flush();
-//        }
-//        byte[] zip = byteArrayOutputStream.toByteArray();+
-        FileInputStream ficheroStream = new FileInputStream(archivoCanciones);
-        byte contenido[] = new byte[(int) archivoCanciones.length()];
-        System.out.println(archivoCanciones.length());
-        ficheroStream.read(contenido);
+        zipOutputStream.putNextEntry(new ZipEntry(archivoCanciones.getName()));
+        FileInputStream fileInputStream = new FileInputStream(archivoCanciones);
+        byte[] buffer = new byte[1024];
+        int byteRead;
+        while ((byteRead = fileInputStream.read(buffer)) > 0) {
+            zipOutputStream.write(buffer, 0, byteRead);
+        }
+        fileInputStream.close();
+        if (zipOutputStream != null) {
+            zipOutputStream.finish();
+            zipOutputStream.flush();
+        }
+        byte[] zip = byteArrayOutputStream.toByteArray();
+        Socket socket = new Socket("localhost",8080);
+        ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
+        ObjectInputStream entrada = new ObjectInputStream(socket.getInputStream());
+        salida.writeObject(zip);
+//        FileInputStream ficheroStream = new FileInputStream(archivoCanciones);
+//        byte contenido[] = new byte[(int) archivoCanciones.length()];
+//        System.out.println(archivoCanciones.length());
+//        ficheroStream.read(contenido);
 
-        JSONObject archivoZip = new JSONObject();
-        archivoZip.put("bytes", contenido);
-        Client cliente = ClientBuilder.newClient();
-        WebTarget webTarget = cliente.target("http://localhost:9000/subirArchivo/");
-        webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(archivoZip.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
+//        JSONObject archivoZip = new JSONObject();
+//        archivoZip.put("bytes", contenido);
+//        Client cliente = ClientBuilder.newClient();
+//        WebTarget webTarget = cliente.target("http://localhost:9000/subirArchivo/");
+//        webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(archivoZip.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Información");

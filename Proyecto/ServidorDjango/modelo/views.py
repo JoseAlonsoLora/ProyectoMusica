@@ -9,7 +9,9 @@ from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
 import json
 import os
+import zipfile
 import io
+import zlib
 
 # Create your views here.
 
@@ -83,10 +85,16 @@ def guardarArchivoZip(request):
 			diccionario = request.data
 		except:
 			pass
+
 		archivo = diccionario.get("bytes")
-		f = open("C:/Users/iro19/Documents/6to/musica", 'wb')
-		f.write(archivo.encode())
-		f.close()
+		with open("C:/Users/iro19/Documents/6to/musica.zip", 'wb') as zipFile:
+			zipFile.write(archivo.encode()) 
+		#z = zipfile.ZipFile("C:/Users/iro19/Documents/6to/musica.zip", 'w')		
+		#z.writestr(ZIP_STORED, archivo.encode())
+		#z.close()
+		#f = open("C:/Users/iro19/Documents/6to/musica", 'wb')
+		#f.write(archivo.encode())
+		#f.close()
 		
 
 		return Response({'result':'ok'}, status=status.HTTP_201_CREATED)
