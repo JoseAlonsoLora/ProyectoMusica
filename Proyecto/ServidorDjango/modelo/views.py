@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
+from django.core import serializers
 import json
 import os
 import zipfile
@@ -22,6 +23,14 @@ class ArtistaList(generics.ListCreateAPIView):
 class GeneroList(generics.ListCreateAPIView):
 	queryset =  Genero.objects.all()
 	serializer_class = GeneroSerializer
+
+class ListareproduccionList(generics.ListCreateAPIView):
+	queryset =  Listareproduccion.objects.all()
+	serializer_class = ListareproduccionSerializer
+
+class UsuarioList(generics.ListCreateAPIView):
+	queryset =  Usuario.objects.all()
+	serializer_class = UsuarioSerializer
 
 @api_view(['POST'])
 def guardarAlbum(request):
@@ -77,24 +86,25 @@ def guardarUsuario(request):
 		biblioteca.save()
 		return Response({'result':'ok'}, status=status.HTTP_201_CREATED)
 
-@api_view(['POST'])
-def guardarArchivoZip(request):
-	if request.method == 'POST':
-		diccionario = {}
+@api_view(['GET'])
+def obtenerCancionesLista(request):
+	if request.method == 'GET':
 		try:
-			diccionario = request.data
+			idLista = request.GET['id']
 		except:
 			pass
+		listaCanciones = {}
+		listaCanciones = ListareproduccionHasCancion.objects.filter(listareproduccion_idlistareproduccion = idLista).values()
+		listaFinal = []
+		for lis in listaCanciones:
+			cancion = Cancion.objects.get(pk = lis.get("cancion_idcancion_id"))
+			serializer = CancionSerializer(cancion)
+			listaFinal.append(serializer.data)
 
-		archivo = diccionario.get("bytes")
-		with open("C:/Users/iro19/Documents/6to/musica.zip", 'wb') as zipFile:
-			zipFile.write(archivo.encode()) 
-		#z = zipfile.ZipFile("C:/Users/iro19/Documents/6to/musica.zip", 'w')		
-		#z.writestr(ZIP_STORED, archivo.encode())
-		#z.close()
-		#f = open("C:/Users/iro19/Documents/6to/musica", 'wb')
-		#f.write(archivo.encode())
-		#f.close()
+		#lista = list(listaCanciones)
+		#print(lista)
+		#for lis in lista:
+		#	serializar = CancionSerializer(lis.cancion_idcancion,many=True)
+		#	print(serializar.data)
 		
-
-		return Response({'result':'ok'}, status=status.HTTP_201_CREATED)
+		return Response(listaFinal)

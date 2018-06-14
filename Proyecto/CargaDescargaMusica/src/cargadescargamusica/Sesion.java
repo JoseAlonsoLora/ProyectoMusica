@@ -39,8 +39,8 @@ public class Sesion implements Runnable {
             ZipInputStream zipStream = new ZipInputStream(new ByteArrayInputStream(archivo));
             ZipEntry entry = null;
 
-            File zipNuevo = new File("C:\\Users\\iro19\\Documents\\6to\\");
-            Path outDir = Paths.get("C:\\Users\\iro19\\Documents\\6to\\");
+            File zipNuevo = new File("C:\\Users\\raymu\\Documents\\Sexto semestre");
+            Path outDir = Paths.get("C:\\Users\\raymu\\Documents\\Sexto semestre");
 
             //guardarArchivo(buffer, "/home/alonso/Documents/cancer.zip");
             while ((entry = zipStream.getNextEntry()) != null) {

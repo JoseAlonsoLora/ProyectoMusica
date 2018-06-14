@@ -12,32 +12,21 @@ import java.util.List;
  * @author raymundo
  */
 public class Cancion {
-    private Integer idCancion;
+    private Integer idcancion;
     private String nombre;
     private Integer calificacion;
-    private String nombreArchivo;
-    private List<Listareproduccion> listareproduccionList;
-    private Album albumidAlbum;
+    private String nombrearchivo;
+    private Album album_idalbum;
 
     public Cancion() {
     }
 
-    public Cancion(Integer idCancion) {
-        this.idCancion = idCancion;
+    public Integer getIdcancion() {
+        return idcancion;
     }
 
-    public Cancion(Integer idCancion, String nombre, String nombreArchivo) {
-        this.idCancion = idCancion;
-        this.nombre = nombre;
-        this.nombreArchivo = nombreArchivo;
-    }
-
-    public Integer getIdCancion() {
-        return idCancion;
-    }
-
-    public void setIdCancion(Integer idCancion) {
-        this.idCancion = idCancion;
+    public void setIdcancion(Integer idcancion) {
+        this.idcancion = idcancion;
     }
 
     public String getNombre() {
@@ -56,27 +45,21 @@ public class Cancion {
         this.calificacion = calificacion;
     }
 
-    public String getNombreArchivo() {
-        return nombreArchivo;
+    public String getNombrearchivo() {
+        return nombrearchivo;
     }
 
-    public void setNombreArchivo(String nombreArchivo) {
-        this.nombreArchivo = nombreArchivo;
+    public void setNombrearchivo(String nombrearchivo) {
+        this.nombrearchivo = nombrearchivo;
     }
 
-    public List<Listareproduccion> getListareproduccionList() {
-        return listareproduccionList;
+    public Album getAlbum_idalbum() {
+        return album_idalbum;
     }
 
-    public void setListareproduccionList(List<Listareproduccion> listareproduccionList) {
-        this.listareproduccionList = listareproduccionList;
+    public void setAlbum_idalbum(Album album_idalbum) {
+        this.album_idalbum = album_idalbum;
     }
 
-    public Album getAlbumidAlbum() {
-        return albumidAlbum;
-    }
 
-    public void setAlbumidAlbum(Album albumidAlbum) {
-        this.albumidAlbum = albumidAlbum;
-    }
 }

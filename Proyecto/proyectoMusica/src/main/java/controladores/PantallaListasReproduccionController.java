@@ -58,7 +58,7 @@ public class PantallaListasReproduccionController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         clienteLista = new ClienteListaReproduccion();
         clienteUsuario = new ClienteUsuario();
-        usuarioActual = clienteUsuario.find("RayPerez");
+        //usuarioActual = clienteUsuario.find("RayPerez");
         mostrarListas();
     }
 
@@ -71,7 +71,7 @@ public class PantallaListasReproduccionController implements Initializable {
         nombresListas = new ArrayList();
         List<Listareproduccion> listas = clienteLista.findAll();
         for (Listareproduccion lista : listas) {
-            if (lista.getUsuarionombreUsuario().getNombreUsuario().equals("RayPerez")) {
+            if (lista.getUsuario_nombreusuario().equals("RayPerez")) {
                 listasReproduccionUsuario.add(lista);
                 nombresListas.add(lista.getNombre());
             }
@@ -108,7 +108,7 @@ public class PantallaListasReproduccionController implements Initializable {
         if (result.isPresent()) {
             Listareproduccion nuevaLista = new Listareproduccion();
             nuevaLista.setNombre(result.get());
-            nuevaLista.setUsuarionombreUsuario(usuarioActual);
+            nuevaLista.setUsuario_nombreusuario("RayPerez");
             clienteLista.create(nuevaLista);
             FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaListasReproduccion.fxml"));
             Parent root = (Parent) loader.load();

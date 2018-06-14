@@ -161,7 +161,7 @@ public class PantallaAgregarBibliotecaController implements Initializable {
         ClienteBiblioteca clienteBiblioteca = new ClienteBiblioteca();
         List<Biblioteca> bibliotecas = clienteBiblioteca.findAll();
         for (Biblioteca biblioteca : bibliotecas) {
-            if (biblioteca.getUsuario_nombreusuario().getNombreUsuario().equals("RayPerez")) {
+            if (biblioteca.getUsuario_nombreusuario().getNombreusuario().equals("RayPerez")) {
                 bibliotecaUsuario = biblioteca;
             }
         }

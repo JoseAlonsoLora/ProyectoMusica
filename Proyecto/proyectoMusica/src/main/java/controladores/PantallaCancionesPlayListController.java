@@ -18,8 +18,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
+import modelo.Artista;
 import modelo.Cancion;
 import modelo.Listareproduccion;
+import modelo.Usuario;
 
 /**
  * FXML Controller class
@@ -45,7 +52,7 @@ public class PantallaCancionesPlayListController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    }
 
     public void setPanelPrincipal(StackPane panelPrincipal) {
         this.panelPrincipal = panelPrincipal;
@@ -54,7 +61,7 @@ public class PantallaCancionesPlayListController implements Initializable {
     public void setLista(Listareproduccion lista) {
         this.lista = lista;
         lblPlaylist.setText(lista.getNombre());
-        System.out.println(lista.getCancionList().size());
+        System.out.println(lista.getIdlistareproduccion() + ".........................");
         mostrarCanciones();
     }
 
@@ -62,10 +69,11 @@ public class PantallaCancionesPlayListController implements Initializable {
     private void descargarPlayList(ActionEvent event) {
     }
 
-    public void mostrarCanciones(){
-        canciones = new ArrayList();
+    public void mostrarCanciones() {
+        Client cliente = ClientBuilder.newClient();
+        WebTarget webTarget = cliente.target("http://localhost:9000/canciones/?id="+lista.getIdlistareproduccion());
+        canciones = (ArrayList<Cancion>) webTarget.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Cancion>>(){});
         nombreCanciones = new ArrayList();
-        canciones = (ArrayList<Cancion>) lista.getCancionList();
         for (Cancion cancion : canciones) {
                 nombreCanciones.add(cancion.getNombre());
         }

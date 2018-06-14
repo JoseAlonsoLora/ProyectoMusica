@@ -29,11 +29,11 @@ public class ClienteListaReproduccion {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/proyectoMusicaServidor/webresources";
+    private static final String BASE_URI = "http://localhost:9000/listaReproduccion/";
 
     public ClienteListaReproduccion() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(BASE_URI).path("modelo.listareproduccion");
+        webTarget = client.target(BASE_URI);
     }
 
     public String countREST() throws ClientErrorException {

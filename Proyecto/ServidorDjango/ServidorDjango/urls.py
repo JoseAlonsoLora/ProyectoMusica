@@ -21,8 +21,10 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^artista/', ArtistaList.as_view()),
     url(r'^genero/', GeneroList.as_view()),
+    url(r'^listaReproduccion/', ListareproduccionList.as_view()),
+    url(r'^usuario/', UsuarioList.as_view()),
     url(r'^crearAlbum/', guardarAlbum),
     url(r'^biblioteca/', BibliotecaList.as_view()),
     url(r'^crearUsuario/', guardarUsuario),
-    url(r'^subirArchivo/', guardarArchivoZip),
+    url(r'^canciones/', obtenerCancionesLista),
 ]

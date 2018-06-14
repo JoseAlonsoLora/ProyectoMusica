@@ -5,36 +5,24 @@
  */
 package modelo;
 
-import java.util.List;
-
 /**
  *
  * @author raymundo
  */
 public class Listareproduccion {
-    private Integer idlistaReproduccion;
+    private Integer idlistareproduccion;
     private String nombre;
-    private List<Cancion> cancionList;
-    private Usuario usuarionombreUsuario;
+    private String usuario_nombreusuario;
 
     public Listareproduccion() {
     }
 
-    public Listareproduccion(Integer idlistaReproduccion) {
-        this.idlistaReproduccion = idlistaReproduccion;
+    public Integer getIdlistareproduccion() {
+        return idlistareproduccion;
     }
 
-    public Listareproduccion(Integer idlistaReproduccion, String nombre) {
-        this.idlistaReproduccion = idlistaReproduccion;
-        this.nombre = nombre;
-    }
-
-    public Integer getIdlistaReproduccion() {
-        return idlistaReproduccion;
-    }
-
-    public void setIdlistaReproduccion(Integer idlistaReproduccion) {
-        this.idlistaReproduccion = idlistaReproduccion;
+    public void setIdlistareproduccion(Integer idlistareproduccion) {
+        this.idlistareproduccion = idlistareproduccion;
     }
 
     public String getNombre() {
@@ -45,19 +33,13 @@ public class Listareproduccion {
         this.nombre = nombre;
     }
 
-    public List<Cancion> getCancionList() {
-        return cancionList;
+    public String getUsuario_nombreusuario() {
+        return usuario_nombreusuario;
     }
 
-    public void setCancionList(List<Cancion> cancionList) {
-        this.cancionList = cancionList;
+    public void setUsuario_nombreusuario(String usuario_nombreusuario) {
+        this.usuario_nombreusuario = usuario_nombreusuario;
     }
 
-    public Usuario getUsuarionombreUsuario() {
-        return usuarionombreUsuario;
-    }
 
-    public void setUsuarionombreUsuario(Usuario usuarionombreUsuario) {
-        this.usuarionombreUsuario = usuarionombreUsuario;
-    }
 }
