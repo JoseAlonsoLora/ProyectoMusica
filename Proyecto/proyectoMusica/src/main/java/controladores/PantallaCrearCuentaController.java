@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controladores;
 
 import clientes.ClienteUsuario;
@@ -23,7 +18,12 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 import modelo.Usuario;
+import org.json.JSONObject;
 
 /**
  * FXML Controller class
@@ -70,25 +70,22 @@ public class PantallaCrearCuentaController implements Initializable {
 
         if (!verificarCamposVacios(campoNombre, campoApellido, campoCorreo, campoUsuario, campoContraseña)) {
             if (!verificarLongitudExcedida(campoNombre, campoApellido, campoCorreo, campoUsuario)) {
-                if (validarCorreo(campoCorreo.getText().trim())) {
-                    ClienteUsuario clienteUsuario = new ClienteUsuario();
-                    Usuario usuario;
-                    usuario = clienteUsuario.find(campoUsuario.getText().trim());
-                    if (usuario != null) {
-                        mostrarMensajeAdvertencia("Usuario existente", "El nombre de usuario elegido ya se encuentra en uso", "El nombre de usuario elegido ya se encuentra en uso");
-                    } else {
-                        Usuario usuarioNuevo = new Usuario();
-                        usuarioNuevo.setNombres(campoNombre.getText().trim());
-                        usuarioNuevo.setApellidos(campoApellido.getText().trim());
-                        usuarioNuevo.setCorreo(campoCorreo.getText().trim());
-                        usuarioNuevo.setNombreUsuario(campoUsuario.getText().trim());
-                        usuarioNuevo.setContrasena(cifrarContrasena(campoContraseña.getText()));
-                        clienteUsuario.create(usuarioNuevo);
-                        mostrarMensajeAdvertencia("", "Registro exitoso", "La cuenta se ha registrado correctamente");
+                if (validarCorreo(campoCorreo.getText().trim())) {                    
+                    JSONObject usuarioNuevo = new JSONObject();
+                    usuarioNuevo.put("nombres", campoNombre.getText().trim());
+                    usuarioNuevo.put("contrasena", cifrarContrasena(campoContraseña.getText()));
+                    usuarioNuevo.put("nombreUsuario", campoUsuario.getText().trim());
+                    usuarioNuevo.put("apellidos", campoApellido.getText().trim());
+                    usuarioNuevo.put("correo", campoCorreo.getText().trim());
+                                        
 
-                    }
+                    Client cliente = ClientBuilder.newClient();
+                    WebTarget webTarget = cliente.target("http://localhost:9000/crearUsuario/");
+                    webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(usuarioNuevo.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
+                    mostrarMensaje("", "Registro exitoso", "La cuenta se ha registrado correctamente");
+
                 } else {
-                    mostrarMensajeAdvertencia("", "Correo no válido", "El correo ingresado no tiene un formato válido");
+                    mostrarMensaje("", "Correo no válido", "El correo ingresado no tiene un formato válido");
                 }
             }
 
@@ -135,7 +132,7 @@ public class PantallaCrearCuentaController implements Initializable {
         }
 
         if (camposVacios) {
-            mostrarMensajeAdvertencia("Campo vacio", "Algún campo esta vacío", "Debe llenar todos los campos requeridos");
+            mostrarMensaje("Campo vacio", "Algún campo esta vacío", "Debe llenar todos los campos requeridos");
         }
 
         return camposVacios;
@@ -173,7 +170,7 @@ public class PantallaCrearCuentaController implements Initializable {
         }
 
         if (longitudExcedida) {
-            mostrarMensajeAdvertencia("Campos excedidos", "Algún campo excede el límite de caracteres", "Revise el límite de caracteres permitidos");
+            mostrarMensaje("Campos excedidos", "Algún campo excede el límite de caracteres", "Revise el límite de caracteres permitidos");
 
         }
 
@@ -249,8 +246,8 @@ public class PantallaCrearCuentaController implements Initializable {
         return stringBuilder.toString();
     }
 
-    public void mostrarMensajeAdvertencia(String titulo, String encabezado, String contenido) {
-        Alert advertencia = new Alert(Alert.AlertType.WARNING);
+    public void mostrarMensaje(String titulo, String encabezado, String contenido) {
+        Alert advertencia = new Alert(Alert.AlertType.INFORMATION);
         advertencia.setTitle(titulo);
         advertencia.setHeaderText(encabezado);
         advertencia.setContentText(contenido);

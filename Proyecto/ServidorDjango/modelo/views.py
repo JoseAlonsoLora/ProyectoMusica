@@ -9,6 +9,7 @@ from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
 import json
 import os
+import io
 
 # Create your views here.
 
@@ -51,3 +52,41 @@ def guardarAlbum(request):
 class BibliotecaList(generics.ListCreateAPIView):
 	queryset =  Biblioteca.objects.all()
 	serializer_class = BibliotecaSerializer
+
+@api_view(['POST'])
+def guardarUsuario(request):
+	if request.method == 'POST':
+		diccionario = {}
+		try:
+			diccionario = request.data
+		except:
+			pass
+		usuario = Usuario()
+		usuario.nombreusuario = diccionario.get("nombreUsuario")
+		usuario.contrasena = diccionario.get("contrasena")
+		usuario.nombres = diccionario.get("nombres")
+		usuario.apellidos = diccionario.get("apellidos")
+		usuario.correo = diccionario.get("correo")
+		usuario.save()
+
+		biblioteca = Biblioteca()
+		biblioteca.publica = 1
+		biblioteca.usuario_nombreusuario = usuario
+		biblioteca.save()
+		return Response({'result':'ok'}, status=status.HTTP_201_CREATED)
+
+@api_view(['POST'])
+def guardarArchivoZip(request):
+	if request.method == 'POST':
+		diccionario = {}
+		try:
+			diccionario = request.data
+		except:
+			pass
+		archivo = diccionario.get("bytes")
+		f = open("C:/Users/iro19/Documents/6to/musica", 'wb')
+		f.write(archivo.encode())
+		f.close()
+		
+
+		return Response({'result':'ok'}, status=status.HTTP_201_CREATED)

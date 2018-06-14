@@ -23,4 +23,6 @@ urlpatterns = [
     url(r'^genero/', GeneroList.as_view()),
     url(r'^crearAlbum/', guardarAlbum),
     url(r'^biblioteca/', BibliotecaList.as_view()),
+    url(r'^crearUsuario/', guardarUsuario),
+    url(r'^subirArchivo/', guardarArchivoZip),
 ]

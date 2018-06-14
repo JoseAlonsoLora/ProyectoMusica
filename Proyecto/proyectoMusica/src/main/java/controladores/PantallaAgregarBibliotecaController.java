@@ -1,12 +1,12 @@
 package controladores;
 
-import clientes.ClienteAlbum;
 import clientes.ClienteArtista;
 import clientes.ClienteBiblioteca;
-import clientes.ClienteCancion;
 import clientes.ClienteGenero;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -29,16 +30,12 @@ import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
-import javax.swing.text.html.parser.Entity;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-import modelo.Album;
-import modelo.AlbumPOST;
 import modelo.Artista;
 import modelo.Biblioteca;
-import modelo.Cancion;
 import modelo.Genero;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -157,11 +154,7 @@ public class PantallaAgregarBibliotecaController implements Initializable {
     }
 
     @FXML
-    private void guardarAlbum(ActionEvent event) {
-//        ClienteAlbum clienteAlbum = new ClienteAlbum();
-//        List<Album> albumes = clienteAlbum.findAll();
-//        int idAlbum = albumes.size() + 1;
-//        clienteAlbum.close();
+    private void guardarAlbum(ActionEvent event) throws IOException {
         ClienteBiblioteca clienteBiblioteca = new ClienteBiblioteca();
         List<Biblioteca> bibliotecas = clienteBiblioteca.findAll();
         for (Biblioteca biblioteca : bibliotecas) {
@@ -169,10 +162,10 @@ public class PantallaAgregarBibliotecaController implements Initializable {
                 bibliotecaUsuario = biblioteca;
             }
         }
-        
+
         JSONObject albumJSON = new JSONObject();
-        albumJSON.put("nombre",txtAlbum.getText());        
-        albumJSON.put("anoLanzamiento",txtAnio.getText());
+        albumJSON.put("nombre", txtAlbum.getText());
+        albumJSON.put("anoLanzamiento", txtAnio.getText());
         albumJSON.put("compania", txtCompania.getText());
         albumJSON.put("idArtista", artistas.get(cmbArtistas.getSelectionModel()
                 .getSelectedIndex()).getIdartista());
@@ -182,13 +175,13 @@ public class PantallaAgregarBibliotecaController implements Initializable {
         JSONArray listaCanciones = new JSONArray();
         for (String nombreCancion : nombresCanciones) {
             JSONObject cancion = new JSONObject();
-            cancion.put("nombre",nombreCancion);
-            cancion.put("calificacion",10);
-            cancion.put("nombrearchivo",nombreCancion);
+            cancion.put("nombre", nombreCancion);
+            cancion.put("calificacion", 10);
+            cancion.put("nombrearchivo", nombreCancion);
             listaCanciones.put(cancion);
         }
         albumJSON.put("listaCanciones", listaCanciones);
-        
+
         File archivoCanciones = new File(archivoSeleccionado.getAbsolutePath());
         if (archivoCanciones.exists()) {
             System.out.println("Existe");
@@ -197,6 +190,34 @@ public class PantallaAgregarBibliotecaController implements Initializable {
             WebTarget webTarget = cliente.target("http://localhost:9000/crearAlbum/");
             webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(albumJSON.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
         }
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(byteArrayOutputStream);
+        ZipOutputStream zipOutputStream = new ZipOutputStream(bufferedOutputStream);
+
+//        zipOutputStream.putNextEntry(new ZipEntry(archivoCanciones.getName()));
+//        FileInputStream fileInputStream = new FileInputStream(archivoCanciones);
+//        byte[] buffer = new byte[1024];
+//        int byteRead;
+//        while ((byteRead = fileInputStream.read(buffer)) > 0) {
+//            zipOutputStream.write(buffer, 0, byteRead);
+//        }
+//        fileInputStream.close();
+//        if (zipOutputStream != null) {
+//            zipOutputStream.finish();
+//            zipOutputStream.flush();
+//        }
+//        byte[] zip = byteArrayOutputStream.toByteArray();+
+        FileInputStream ficheroStream = new FileInputStream(archivoCanciones);
+        byte contenido[] = new byte[(int) archivoCanciones.length()];
+        System.out.println(archivoCanciones.length());
+        ficheroStream.read(contenido);
+
+        JSONObject archivoZip = new JSONObject();
+        archivoZip.put("bytes", contenido);
+        Client cliente = ClientBuilder.newClient();
+        WebTarget webTarget = cliente.target("http://localhost:9000/subirArchivo/");
+        webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(archivoZip.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Información");
