@@ -62,6 +62,8 @@ public class PantallaListasReproduccionController implements Initializable {
         clienteLista = new ClienteListaReproduccion();
         clienteUsuario = new ClienteUsuario();
         recurso = MainApp.leerConfig();
+        lstListas.setDepth(1);
+        lstListas.setExpanded(true);
         //usuarioActual = clienteUsuario.find("RayPerez");
         mostrarListas();
     }

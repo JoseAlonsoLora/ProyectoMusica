@@ -6,10 +6,15 @@
 package clientes;
 
 import com.mycompany.proyectomusica.MainApp;
+import java.io.StringReader;
+import java.util.List;
 import java.util.Properties;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
+import modelo.Cancion;
 
 /**
  * Jersey REST client generated for REST resource:CancionFacadeREST
@@ -35,7 +40,7 @@ public class ClienteCancion {
         recurso = MainApp.leerConfig();
         String ip = recurso.getProperty("ipAddress");
         String puerto = recurso.getProperty("portDjango");
-        BASE_URI = "http://localhost:8080/proyectoMusicaServidor/webresources";
+        BASE_URI = "http://"+ip+":"+puerto+"/todasCanciones/";
         client = javax.ws.rs.client.ClientBuilder.newClient();
         webTarget = client.target(BASE_URI).path("modelo.cancion");
     }
@@ -66,9 +71,9 @@ public class ClienteCancion {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
-    public <T> T findAll(Class<T> responseType) throws ClientErrorException {
+    public List<Cancion>  findAll() throws ClientErrorException {
         WebTarget resource = webTarget;
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(new GenericType<List<Cancion>>(){});
     }
 
     public void remove(String id) throws ClientErrorException {

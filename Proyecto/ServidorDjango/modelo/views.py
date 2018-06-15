@@ -108,3 +108,20 @@ def obtenerCancionesLista(request):
 		#	print(serializar.data)
 		
 		return Response(listaFinal)
+
+@api_view(['GET'])
+def obtenerTodasCanciones(request):
+	canciones = Cancion.objects.all()
+	serializer = CancionSerializer(canciones,many=True)
+	listaCanciones = []
+	for cancionJson in serializer.data:
+		cancionAux = {}
+		cancionAux["nombre"] = cancionJson['nombre']
+		cancionAux["idcancion"] = cancionJson['idcancion']
+		cancionAux['calificacion'] = cancionJson['calificacion']
+		cancionAux['nombrearchivo'] = cancionJson['nombrearchivo']
+		album = Album.objects.get(pk = cancionJson['album_idalbum'])
+		cancionAux['nombreAlbum'] = album.nombre		
+		cancionAux['nombreArtista'] = album.artista_idArtista.nombre
+		listaCanciones.append(cancionAux)
+	return Response(listaCanciones)

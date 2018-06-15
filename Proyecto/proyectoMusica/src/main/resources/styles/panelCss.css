@@ -8,6 +8,25 @@ and open the template in the editor.
     Author     : alonso
 */
 
+.panel{
+    -fx-effect: dropshadow(three-pass-box, grey, 10, 0, 0, 3);
+}
 .pane{
     -fx-effect: dropshadow(three-pass-box, grey, 10, 0, 0, 3);
+}
+
+.pane:hover{
+    -fx-background-color: #FFD4FC;
+    -fx-rotate: 3; 
+    -fx-translate-y: -2; 
+    -fx-background-insets: 20 10 15 80;
+    -fx-effect: dropshadow(three-pass-box, grey, 10, 0, 0, 15);
+}
+
+.pane:pressed {
+    -fx-background-color: #FFD4FC;
+    -fx-rotate: 3; 
+    -fx-translate-y: -2; 
+    -fx-background-insets: 20 10 15 80;
+    -fx-effect: dropshadow(three-pass-box, grey, 10, 0, 0, 15);
 }

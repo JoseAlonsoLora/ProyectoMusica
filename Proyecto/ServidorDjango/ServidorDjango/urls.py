@@ -27,4 +27,6 @@ urlpatterns = [
     url(r'^biblioteca/', BibliotecaList.as_view()),
     url(r'^crearUsuario/', guardarUsuario),
     url(r'^canciones/', obtenerCancionesLista),
+    url(r'^todasCanciones/', obtenerTodasCanciones),
+
 ]

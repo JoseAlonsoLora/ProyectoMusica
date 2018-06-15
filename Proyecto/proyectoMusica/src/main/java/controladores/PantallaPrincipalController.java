@@ -47,7 +47,7 @@ public class PantallaPrincipalController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        pnlCancion.getStyleClass().add("pane");
+        pnlCancion.getStyleClass().add("panel");
         try {
             crearPantallaMiBiblioteca();
             FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaReproducirCancion.fxml"));
@@ -98,6 +98,21 @@ public class PantallaPrincipalController implements Initializable {
         try {
             root = (Parent) loader.load();
             PantallaMiBibliotecaController pantallaMiBiblioteca = loader.getController();
+            pantallaMiBiblioteca.setPnlPrincipal(pnlPrincipal);
+            pnlPrincipal.getChildren().clear();
+            pnlPrincipal.getChildren().add(root);
+        } catch (IOException ex) {
+            Logger.getLogger(PantallaPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void deplegarExplorarMusica(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaExplorarMusica.fxml"));
+        Parent root;
+        try {
+            root = (Parent) loader.load();
+            PantallaExplorarMusicaController pantallaMiBiblioteca = loader.getController();
             pantallaMiBiblioteca.setPnlPrincipal(pnlPrincipal);
             pnlPrincipal.getChildren().clear();
             pnlPrincipal.getChildren().add(root);
