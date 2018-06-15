@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="369.0" prefWidth="370.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.PantallaIniciarSesionController">
+   <children>
+      <Pane layoutY="-3.0" prefHeight="35.0" prefWidth="374.0" style="-fx-background-color: #252525;">
+         <children>
+            <Label layoutX="132.0" layoutY="1.0" text="Iniciar sesión" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <JFXTextField fx:id="campoUsuario" layoutX="126.0" layoutY="93.0" />
+      <Label layoutX="166.0" layoutY="65.0" text="Usuario:">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="155.0" layoutY="175.0" text="Contraseña:">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="botonIniciarSesion" layoutX="146.0" layoutY="287.0" onAction="#iniciarSesion" prefHeight="35.0" prefWidth="95.0" style="-fx-background-color: #252525;" text="Iniciar Sesión" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </JFXButton>
+      <JFXPasswordField fx:id="campoContraseña" layoutX="127.0" layoutY="216.0" />
+   </children>
+</AnchorPane>
