@@ -14,7 +14,7 @@ import java.util.List;
 public class Biblioteca {
     private Integer idBiblioteca;
     private short publica;
-    private Usuario usuario_nombreusuario;
+    private String usuario_nombreusuario;
 
     public Biblioteca() {
     }
@@ -35,13 +35,15 @@ public class Biblioteca {
         this.publica = publica;
     }
 
-    public Usuario getUsuario_nombreusuario() {
+    public String getUsuario_nombreusuario() {
         return usuario_nombreusuario;
     }
 
-    public void setUsuario_nombreusuario(Usuario usuario_nombreusuario) {
+    public void setUsuario_nombreusuario(String usuario_nombreusuario) {
         this.usuario_nombreusuario = usuario_nombreusuario;
     }
+
+
 
     
 }

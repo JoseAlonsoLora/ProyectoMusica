@@ -73,7 +73,7 @@
                                           <Label text="Álbum:" GridPane.rowIndex="3" />
                                           <JFXComboBox fx:id="cmbArtistas" prefHeight="25.0" prefWidth="162.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                           <JFXComboBox fx:id="cmbGeneros" prefHeight="25.0" prefWidth="165.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                          <JFXTextField fx:id="txtAlbum" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                          <JFXTextField fx:id="txtAlbum" onKeyTyped="#limitarAlbum" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                           <JFXButton onAction="#agregarArtista" text="" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                              <graphic>
                                                 <FontAwesomeIconView fill="#252525" glyphName="PLUS_CIRCLE" size="20" />
@@ -84,8 +84,8 @@
                                           </JFXButton>
                                           <Label text="Año de lanzamiento:" GridPane.rowIndex="4" />
                                           <Label text="Compañia:" GridPane.rowIndex="5" />
-                                          <JFXTextField fx:id="txtAnio" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                          <JFXTextField fx:id="txtCompania" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                          <JFXTextField fx:id="txtAnio" onKeyTyped="#limitarAnio" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                          <JFXTextField fx:id="txtCompania" onKeyTyped="#limitarCompania" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                                        </children>
                                     </GridPane>
                                     <HBox alignment="BOTTOM_CENTER" prefHeight="89.0" prefWidth="300.0" spacing="60.0">

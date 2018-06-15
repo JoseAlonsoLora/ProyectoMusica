@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.KeyEvent;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -100,29 +102,58 @@ public class PantallaAgregarBibliotecaController implements Initializable {
         itemsGeneros.addAll(nombresGeneros);
         cmbGeneros.setItems(itemsGeneros);
         clienteGenero.close();
+        clienteArtista.close();
     }
 
     @FXML
     private void seleccionarArchivo() {
+        boolean archivoValido = true;
         FileChooser explorador = new FileChooser();
         archivoSeleccionado = explorador.showOpenDialog(null);
         if (archivoSeleccionado != null) {
-            try {
-                ZipInputStream archivo = new ZipInputStream(new FileInputStream(archivoSeleccionado));
-                ZipEntry entrada;
+            String nombre = archivoSeleccionado.getName();
+            String[] auxiliar = nombre.split("\\.");
+            if (auxiliar.length < 2 || !auxiliar[1].equals("zip")) {
+                archivoValido = false;
+            }
+            if (archivoValido) {
+                lstCanciones.setItems(null);
+                nombresCanciones = new ArrayList();
+                try {
+                    ZipInputStream archivo = new ZipInputStream(new FileInputStream(archivoSeleccionado));
+                    ZipEntry entrada;
 
-                while ((entrada = archivo.getNextEntry()) != null) {
-                    if (!entrada.isDirectory()) {
-                        nombresCanciones.add(entrada.getName());
+                    while ((entrada = archivo.getNextEntry()) != null) {
+                        if (!entrada.isDirectory()) {
+                            String[] auxiliarArchivo = entrada.getName().split("\\.");
+                            if (auxiliarArchivo.length < 2 || !auxiliarArchivo[1].equals("mp3")) {
+                                lstCanciones.setItems(null);
+                                nombresCanciones = new ArrayList();
+                                Alert alert = new Alert(Alert.AlertType.WARNING);
+                                alert.setTitle("Información");
+                                alert.setHeaderText(null);
+                                alert.setContentText("El zip contiene algunos archivos que no cumplen con el formato .mp3");
+                                alert.showAndWait();
+                                break;
+                            } else {
+                                nombresCanciones.add(entrada.getName());
+                            }
+                        }
                     }
+                    ObservableList<String> items = FXCollections.observableArrayList();
+                    items.addAll(nombresCanciones);
+                    lstCanciones.setItems(items);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(PantallaAgregarBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(PantallaAgregarBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                ObservableList<String> items = FXCollections.observableArrayList();
-                items.addAll(nombresCanciones);
-                lstCanciones.setItems(items);
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(PantallaAgregarBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(PantallaAgregarBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Archivo no compatible");
+                alert.setHeaderText(null);
+                alert.setContentText("El archivo debe tener una extención .zip");
+                alert.showAndWait();
             }
         }
     }
@@ -138,9 +169,15 @@ public class PantallaAgregarBibliotecaController implements Initializable {
         if (result.isPresent()) {
             Artista artista = new Artista();
             artista.setNombre(result.get());
+            clienteArtista = new ClienteArtista();
             clienteArtista.create(artista);
-            artistas.add(artista);
-            nombresArtistas.add(artista.getNombre());
+            clienteArtista.close();
+            clienteArtista = new ClienteArtista();
+            nombresArtistas = new ArrayList();
+            artistas = clienteArtista.findAll();
+            for (Artista artistaAux : artistas) {
+                nombresArtistas.add(artistaAux.getNombre());
+            }
             ObservableList<String> itemsArtistas = FXCollections.observableArrayList();
             itemsArtistas.addAll(nombresArtistas);
             cmbArtistas.setItems(itemsArtistas);
@@ -158,63 +195,66 @@ public class PantallaAgregarBibliotecaController implements Initializable {
 
     @FXML
     private void guardarAlbum(ActionEvent event) throws IOException {
-        ClienteBiblioteca clienteBiblioteca = new ClienteBiblioteca();
-        List<Biblioteca> bibliotecas = clienteBiblioteca.findAll();
-        for (Biblioteca biblioteca : bibliotecas) {
-            if (biblioteca.getUsuario_nombreusuario().getNombreusuario().equals("RayPerez")) {
-                bibliotecaUsuario = biblioteca;
-            }
-        }
+        if (!verificarCamposVacios()) {
+            if (!verificarArchivoSubido()) {
+                if (!verificarLongitudCampos()) {
+                    ClienteBiblioteca clienteBiblioteca = new ClienteBiblioteca();
+                    List<Biblioteca> bibliotecas = clienteBiblioteca.findAll();
+                    for (Biblioteca biblioteca : bibliotecas) {
+                        if (biblioteca.getUsuario_nombreusuario().equals("RayPerez")) {
+                            bibliotecaUsuario = biblioteca;
+                        }
+                    }
 
-        JSONObject albumJSON = new JSONObject();
-        albumJSON.put("nombre", txtAlbum.getText());
-        albumJSON.put("anoLanzamiento", txtAnio.getText());
-        albumJSON.put("compania", txtCompania.getText());
-        albumJSON.put("idArtista", artistas.get(cmbArtistas.getSelectionModel()
-                .getSelectedIndex()).getIdartista());
-        albumJSON.put("idGenero", generos.get(cmbGeneros.getSelectionModel()
-                .getSelectedIndex()).getIdgenero());
-        albumJSON.put("idBiblioteca", bibliotecaUsuario.getIdBiblioteca());
-        JSONArray listaCanciones = new JSONArray();
-        for (String nombreCancion : nombresCanciones) {
-            JSONObject cancion = new JSONObject();
-            cancion.put("nombre", nombreCancion);
-            cancion.put("calificacion", 10);
-            cancion.put("nombrearchivo", nombreCancion);
-            listaCanciones.put(cancion);
-        }
-        albumJSON.put("listaCanciones", listaCanciones);
+                    JSONObject albumJSON = new JSONObject();
+                    albumJSON.put("nombre", txtAlbum.getText());
+                    albumJSON.put("anoLanzamiento", txtAnio.getText());
+                    albumJSON.put("compania", txtCompania.getText());
+                    albumJSON.put("idArtista", artistas.get(cmbArtistas.getSelectionModel()
+                            .getSelectedIndex()).getIdartista());
+                    albumJSON.put("idGenero", generos.get(cmbGeneros.getSelectionModel()
+                            .getSelectedIndex()).getIdgenero());
+                    albumJSON.put("idBiblioteca", bibliotecaUsuario.getIdBiblioteca());
+                    JSONArray listaCanciones = new JSONArray();
+                    for (String nombreCancion : nombresCanciones) {
+                        JSONObject cancion = new JSONObject();
+                        cancion.put("nombre", nombreCancion);
+                        cancion.put("calificacion", 10);
+                        cancion.put("nombrearchivo", nombreCancion);
+                        listaCanciones.put(cancion);
+                    }
+                    albumJSON.put("listaCanciones", listaCanciones);
 
-        File archivoCanciones = new File(archivoSeleccionado.getAbsolutePath());
-        if (archivoCanciones.exists()) {
-            System.out.println("Existe");
-            Client cliente = ClientBuilder.newClient();
-            System.out.println(albumJSON.toString());
-            WebTarget webTarget = cliente.target("http://localhost:9000/crearAlbum/");
-            webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(albumJSON.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
-        }
+                    File archivoCanciones = new File(archivoSeleccionado.getAbsolutePath());
+                    if (archivoCanciones.exists()) {
+                        Client cliente = ClientBuilder.newClient();
+                        WebTarget webTarget = cliente.target("http://localhost:9000/crearAlbum/");
+                        webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(albumJSON.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
+                    }
 
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(byteArrayOutputStream);
-        ZipOutputStream zipOutputStream = new ZipOutputStream(bufferedOutputStream);
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(byteArrayOutputStream);
+                    ZipOutputStream zipOutputStream = new ZipOutputStream(bufferedOutputStream);
 
-        zipOutputStream.putNextEntry(new ZipEntry(archivoCanciones.getName()));
-        FileInputStream fileInputStream = new FileInputStream(archivoCanciones);
-        byte[] buffer = new byte[1024];
-        int byteRead;
-        while ((byteRead = fileInputStream.read(buffer)) > 0) {
-            zipOutputStream.write(buffer, 0, byteRead);
-        }
-        fileInputStream.close();
-        if (zipOutputStream != null) {
-            zipOutputStream.finish();
-            zipOutputStream.flush();
-        }
-        byte[] zip = byteArrayOutputStream.toByteArray();
-        Socket socket = new Socket("localhost",8080);
-        ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
-        ObjectInputStream entrada = new ObjectInputStream(socket.getInputStream());
-        salida.writeObject(zip);
+                    zipOutputStream.putNextEntry(new ZipEntry(archivoCanciones.getName()));
+                    FileInputStream fileInputStream = new FileInputStream(archivoCanciones);
+                    byte[] buffer = new byte[1024];
+                    int byteRead;
+                    while ((byteRead = fileInputStream.read(buffer)) > 0) {
+                        zipOutputStream.write(buffer, 0, byteRead);
+                    }
+                    fileInputStream.close();
+                    if (zipOutputStream != null) {
+                        zipOutputStream.finish();
+                        zipOutputStream.flush();
+                    }
+                    byte[] zip = byteArrayOutputStream.toByteArray();
+                    Socket socket = new Socket("localhost", 8080);
+                    //PrintWriter salidaTexto = new PrintWriter(socket.getOutputStream());
+                    ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
+                    ObjectInputStream entrada = new ObjectInputStream(socket.getInputStream());
+                    salida.writeObject("RayPerez/" + txtAlbum.getText());
+                    salida.writeObject(zip);
 //        FileInputStream ficheroStream = new FileInputStream(archivoCanciones);
 //        byte contenido[] = new byte[(int) archivoCanciones.length()];
 //        System.out.println(archivoCanciones.length());
@@ -225,11 +265,93 @@ public class PantallaAgregarBibliotecaController implements Initializable {
 //        Client cliente = ClientBuilder.newClient();
 //        WebTarget webTarget = cliente.target("http://localhost:9000/subirArchivo/");
 //        webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(archivoZip.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Información");
-        alert.setHeaderText(null);
-        alert.setContentText("Album creado exitosamente");
-        alert.showAndWait();
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Información");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Album creado exitosamente");
+                    alert.showAndWait();
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Información");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Algunos campos sobrepasan el límite de caracteres");
+                    alert.showAndWait();
+                }
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Información");
+                alert.setHeaderText(null);
+                alert.setContentText("Debe seleccionar un archivo valido de canciones");
+                alert.showAndWait();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Información");
+            alert.setHeaderText(null);
+            alert.setContentText("Algunos campos estan vacios");
+            alert.showAndWait();
+        }
     }
+
+    public boolean verificarCamposVacios() {
+        boolean camposVacios = false;
+        if (txtAlbum.getText().trim().isEmpty() || txtAnio.getText().trim().isEmpty()
+                || txtCompania.getText().trim().isEmpty() || cmbArtistas.getSelectionModel().isEmpty()
+                || cmbGeneros.getSelectionModel().isEmpty()) {
+            camposVacios = true;
+        }
+        return camposVacios;
+    }
+
+    public boolean verificarArchivoSubido() {
+        boolean archivoVacio = true;
+        if (lstCanciones.getItems().size() > 0) {
+            archivoVacio = false;
+        }
+        return archivoVacio;
+    }
+
+    public boolean verificarLongitudCampos() {
+        boolean longitudExcedida = false;
+        if (txtAlbum.getText().trim().length() > 20 || txtAnio.getText().trim().length() > 4
+                || txtCompania.getText().trim().length() > 20) {
+            System.out.println(txtAlbum.getText().trim().length());
+            longitudExcedida = true;
+        }
+        return longitudExcedida;
+    }
+
+    @FXML
+    private void limitarAlbum(KeyEvent event) {
+        char caracter = event.getCharacter().charAt(0);
+        limitarCaracteres(event, txtAlbum, 20);
+        if (!Character.isLetterOrDigit(caracter)) {
+            event.consume();
+        }
+    }
+
+    @FXML
+    private void limitarAnio(KeyEvent event) {
+        char caracter = event.getCharacter().charAt(0);
+        limitarCaracteres(event, txtAnio, 4);
+        if (!Character.isDigit(caracter)) {
+            event.consume();
+        }
+    }
+
+    @FXML
+    private void limitarCompania(KeyEvent event) {
+        char caracter = event.getCharacter().charAt(0);
+        limitarCaracteres(event, txtCompania, 20);
+        if (!Character.isLetterOrDigit(caracter) && !Character.isSpaceChar(caracter)) {
+            event.consume();
+        }
+    }
+
+    public void limitarCaracteres(KeyEvent event, JFXTextField campo, int caracteresMaximos) {
+        if (campo.getText().trim().length() >= caracteresMaximos) {
+            event.consume();
+        }
+    }
+
 }
