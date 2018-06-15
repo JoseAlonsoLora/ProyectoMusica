@@ -141,6 +141,15 @@ public class PantallaAgregarBibliotecaController implements Initializable {
                             } else {
                                 nombresCanciones.add(entrada.getName());
                             }
+                        } else {
+                            lstCanciones.setItems(null);
+                            nombresCanciones = new ArrayList();
+                            Alert alert = new Alert(Alert.AlertType.WARNING);
+                            alert.setTitle("Información");
+                            alert.setHeaderText(null);
+                            alert.setContentText("El zip no debe de contener directorios, únicamente archivos .mp3");
+                            alert.showAndWait();
+                            break;
                         }
                     }
                     ObservableList<String> items = FXCollections.observableArrayList();
@@ -158,6 +167,12 @@ public class PantallaAgregarBibliotecaController implements Initializable {
                 alert.setContentText("El archivo debe tener una extención .zip");
                 alert.showAndWait();
             }
+        } else {
+            lstCanciones.setItems(null);
+            nombresCanciones = new ArrayList();
+            ObservableList<String> items = FXCollections.observableArrayList();
+            items.addAll(nombresCanciones);
+            lstCanciones.setItems(items);
         }
     }
 
@@ -221,9 +236,9 @@ public class PantallaAgregarBibliotecaController implements Initializable {
                     JSONArray listaCanciones = new JSONArray();
                     for (String nombreCancion : nombresCanciones) {
                         JSONObject cancion = new JSONObject();
-                        cancion.put("nombre", nombreCancion);
+                        cancion.put("nombre", nombreCancion.replace(".mp3", ""));
                         cancion.put("calificacion", 10);
-                        cancion.put("nombrearchivo", nombreCancion);
+                        cancion.put("nombrearchivo", "RayPerez/" + txtAlbum.getText()+"/"+nombreCancion);
                         listaCanciones.put(cancion);
                     }
                     albumJSON.put("listaCanciones", listaCanciones);
@@ -233,7 +248,7 @@ public class PantallaAgregarBibliotecaController implements Initializable {
                     if (archivoCanciones.exists()) {
                         Client cliente = ClientBuilder.newClient();
 
-                        WebTarget webTarget = cliente.target("http://"+ip+":"+puerto+"/crearAlbum/");
+                        WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/crearAlbum/");
                         webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(albumJSON.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
                     }
 
@@ -255,11 +270,13 @@ public class PantallaAgregarBibliotecaController implements Initializable {
                     }
                     byte[] zip = byteArrayOutputStream.toByteArray();
                     puerto = recurso.getProperty("portFiles");
-                    Socket socket = new Socket(ip, Integer.parseInt(puerto));                    
+                    Socket socket = new Socket(ip, Integer.parseInt(puerto));
                     ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
                     ObjectInputStream entrada = new ObjectInputStream(socket.getInputStream());
+                    salida.writeObject(true);
                     salida.writeObject("RayPerez/" + txtAlbum.getText());
                     salida.writeObject(zip);
+                    socket.close();
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Información");
