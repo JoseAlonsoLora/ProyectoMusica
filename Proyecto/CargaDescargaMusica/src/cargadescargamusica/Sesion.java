@@ -45,7 +45,7 @@ public class Sesion implements Runnable {
 
             ZipInputStream zipStream = new ZipInputStream(new ByteArrayInputStream(archivo));
             ZipEntry entry = null;
-            String rutaFinal = "C:/Users/raymu/Documents/ServidorCanciones/" + rutaGuardado;
+            String rutaFinal = "/home/alonso/Desktop/Musica/" + rutaGuardado;
             File zipNuevo = new File(rutaFinal);
             if (!zipNuevo.exists()) {
                 zipNuevo.mkdirs();

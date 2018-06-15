@@ -6,9 +6,11 @@
 package controladores;
 
 import com.jfoenix.controls.JFXButton;
+import com.mycompany.proyectomusica.MainApp;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,10 +25,8 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import modelo.Artista;
 import modelo.Cancion;
 import modelo.Listareproduccion;
-import modelo.Usuario;
 
 /**
  * FXML Controller class
@@ -45,13 +45,14 @@ public class PantallaCancionesPlayListController implements Initializable {
     private ListView<String> lstCanciones;
     private ArrayList<String> nombreCanciones;
     private ArrayList<Cancion> canciones;
+    private Properties recurso;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        recurso = MainApp.leerConfig();
     }
 
     public void setPanelPrincipal(StackPane panelPrincipal) {
@@ -61,7 +62,6 @@ public class PantallaCancionesPlayListController implements Initializable {
     public void setLista(Listareproduccion lista) {
         this.lista = lista;
         lblPlaylist.setText(lista.getNombre());
-        System.out.println(lista.getIdlistareproduccion() + ".........................");
         mostrarCanciones();
     }
 
@@ -71,7 +71,9 @@ public class PantallaCancionesPlayListController implements Initializable {
 
     public void mostrarCanciones() {
         Client cliente = ClientBuilder.newClient();
-        WebTarget webTarget = cliente.target("http://localhost:9000/canciones/?id="+lista.getIdlistareproduccion());
+        String ip = recurso.getProperty("ipAddress");
+        String puerto = recurso.getProperty("portDjango");
+        WebTarget webTarget = cliente.target("http://"+ip+":"+puerto+"/canciones/?id="+lista.getIdlistareproduccion());
         canciones = (ArrayList<Cancion>) webTarget.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Cancion>>(){});
         nombreCanciones = new ArrayList();
         for (Cancion cancion : canciones) {

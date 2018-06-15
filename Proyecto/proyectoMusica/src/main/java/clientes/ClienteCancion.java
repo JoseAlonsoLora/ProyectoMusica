@@ -5,6 +5,8 @@
  */
 package clientes;
 
+import com.mycompany.proyectomusica.MainApp;
+import java.util.Properties;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -26,9 +28,14 @@ public class ClienteCancion {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/proyectoMusicaServidor/webresources";
+    private static String BASE_URI;
+    private Properties recurso;
 
     public ClienteCancion() {
+        recurso = MainApp.leerConfig();
+        String ip = recurso.getProperty("ipAddress");
+        String puerto = recurso.getProperty("portDjango");
+        BASE_URI = "http://localhost:8080/proyectoMusicaServidor/webresources";
         client = javax.ws.rs.client.ClientBuilder.newClient();
         webTarget = client.target(BASE_URI).path("modelo.cancion");
     }

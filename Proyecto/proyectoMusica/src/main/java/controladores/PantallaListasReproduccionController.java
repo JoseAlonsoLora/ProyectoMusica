@@ -9,11 +9,13 @@ import clientes.ClienteListaReproduccion;
 import clientes.ClienteUsuario;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
+import com.mycompany.proyectomusica.MainApp;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,6 +52,7 @@ public class PantallaListasReproduccionController implements Initializable {
     private ClienteUsuario clienteUsuario;
     private Usuario usuarioActual;
     private StackPane panelPrincipal;
+    private Properties recurso;
 
     /**
      * Initializes the controller class.
@@ -58,6 +61,7 @@ public class PantallaListasReproduccionController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         clienteLista = new ClienteListaReproduccion();
         clienteUsuario = new ClienteUsuario();
+        recurso = MainApp.leerConfig();
         //usuarioActual = clienteUsuario.find("RayPerez");
         mostrarListas();
     }

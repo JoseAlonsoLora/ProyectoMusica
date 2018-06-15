@@ -4,9 +4,11 @@ import clientes.ClienteUsuario;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import com.mycompany.proyectomusica.MainApp;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,13 +58,15 @@ public class PantallaCrearCuentaController implements Initializable {
     private Label etiquetaAdvertenciaUsuario;
     @FXML
     private Label etiquetaAdvertenciaContraseña;
+    private Properties recurso;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        recurso = MainApp.leerConfig();
+
     }
 
     @FXML
@@ -70,17 +74,18 @@ public class PantallaCrearCuentaController implements Initializable {
 
         if (!verificarCamposVacios(campoNombre, campoApellido, campoCorreo, campoUsuario, campoContraseña)) {
             if (!verificarLongitudExcedida(campoNombre, campoApellido, campoCorreo, campoUsuario)) {
-                if (validarCorreo(campoCorreo.getText().trim())) {                    
+                if (validarCorreo(campoCorreo.getText().trim())) {
                     JSONObject usuarioNuevo = new JSONObject();
                     usuarioNuevo.put("nombres", campoNombre.getText().trim());
                     usuarioNuevo.put("contrasena", cifrarContrasena(campoContraseña.getText()));
                     usuarioNuevo.put("nombreUsuario", campoUsuario.getText().trim());
                     usuarioNuevo.put("apellidos", campoApellido.getText().trim());
                     usuarioNuevo.put("correo", campoCorreo.getText().trim());
-                                        
 
                     Client cliente = ClientBuilder.newClient();
-                    WebTarget webTarget = cliente.target("http://localhost:9000/crearUsuario/");
+                    String ip = recurso.getProperty("ipAddress");
+                    String puerto = recurso.getProperty("portDjango");
+                    WebTarget webTarget = cliente.target("http://"+ip+":"+puerto+"/crearUsuario/");
                     webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(usuarioNuevo.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
                     mostrarMensaje("", "Registro exitoso", "La cuenta se ha registrado correctamente");
 

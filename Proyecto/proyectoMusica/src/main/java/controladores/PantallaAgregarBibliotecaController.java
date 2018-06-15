@@ -5,6 +5,7 @@ import clientes.ClienteBiblioteca;
 import clientes.ClienteGenero;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import com.mycompany.proyectomusica.MainApp;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -13,12 +14,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -73,6 +74,7 @@ public class PantallaAgregarBibliotecaController implements Initializable {
     private JFXTextField txtAlbum;
     private Biblioteca bibliotecaUsuario;
     private File archivoSeleccionado;
+    private Properties recurso;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -83,6 +85,7 @@ public class PantallaAgregarBibliotecaController implements Initializable {
         nombresArtistas = new ArrayList();
         nombresGeneros = new ArrayList();
         archivoSeleccionado = null;
+        recurso = MainApp.leerConfig();
         cargarDatos();
     }
 
@@ -224,11 +227,13 @@ public class PantallaAgregarBibliotecaController implements Initializable {
                         listaCanciones.put(cancion);
                     }
                     albumJSON.put("listaCanciones", listaCanciones);
-
+                    String ip = recurso.getProperty("ipAddress");
+                    String puerto = recurso.getProperty("portDjango");
                     File archivoCanciones = new File(archivoSeleccionado.getAbsolutePath());
                     if (archivoCanciones.exists()) {
                         Client cliente = ClientBuilder.newClient();
-                        WebTarget webTarget = cliente.target("http://localhost:9000/crearAlbum/");
+
+                        WebTarget webTarget = cliente.target("http://"+ip+":"+puerto+"/crearAlbum/");
                         webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(albumJSON.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
                     }
 
@@ -249,22 +254,13 @@ public class PantallaAgregarBibliotecaController implements Initializable {
                         zipOutputStream.flush();
                     }
                     byte[] zip = byteArrayOutputStream.toByteArray();
-                    Socket socket = new Socket("localhost", 8080);
-                    //PrintWriter salidaTexto = new PrintWriter(socket.getOutputStream());
+                    puerto = recurso.getProperty("portFiles");
+                    Socket socket = new Socket(ip, Integer.parseInt(puerto));                    
                     ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
                     ObjectInputStream entrada = new ObjectInputStream(socket.getInputStream());
                     salida.writeObject("RayPerez/" + txtAlbum.getText());
                     salida.writeObject(zip);
-//        FileInputStream ficheroStream = new FileInputStream(archivoCanciones);
-//        byte contenido[] = new byte[(int) archivoCanciones.length()];
-//        System.out.println(archivoCanciones.length());
-//        ficheroStream.read(contenido);
 
-//        JSONObject archivoZip = new JSONObject();
-//        archivoZip.put("bytes", contenido);
-//        Client cliente = ClientBuilder.newClient();
-//        WebTarget webTarget = cliente.target("http://localhost:9000/subirArchivo/");
-//        webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(archivoZip.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Información");
                     alert.setHeaderText(null);
