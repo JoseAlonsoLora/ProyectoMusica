@@ -40,6 +40,9 @@ public class Listareproduccion {
     public void setUsuario_nombreusuario(String usuario_nombreusuario) {
         this.usuario_nombreusuario = usuario_nombreusuario;
     }
-
-
+    
+    @Override
+    public String toString(){
+        return this.nombre;
+    }
 }

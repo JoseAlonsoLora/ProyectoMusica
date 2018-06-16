@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
@@ -9,7 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane id="AnchorPane" fx:id="pnlTarjeta" prefHeight="100.0" prefWidth="350.0" stylesheets="@../styles/panelCss.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.TarjetaCancionController">
+<StackPane id="AnchorPane" fx:id="pnlTarjeta" prefHeight="100.0" prefWidth="350.0" stylesheets="@../styles/panelCss.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.TarjetaCancionController">
     <cursor>
         <Cursor fx:constant="HAND" />
     </cursor>
@@ -37,6 +39,14 @@
                      <Insets left="10.0" />
                   </GridPane.margin></Label>
                     <Label fx:id="lblAlbum" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               <JFXButton fx:id="bntMenuCancion" onAction="#mostrarMenu" prefHeight="34.0" prefWidth="34.0" text="" GridPane.columnIndex="1">
+                  <GridPane.margin>
+                     <Insets left="120.0" />
+                  </GridPane.margin>
+                  <graphic>
+                     <FontAwesomeIconView glyphName="ELLIPSIS_V" size="25" />
+                  </graphic>
+               </JFXButton>
                 </children>
             </GridPane>
         </StackPane>

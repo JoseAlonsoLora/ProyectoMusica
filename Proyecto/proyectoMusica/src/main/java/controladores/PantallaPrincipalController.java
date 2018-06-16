@@ -8,6 +8,8 @@ package controladores;
 import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +21,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.layout.StackPane;
+import modelo.Cancion;
 
 /**
  * FXML Controller class
@@ -40,13 +43,15 @@ public class PantallaPrincipalController implements Initializable {
     @FXML
     private StackPane pnlPrincipal;
     @FXML
-    private StackPane pnlCancion;
+    private StackPane pnlCancion;    
+    private static List<Cancion> colaCanciones;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        colaCanciones = new ArrayList<>();
         pnlCancion.getStyleClass().add("panel");
         try {
             crearPantallaMiBiblioteca();
@@ -119,6 +124,11 @@ public class PantallaPrincipalController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(PantallaPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public static void agregarCola(Cancion cancion){
+        colaCanciones.add(cancion);
+        System.out.println(colaCanciones.size());
     }
 
 }
