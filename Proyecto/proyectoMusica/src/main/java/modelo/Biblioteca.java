@@ -12,20 +12,21 @@ import java.util.List;
  * @author raymundo
  */
 public class Biblioteca {
-    private Integer idBiblioteca;
+    private Integer idbiblioteca;
     private short publica;
     private String usuario_nombreusuario;
 
     public Biblioteca() {
     }
 
-    public Integer getIdBiblioteca() {
-        return idBiblioteca;
+    public Integer getIdbiblioteca() {
+        return idbiblioteca;
     }
 
-    public void setIdBiblioteca(Integer idBiblioteca) {
-        this.idBiblioteca = idBiblioteca;
+    public void setIdbiblioteca(Integer idbiblioteca) {
+        this.idbiblioteca = idbiblioteca;
     }
+    
 
     public short getPublica() {
         return publica;

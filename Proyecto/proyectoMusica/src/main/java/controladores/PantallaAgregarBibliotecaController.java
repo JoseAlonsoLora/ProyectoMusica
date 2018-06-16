@@ -231,9 +231,11 @@ public class PantallaAgregarBibliotecaController implements Initializable {
                     albumJSON.put("compania", txtCompania.getText());
                     albumJSON.put("idArtista", artistas.get(cmbArtistas.getSelectionModel()
                             .getSelectedIndex()).getIdartista());
+                    System.out.println("id artista: "+ artistas.get(cmbArtistas.getSelectionModel()
+                            .getSelectedIndex()).getIdartista());
                     albumJSON.put("idGenero", generos.get(cmbGeneros.getSelectionModel()
                             .getSelectedIndex()).getIdgenero());
-                    albumJSON.put("idBiblioteca", bibliotecaUsuario.getIdBiblioteca());
+                    albumJSON.put("idBiblioteca", bibliotecaUsuario.getIdbiblioteca());
                     JSONArray listaCanciones = new JSONArray();
                     for (String nombreCancion : nombresCanciones) {
                         JSONObject cancion = new JSONObject();

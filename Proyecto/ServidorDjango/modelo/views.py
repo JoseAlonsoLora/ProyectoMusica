@@ -44,9 +44,9 @@ def guardarAlbum(request):
 		album.nombre = diccionario.get("nombre")
 		album.anoLanzamiento = diccionario.get("anoLanzamiento")
 		album.compania = diccionario.get("compania")
-		album.genero_idGenero = Genero.objects.get(pk = diccionario.get("idGenero"))
-		album.artista_idArtista = Artista.objects.get(pk = diccionario.get("idArtista"))
-		album.biblioteca_idBiblioteca = Biblioteca.objects.get(pk = diccionario.get("idBiblioteca"))
+		album.genero_idgenero = Genero.objects.get(pk = diccionario.get("idGenero"))
+		album.artista_idartista = Artista.objects.get(pk = diccionario.get("idArtista"))
+		album.biblioteca_idbiblioteca = Biblioteca.objects.get(pk = diccionario.get("idBiblioteca"))
 		album.save()
 		canciones = {}
 		canciones = diccionario.get("listaCanciones")
@@ -94,21 +94,19 @@ def obtenerCancionesLista(request):
 		except:
 			pass
 		listaCanciones = {}
+		aux = {}
+		aux = ListareproduccionHasCancion.objects.all()
+		print(aux)
 		listaCanciones = ListareproduccionHasCancion.objects.filter(listareproduccion_idlistareproduccion = idLista).values()
 		listaFinal = []
 		for lis in listaCanciones:
+
 			cancion = Cancion.objects.get(pk = lis.get("cancion_idcancion_id"))
 			serializer = CancionSerializer(cancion)
-			listaFinal.append(serializer.data)
-
-		#lista = list(listaCanciones)
-		#print(lista)
-		#for lis in lista:
-		#	serializar = CancionSerializer(lis.cancion_idcancion,many=True)
-		#	print(serializar.data)
-		
+			listaFinal.append(serializer.data)		
 		return Response(listaFinal)
-#Filtrar
+
+
 @api_view(['GET'])
 def obtenerTodasCanciones(request):
 	canciones = Cancion.objects.all()
@@ -117,13 +115,13 @@ def obtenerTodasCanciones(request):
 	for cancionJson in serializer.data:
 		cancionAux = {}
 		album = Album.objects.get(pk = cancionJson['album_idalbum'])
-		if (album.biblioteca_idBiblioteca.publica == 1):
+		if (album.biblioteca_idbiblioteca.publica == 1):
 			cancionAux["nombre"] = cancionJson['nombre']
 			cancionAux["idcancion"] = cancionJson['idcancion']
 			cancionAux['calificacion'] = cancionJson['calificacion']
 			cancionAux['nombrearchivo'] = cancionJson['nombrearchivo']
 			cancionAux['nombreAlbum'] = album.nombre		
-			cancionAux['nombreArtista'] = album.artista_idArtista.nombre
+			cancionAux['nombreArtista'] = album.artista_idartista.nombre
 			listaCanciones.append(cancionAux)
 	return Response(listaCanciones)
 
@@ -134,7 +132,7 @@ def obtenerTodosAlbum(request):
 	listaAlbumes = []
 	serializer = AlbumSerializer(albumes,many=True)
 	for album in serializer.data:
-		biblioteca = Biblioteca.objects.get(pk = album.get('biblioteca_idBiblioteca'))
+		biblioteca = Biblioteca.objects.get(pk = album.get('biblioteca_idbiblioteca'))
 		if (biblioteca.publica == 1):
 			listaAlbumes.append(album)
 	return Response(listaAlbumes)
@@ -145,9 +143,9 @@ def obtenerAlbumesArtista(request):
 	idArtista = request.GET['id']
 	listaAlbumes = {}
 	listaAlbumesFinal = []
-	listaAlbumes = Album.objects.filter(artista_idArtista = idArtista).values()
+	listaAlbumes = Album.objects.filter(artista_idartista = idArtista).values()
 	for album in listaAlbumes:
-		biblioteca = Biblioteca.objects.get(pk = album.get('biblioteca_idBiblioteca_id'))
+		biblioteca = Biblioteca.objects.get(pk = album.get('biblioteca_idbiblioteca_id'))
 		if (biblioteca.publica == 1):
 			listaAlbumesFinal.append(album)
 	return Response(listaAlbumesFinal)
@@ -165,7 +163,7 @@ def obtenerCancionesAlbum(request):
 def obtenerAlbumPorBiblioteca(request):
 	idBiblioteca = request.GET['id']
 	listaAlbumes = {}
-	listaAlbumes = Album.objects.filter(biblioteca_idBiblioteca = idBiblioteca).values()
+	listaAlbumes = Album.objects.filter(biblioteca_idbiblioteca = idBiblioteca).values()
 	return Response(listaAlbumes)
 
 
@@ -173,11 +171,11 @@ def obtenerAlbumPorBiblioteca(request):
 def obtenerCancionesPorBiblioteca(request):
 	idBiblioteca = request.GET['id']
 	listaAlbumes = {}
-	listaAlbumes = Album.objects.filter(biblioteca_idBiblioteca = idBiblioteca).values()
+	listaAlbumes = Album.objects.filter(biblioteca_idbiblioteca = idBiblioteca).values()
 	listaCanciones = []
 	for album in listaAlbumes:
 		serializer = {}
-		serializer = Cancion.objects.filter(album_idalbum = album.get('idAlbum')).values()		
+		serializer = Cancion.objects.filter(album_idalbum = album.get('idalbum')).values()		
 		for cancionJson in serializer:
 			cancionAux = {}
 			cancionAux["nombre"] = cancionJson['nombre']
@@ -185,7 +183,19 @@ def obtenerCancionesPorBiblioteca(request):
 			cancionAux['calificacion'] = cancionJson['calificacion']
 			cancionAux['nombrearchivo'] = cancionJson['nombrearchivo']
 			cancionAux['nombreAlbum'] = album.get("nombre")
-			artista = Artista.objects.get(pk = album.get("artista_idArtista_id"))
+			artista = Artista.objects.get(pk = album.get("artista_idartista_id"))
 			cancionAux['nombreArtista'] = artista.nombre
 			listaCanciones.append(cancionAux)
 	return Response(listaCanciones)
+
+@api_view(['POST'])
+def agregarCancionLista(request):
+	diccionario = {}
+	diccionario = request.data
+	lista = Listareproduccion.objects.get(pk = diccionario.get("idLista"))
+	cancion = Cancion.objects.get(pk = diccionario.get("idCancion"))
+	listahascancion = ListareproduccionHasCancion()
+	listahascancion.listareproduccion_idlistareproduccion = lista
+	listahascancion.cancion_idcancion = cancion
+	listahascancion.save()
+	return Response({'result':'ok'}, status=status.HTTP_201_CREATED)

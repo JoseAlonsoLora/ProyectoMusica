@@ -33,5 +33,6 @@ urlpatterns = [
     url(r'^cancionesPorAlbum/', obtenerCancionesAlbum),
     url(r'^albumesPorBiblioteca/', obtenerAlbumPorBiblioteca),
     url(r'^cancionesPorBiblioteca/', obtenerCancionesPorBiblioteca),
+    url(r'^agregarALista/', agregarCancionLista),
 
 ]

@@ -11,13 +11,13 @@ from django.db import models
 
 
 class Album(models.Model):
-    idAlbum = models.AutoField(db_column='idAlbum', primary_key=True)  # Field name made lowercase.
+    idalbum = models.AutoField(db_column='idAlbum', primary_key=True)  # Field name made lowercase.
     nombre = models.CharField(max_length=45)
-    anoLanzamiento = models.CharField(db_column='anoLanzamiento', max_length=4, blank=True, null=True)  # Field name made lowercase.
+    anolanzamiento = models.CharField(db_column='anoLanzamiento', max_length=4, blank=True, null=True)  # Field name made lowercase.
     compania = models.CharField(max_length=45, blank=True, null=True)
-    artista_idArtista = models.ForeignKey('Artista', models.DO_NOTHING, db_column='artista_idArtista')  # Field name made lowercase.
-    genero_idGenero = models.ForeignKey('Genero', models.DO_NOTHING, db_column='genero_idGenero')  # Field name made lowercase.
-    biblioteca_idBiblioteca = models.ForeignKey('Biblioteca', models.DO_NOTHING, db_column='biblioteca_idBiblioteca')  # Field name made lowercase.
+    artista_idartista = models.ForeignKey('Artista', models.DO_NOTHING, db_column='artista_idArtista')  # Field name made lowercase.
+    genero_idgenero = models.ForeignKey('Genero', models.DO_NOTHING, db_column='genero_idGenero')  # Field name made lowercase.
+    biblioteca_idbiblioteca = models.ForeignKey('Biblioteca', models.DO_NOTHING, db_column='biblioteca_idBiblioteca')  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -34,7 +34,7 @@ class Artista(models.Model):
 
 
 class Biblioteca(models.Model):
-    idBiblioteca = models.AutoField(db_column='idBiblioteca', primary_key=True)  # Field name made lowercase.
+    idbiblioteca = models.AutoField(db_column='idBiblioteca', primary_key=True)  # Field name made lowercase.
     publica = models.IntegerField()
     usuario_nombreusuario = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='usuario_nombreUsuario')  # Field name made lowercase.
 
@@ -75,13 +75,13 @@ class Listareproduccion(models.Model):
 
 
 class ListareproduccionHasCancion(models.Model):
-    listareproduccion_idlistareproduccion = models.ForeignKey(Listareproduccion, models.DO_NOTHING, db_column='listaReproduccion_idlistaReproduccion', primary_key=True)  # Field name made lowercase.
+    listareproduccion_idlistareproduccion = models.ForeignKey(Listareproduccion, models.DO_NOTHING, db_column='listaReproduccion_idlistaReproduccion')  # Field name made lowercase.
     cancion_idcancion = models.ForeignKey(Cancion, models.DO_NOTHING, db_column='cancion_idCancion')  # Field name made lowercase.
+    idreproduccioncancion = models.AutoField(db_column='idReproduccionCancion', primary_key=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
         db_table = 'listaReproduccion_has_cancion'
-        unique_together = (('listareproduccion_idlistareproduccion', 'cancion_idcancion'),)
 
 
 class Usuario(models.Model):
