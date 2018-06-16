@@ -1,5 +1,6 @@
 package controladores;
 
+import clasesApoyo.HiloCargaCanciones;
 import clientes.ClienteArtista;
 import clientes.ClienteBiblioteca;
 import clientes.ClienteGenero;
@@ -30,12 +31,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -238,7 +243,7 @@ public class PantallaAgregarBibliotecaController implements Initializable {
                         JSONObject cancion = new JSONObject();
                         cancion.put("nombre", nombreCancion.replace(".mp3", ""));
                         cancion.put("calificacion", 10);
-                        cancion.put("nombrearchivo", "RayPerez/" + txtAlbum.getText()+"/"+nombreCancion);
+                        cancion.put("nombrearchivo", "RayPerez/" + txtAlbum.getText() + "/" + nombreCancion);
                         listaCanciones.put(cancion);
                     }
                     albumJSON.put("listaCanciones", listaCanciones);
@@ -270,19 +275,29 @@ public class PantallaAgregarBibliotecaController implements Initializable {
                     }
                     byte[] zip = byteArrayOutputStream.toByteArray();
                     puerto = recurso.getProperty("portFiles");
-                    Socket socket = new Socket(ip, Integer.parseInt(puerto));
-                    ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
-                    ObjectInputStream entrada = new ObjectInputStream(socket.getInputStream());
-                    salida.writeObject(true);
-                    salida.writeObject("RayPerez/" + txtAlbum.getText());
-                    salida.writeObject(zip);
-                    socket.close();
+                    Stage stage = new Stage();
+                    FXMLLoader loader = new FXMLLoader(PantallaAgregarBibliotecaController.class.getResource("/fxml/BarraProgreso.fxml"));
+                    Parent root = loader.load();
+                    BarraProgresoController barra = loader.getController();
+                    barra.setTipo("Cargando canciones");
+                    barra.setStageActual(stage);
+                    barra.setZip(zip);
+                    barra.setPuerto(Integer.parseInt(puerto));
+                    barra.setIp(ip);
+                    barra.setRuta("RayPerez/" + txtAlbum.getText());
+                    Scene scene = new Scene(root);
+                    stage.setTitle("Trabajando");
+                    stage.setScene(scene);
+                    stage.show();
+                    barra.setTipoCarga(true);
+//                    Socket socket = new Socket(ip, Integer.parseInt(puerto));
+//                    ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
+//                    ObjectInputStream entrada = new ObjectInputStream(socket.getInputStream());
+//                    salida.writeObject(true);
+//                    salida.writeObject("RayPerez/" + txtAlbum.getText());
+//                    salida.writeObject(zip);
+//                    socket.close();
 
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Información");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Album creado exitosamente");
-                    alert.showAndWait();
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Información");
