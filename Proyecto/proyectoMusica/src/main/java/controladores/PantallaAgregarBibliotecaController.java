@@ -1,6 +1,5 @@
 package controladores;
 
-import clasesApoyo.HiloCargaCanciones;
 import clientes.ClienteArtista;
 import clientes.ClienteBiblioteca;
 import clientes.ClienteGenero;
@@ -13,9 +12,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;

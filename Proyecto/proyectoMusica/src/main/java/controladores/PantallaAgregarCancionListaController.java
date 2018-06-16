@@ -18,6 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import modelo.Cancion;
 import modelo.Listareproduccion;
 
 /**
@@ -32,6 +33,7 @@ public class PantallaAgregarCancionListaController implements Initializable {
     @FXML
     private JFXButton btnAceptar;
     private List<Listareproduccion> listasReproduccionUsuario;
+    private Cancion cancion;
 
     /**
      * Initializes the controller class.
@@ -42,6 +44,10 @@ public class PantallaAgregarCancionListaController implements Initializable {
         listPlayList.setExpanded(true);
         mostrarListas();
     }    
+
+    public void setCancion(Cancion cancion) {
+        this.cancion = cancion;
+    }
 
     @FXML
     private void agregarCancionPlayList(ActionEvent event) {
