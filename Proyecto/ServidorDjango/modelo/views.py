@@ -108,7 +108,7 @@ def obtenerCancionesLista(request):
 		#	print(serializar.data)
 		
 		return Response(listaFinal)
-
+#Filtrar
 @api_view(['GET'])
 def obtenerTodasCanciones(request):
 	canciones = Cancion.objects.all()
@@ -116,30 +116,41 @@ def obtenerTodasCanciones(request):
 	listaCanciones = []
 	for cancionJson in serializer.data:
 		cancionAux = {}
-		cancionAux["nombre"] = cancionJson['nombre']
-		cancionAux["idcancion"] = cancionJson['idcancion']
-		cancionAux['calificacion'] = cancionJson['calificacion']
-		cancionAux['nombrearchivo'] = cancionJson['nombrearchivo']
 		album = Album.objects.get(pk = cancionJson['album_idalbum'])
-		cancionAux['nombreAlbum'] = album.nombre		
-		cancionAux['nombreArtista'] = album.artista_idArtista.nombre
-		listaCanciones.append(cancionAux)
+		if (album.biblioteca_idBiblioteca.publica == 1):
+			cancionAux["nombre"] = cancionJson['nombre']
+			cancionAux["idcancion"] = cancionJson['idcancion']
+			cancionAux['calificacion'] = cancionJson['calificacion']
+			cancionAux['nombrearchivo'] = cancionJson['nombrearchivo']
+			cancionAux['nombreAlbum'] = album.nombre		
+			cancionAux['nombreArtista'] = album.artista_idArtista.nombre
+			listaCanciones.append(cancionAux)
 	return Response(listaCanciones)
 
 
 @api_view(['GET'])
 def obtenerTodosAlbum(request):
 	albumes = Album.objects.all()
+	listaAlbumes = []
 	serializer = AlbumSerializer(albumes,many=True)
-	return Response(serializer.data)
+	for album in serializer.data:
+		biblioteca = Biblioteca.objects.get(pk = album.get('biblioteca_idBiblioteca'))
+		if (biblioteca.publica == 1):
+			listaAlbumes.append(album)
+	return Response(listaAlbumes)
 
 
 @api_view(['GET'])
 def obtenerAlbumesArtista(request):
 	idArtista = request.GET['id']
 	listaAlbumes = {}
+	listaAlbumesFinal = []
 	listaAlbumes = Album.objects.filter(artista_idArtista = idArtista).values()
-	return Response(listaAlbumes)
+	for album in listaAlbumes:
+		biblioteca = Biblioteca.objects.get(pk = album.get('biblioteca_idBiblioteca_id'))
+		if (biblioteca.publica == 1):
+			listaAlbumesFinal.append(album)
+	return Response(listaAlbumesFinal)
 
 
 @api_view(['GET'])

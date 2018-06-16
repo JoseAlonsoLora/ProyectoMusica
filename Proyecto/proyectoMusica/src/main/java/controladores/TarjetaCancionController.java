@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import modelo.Artista;
 import modelo.Cancion;
 
 /**
@@ -30,6 +31,8 @@ public class TarjetaCancionController implements Initializable {
     private Label lblAlbum;
     @FXML
     private StackPane pnlTarjeta;
+   
+
 
     /**
      * Initializes the controller class.
@@ -46,6 +49,8 @@ public class TarjetaCancionController implements Initializable {
         lblArtista.setText(this.cancion.getNombreArtista());
         lblAlbum.setText(this.cancion.getNombreAlbum());
     }
+
+
     
     
 }

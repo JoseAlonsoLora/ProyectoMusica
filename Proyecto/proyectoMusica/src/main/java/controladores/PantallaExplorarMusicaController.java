@@ -12,6 +12,8 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -53,6 +55,12 @@ public class PantallaExplorarMusicaController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         crearPantallaCanciones();
+        tbArtistas.setOnSelectionChanged(new EventHandler<Event>() {
+            @Override
+            public void handle(Event t) {
+               crearPantallaArtistas();
+            }
+        });
     }    
 
     void setPnlPrincipal(StackPane pnlPrincipal) {
@@ -66,6 +74,18 @@ public class PantallaExplorarMusicaController implements Initializable {
             root = (Parent) loader.load();
             pnlCanciones.getChildren().clear();
             pnlCanciones.getChildren().add(root);
+        } catch (IOException ex) {
+            Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void crearPantallaArtistas(){
+    FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaArtistas.fxml"));
+        Parent root;
+        try {
+            root = (Parent) loader.load();
+            pnlArtistas.getChildren().clear();
+            pnlArtistas.getChildren().add(root);
         } catch (IOException ex) {
             Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
         }

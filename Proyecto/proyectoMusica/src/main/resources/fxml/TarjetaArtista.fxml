@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane id="AnchorPane" fx:id="pnlTarjeta" prefHeight="100.0" prefWidth="350.0" stylesheets="@../styles/panelCss.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.TarjetaArtistaController">
+    <cursor>
+        <Cursor fx:constant="HAND" />
+    </cursor>
+    <children>
+        <StackPane style="-fx-background-color: #D1F2EB;">
+            <GridPane prefHeight="36.0" prefWidth="335.0">
+                <columnConstraints>
+                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                </rowConstraints>
+                <children>
+                    <Label fx:id="lblNombreArtista" prefHeight="18.0" text="Label">
+                  <GridPane.margin>
+                     <Insets left="10.0" />
+                  </GridPane.margin>
+                  <font>
+                     <Font name="System Bold" size="13.0" />
+                  </font></Label>
+                </children>
+            </GridPane>
+        </StackPane>
+    </children>
+    <padding>
+        <Insets left="15.0" />
+    </padding>
+</StackPane>
