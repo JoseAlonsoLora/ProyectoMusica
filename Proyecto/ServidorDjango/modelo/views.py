@@ -199,3 +199,21 @@ def agregarCancionLista(request):
 	listahascancion.cancion_idcancion = cancion
 	listahascancion.save()
 	return Response({'result':'ok'}, status=status.HTTP_201_CREATED)
+
+@api_view(['GET'])
+def iniciarSesion(request):
+	nombreUsuario = request.GET['id']
+	contrasenaUsuario = request.GET['password']
+	respuesta = {'result':'false'}
+	try:
+		usuario = Usuario.objects.get(pk = nombreUsuario)
+	except:
+		return Response(respuesta)
+	if usuario:
+		if (usuario.contrasena ==  contrasenaUsuario):
+			print(usuario)
+			respuesta = {'result':'true'}
+	return Response(respuesta)
+
+
+
