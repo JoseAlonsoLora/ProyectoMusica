@@ -28,5 +28,10 @@ urlpatterns = [
     url(r'^crearUsuario/', guardarUsuario),
     url(r'^canciones/', obtenerCancionesLista),
     url(r'^todasCanciones/', obtenerTodasCanciones),
+    url(r'^todosLosAlbumes/', obtenerTodosAlbum),
+    url(r'^albumesPorArtista/', obtenerAlbumesArtista),
+    url(r'^cancionesPorAlbum/', obtenerCancionesAlbum),
+    url(r'^albumesPorBiblioteca/', obtenerAlbumPorBiblioteca),
+    url(r'^cancionesPorBiblioteca/', obtenerCancionesPorBiblioteca),
 
 ]
