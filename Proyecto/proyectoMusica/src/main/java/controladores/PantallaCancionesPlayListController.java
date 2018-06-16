@@ -7,8 +7,12 @@ package controladores;
 
 import com.jfoenix.controls.JFXButton;
 import com.mycompany.proyectomusica.MainApp;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -129,6 +133,7 @@ public class PantallaCancionesPlayListController implements Initializable {
 
                         zipStream.close();
                         socket.close();
+                        descomprimirArchivo(rutaFinal, rutaFinal + "/" + entryName);
                         Alert alert = new Alert(Alert.AlertType.WARNING);
                         alert.setTitle("Información");
                         alert.setHeaderText(null);
@@ -173,5 +178,49 @@ public class PantallaCancionesPlayListController implements Initializable {
         ObservableList<String> items = FXCollections.observableArrayList();
         items.addAll(nombreCanciones);
         lstCanciones.setItems(items);
+    }
+
+    public void descomprimirArchivo(String ruta, String rutaZip) {
+        final int TAM_BUFFER = 4096;
+        byte[] buffer = new byte[TAM_BUFFER];
+
+        ZipInputStream flujo = null;
+        try {
+            flujo = new ZipInputStream(new BufferedInputStream(
+                    new FileInputStream(rutaZip)));
+            ZipEntry entrada;
+            while ((entrada = flujo.getNextEntry()) != null) {
+                String nombreSalida = ruta + File.separator
+                        + entrada.getName();
+                BufferedOutputStream salida = null;
+                try {
+                    int leido;
+                    salida = new BufferedOutputStream(
+                            new FileOutputStream(nombreSalida), TAM_BUFFER);
+                    while ((leido = flujo.read(buffer, 0, TAM_BUFFER)) != -1) {
+                        salida.write(buffer, 0, leido);
+                    }
+                } finally {
+                    if (salida != null) {
+                        salida.close();
+                    }
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PantallaAgregarBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(PantallaAgregarBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (flujo != null) {
+                try {
+                    flujo.close();
+                    File file = new File(rutaZip);
+                    file.delete();
+                } catch (IOException ex) {
+                    Logger.getLogger(PantallaAgregarBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+        }
     }
 }
