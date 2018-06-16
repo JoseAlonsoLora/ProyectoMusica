@@ -6,6 +6,7 @@
 package clientes;
 
 import com.mycompany.proyectomusica.MainApp;
+import java.util.List;
 import java.util.Properties;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
@@ -68,9 +69,9 @@ public class ClienteUsuario {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
     }
 
-    public <T> T findAll(Class<T> responseType) throws ClientErrorException {
+    public List<Usuario> findAll() throws ClientErrorException {
         WebTarget resource = webTarget;
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(new GenericType<List<Usuario>>(){});
     }
 
     public void remove(String id) throws ClientErrorException {

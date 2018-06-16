@@ -8,6 +8,7 @@ import com.mycompany.proyectomusica.MainApp;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
@@ -71,24 +72,36 @@ public class PantallaCrearCuentaController implements Initializable {
 
     @FXML
     private void registrarUsuario(ActionEvent event) throws NoSuchAlgorithmException {
-
+        boolean usuarioValido = true;
         if (!verificarCamposVacios(campoNombre, campoApellido, campoCorreo, campoUsuario, campoContraseña)) {
             if (!verificarLongitudExcedida(campoNombre, campoApellido, campoCorreo, campoUsuario)) {
                 if (validarCorreo(campoCorreo.getText().trim())) {
-                    JSONObject usuarioNuevo = new JSONObject();
-                    usuarioNuevo.put("nombres", campoNombre.getText().trim());
-                    usuarioNuevo.put("contrasena", cifrarContrasena(campoContraseña.getText()));
-                    usuarioNuevo.put("nombreUsuario", campoUsuario.getText().trim());
-                    usuarioNuevo.put("apellidos", campoApellido.getText().trim());
-                    usuarioNuevo.put("correo", campoCorreo.getText().trim());
+                    ClienteUsuario clienteUsuario = new ClienteUsuario();
+                    List<Usuario> usuarios;
+                    usuarios = clienteUsuario.findAll();
+                    for(Usuario usuario: usuarios){
+                        if(usuario.getNombreusuario().equals(campoUsuario.getText())){
+                            usuarioValido = false;
+                        }
+                    }
+                    clienteUsuario.close();
+                    if (!usuarioValido) {
+                        mostrarMensaje("Usuario existente", "El nombre de usuario elegido ya se encuentra en uso", "El nombre de usuario elegido ya se encuentra en uso");
+                    } else {
+                        JSONObject usuarioNuevo = new JSONObject();
+                        usuarioNuevo.put("nombres", campoNombre.getText().trim());
+                        usuarioNuevo.put("contrasena", cifrarContrasena(campoContraseña.getText()));
+                        usuarioNuevo.put("nombreUsuario", campoUsuario.getText().trim());
+                        usuarioNuevo.put("apellidos", campoApellido.getText().trim());
+                        usuarioNuevo.put("correo", campoCorreo.getText().trim());
 
-                    Client cliente = ClientBuilder.newClient();
-                    String ip = recurso.getProperty("ipAddress");
-                    String puerto = recurso.getProperty("portDjango");
-                    WebTarget webTarget = cliente.target("http://"+ip+":"+puerto+"/crearUsuario/");
-                    webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(usuarioNuevo.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
-                    mostrarMensaje("", "Registro exitoso", "La cuenta se ha registrado correctamente");
-
+                        Client cliente = ClientBuilder.newClient();
+                        String ip = recurso.getProperty("ipAddress");
+                        String puerto = recurso.getProperty("portDjango");
+                        WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/crearUsuario/");
+                        webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(usuarioNuevo.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
+                        mostrarMensaje("", "Registro exitoso", "La cuenta se ha registrado correctamente");
+                    }
                 } else {
                     mostrarMensaje("", "Correo no válido", "El correo ingresado no tiene un formato válido");
                 }
