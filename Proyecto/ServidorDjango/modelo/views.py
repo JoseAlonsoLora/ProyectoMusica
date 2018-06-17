@@ -202,6 +202,24 @@ def obtenerAlbumPorBiblioteca(request):
 
 
 @api_view(['GET'])
+def obtenerAlbumPorGenero(request):
+	idGenero = request.GET['id']
+	listaAlbumesFinal = []
+	listaAlbumes = Album.objects.filter(genero_idgenero = idGenero).values()
+	for album in listaAlbumes:
+		albumJson = {}
+		albumJson["nombre"] = album["nombre"]
+		albumJson["idalbum"] = album["idalbum"]
+		albumJson["artista_idartista"] = album["artista_idartista_id"]
+		albumJson["genero_idgenero"] = album["genero_idgenero_id"]
+		albumJson["compania"] = album["compania"]
+		albumJson["biblioteca_idbiblioteca"] = album["biblioteca_idbiblioteca_id"]
+		listaAlbumesFinal.append(albumJson)
+	return Response(listaAlbumesFinal)
+
+
+
+@api_view(['GET'])
 def obtenerCancionesPorBiblioteca(request):
 	idBiblioteca = request.GET['id']
 	listaAlbumes = {}
@@ -250,4 +268,19 @@ def iniciarSesion(request):
 	return Response(respuesta)
 
 
+@api_view(['GET'])
+def bibliotecaPrivada(request):
+	idBiblioteca = request.GET['id']
+	biblioteca = Biblioteca.objects.get(pk = idBiblioteca)
+	biblioteca.publica = 0
+	biblioteca.save()
+	return Response({'result':'ok'})
 
+
+@api_view(['GET'])
+def bibliotecaPublica(request):
+	idBiblioteca = request.GET['id']
+	biblioteca = Biblioteca.objects.get(pk = idBiblioteca)
+	biblioteca.publica = 1
+	biblioteca.save()
+	return Response({'result':'ok'})
