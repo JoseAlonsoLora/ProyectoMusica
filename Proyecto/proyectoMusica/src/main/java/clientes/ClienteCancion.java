@@ -102,5 +102,14 @@ public class ClienteCancion {
         return webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(new GenericType<List<Cancion>>() {
         });
     }
+    
+    public List<Cancion> obtenerCancionesLista(int idLista){
+        String ip = recurso.getProperty("ipAddress");
+        String puerto = recurso.getProperty("portDjango");
+        Client cliente = ClientBuilder.newClient();
+        WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/canciones/"+"?id="+ idLista);
+        return webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(new GenericType<List<Cancion>>() {
+        });
+    }
 
 }

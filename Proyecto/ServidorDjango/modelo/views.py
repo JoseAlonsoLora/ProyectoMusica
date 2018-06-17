@@ -100,10 +100,15 @@ def obtenerCancionesLista(request):
 		listaCanciones = ListareproduccionHasCancion.objects.filter(listareproduccion_idlistareproduccion = idLista).values()
 		listaFinal = []
 		for lis in listaCanciones:
-
+			cancionAux = {}
 			cancion = Cancion.objects.get(pk = lis.get("cancion_idcancion_id"))
-			serializer = CancionSerializer(cancion)
-			listaFinal.append(serializer.data)		
+			cancionAux["nombre"] = cancion.nombre
+			cancionAux["idcancion"] = cancion.idcancion
+			cancionAux['calificacion'] = cancion.calificacion
+			cancionAux['nombrearchivo'] = cancion.nombrearchivo
+			cancionAux['nombreAlbum'] = cancion.album_idalbum.nombre		
+			cancionAux['nombreArtista'] = cancion.album_idalbum.artista_idartista.nombre
+			listaFinal.append(cancionAux)		
 		return Response(listaFinal)
 
 

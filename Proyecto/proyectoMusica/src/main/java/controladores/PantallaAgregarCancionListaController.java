@@ -5,6 +5,8 @@
  */
 package controladores;
 
+import clientes.ClienteAlbum;
+import clientes.ClienteCancion;
 import clientes.ClienteListaReproduccion;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
@@ -20,6 +22,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.stage.Stage;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -61,19 +64,29 @@ public class PantallaAgregarCancionListaController implements Initializable {
     @FXML
     private void agregarCancionPlayList(ActionEvent event) {
         if (listPlayList.getSelectionModel().getSelectedItem() != null) {
-            Client cliente = ClientBuilder.newClient();
-            JSONObject listaCancion = new JSONObject();
-            listaCancion.put("idLista", listPlayList.getSelectionModel().getSelectedItem().getIdlistareproduccion());
-            listaCancion.put("idCancion", cancion.getIdcancion());
-            String ip = recurso.getProperty("ipAddress");
-            String puerto = recurso.getProperty("portDjango");
-            WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/agregarALista/");
-            webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(listaCancion.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Información");
-            alert.setHeaderText(null);
-            alert.setContentText("Canción agregada");
-            alert.showAndWait();
+            if (!hayNombreRepetido()) {
+                Client cliente = ClientBuilder.newClient();
+                JSONObject listaCancion = new JSONObject();
+                listaCancion.put("idLista", listPlayList.getSelectionModel().getSelectedItem().getIdlistareproduccion());
+                listaCancion.put("idCancion", cancion.getIdcancion());
+                String ip = recurso.getProperty("ipAddress");
+                String puerto = recurso.getProperty("portDjango");
+                WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/agregarALista/");
+                webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(listaCancion.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Información");
+                alert.setHeaderText(null);
+                alert.setContentText("Canción agregada");
+                alert.showAndWait();
+                Stage mainStage = (Stage) btnAceptar.getScene().getWindow();
+                mainStage.close();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Información");
+                alert.setHeaderText(null);
+                alert.setContentText("No puede tener un nombre de canción repetido en la misma PlayList");
+                alert.showAndWait();
+            }
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Información");
@@ -95,6 +108,20 @@ public class PantallaAgregarCancionListaController implements Initializable {
         ObservableList<Listareproduccion> items = FXCollections.observableArrayList();
         items.addAll(listasReproduccionUsuario);
         listPlayList.setItems(items);
+    }
+
+    public boolean hayNombreRepetido() {
+        boolean hayNombreRepetido = false;
+        ClienteCancion cliente = new ClienteCancion();
+        List<Cancion> cancionesPlayList = cliente.obtenerCancionesLista(
+                listPlayList.getSelectionModel().getSelectedItem().getIdlistareproduccion());
+        for (Cancion cancion : cancionesPlayList) {
+            if (this.cancion.getNombre().equals(cancion.getNombre())) {
+                hayNombreRepetido = true;
+                break;
+            }
+        }
+        return hayNombreRepetido;
     }
 
 }

@@ -117,7 +117,6 @@ public class PantallaCancionesPlayListController implements Initializable {
                         }
                         Path outDir = Paths.get(rutaFinal);
                         String entryName = "";
-                        //guardarArchivo(buffer, "/home/alonso/Documents/cancer.zip");
                         while ((entry = zipStream.getNextEntry()) != null) {
                             Path filePath = outDir.resolve(entry.getName());
                             entryName = entry.getName();
@@ -141,8 +140,6 @@ public class PantallaCancionesPlayListController implements Initializable {
                         alert.setHeaderText(null);
                         alert.setContentText("Las canciones se han descargado correctamente");
                         alert.showAndWait();
-//                        salida.writeObject("RayPerez/" + txtAlbum.getText());
-//                        salida.writeObject(zip);
                         socket.close();
                     } catch (IOException ex) {
                         Logger.getLogger(PantallaCancionesPlayListController.class.getName()).log(Level.SEVERE, null, ex);
@@ -182,7 +179,7 @@ public class PantallaCancionesPlayListController implements Initializable {
         try {
             root = (Parent) loader.load();
             PantallaCancionesController controlador = loader.getController();
-            controlador.setCanciones(new ClienteCancion().findAll());
+            controlador.setCanciones(canciones);
             controlador.ocultarBuscar();
             pnlCanciones.getChildren().clear();
             pnlCanciones.getChildren().add(root);
