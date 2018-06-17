@@ -5,7 +5,6 @@
  */
 package controladores;
 
-import clientes.ClienteCancion;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
@@ -81,6 +80,11 @@ public class PantallaCancionesController implements Initializable {
             }
         }
 
+    }
+    
+    public void ocultarBuscar(){
+        btnBuscarCancion.setVisible(false);
+        txtNombreCancion.setVisible(false);
     }
 
 }

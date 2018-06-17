@@ -8,11 +8,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="608.0" prefWidth="1120.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.PantallaCancionesPlayListController">
+<BorderPane prefHeight="608.0" prefWidth="1120.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.PantallaCancionesPlayListController">
    <center>
-      <AnchorPane id="AnchorPane" prefHeight="485.0" prefWidth="1020.0" style="-fx-background-color: #ecf0f1;">
+      <AnchorPane id="AnchorPane" prefHeight="485.0" prefWidth="1020.0">
          <children>
             <Label fx:id="lblPlaylist" layoutX="429.0" layoutY="5.0" text="Nombre de la playlist">
                <font>
@@ -25,21 +26,21 @@
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
-            </JFXButton>
-            <ListView fx:id="lstCanciones" layoutY="48.0" prefHeight="417.0" prefWidth="922.0" />
+            </JFXButton>            
+            <StackPane fx:id="pnlCanciones" layoutX="-1.0" layoutY="41.0" prefHeight="461.0" prefWidth="1097.0" />
          </children>
       </AnchorPane>
    </center>
    <left>
-      <Pane prefHeight="608.0" prefWidth="50.0" style="-fx-background-color: #ecf0f1;" BorderPane.alignment="CENTER" />
+      <Pane prefHeight="508.0" prefWidth="11.0" BorderPane.alignment="CENTER" />
    </left>
    <right>
-      <Pane prefHeight="200.0" prefWidth="50.0" style="-fx-background-color: #ecf0f1;" BorderPane.alignment="CENTER" />
+      <Pane prefHeight="508.0" prefWidth="12.0" BorderPane.alignment="CENTER" />
    </right>
    <top>
-      <Pane prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #ecf0f1;" BorderPane.alignment="CENTER" />
+      <Pane prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER" />
    </top>
    <bottom>
-      <Pane prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #ecf0f1;" BorderPane.alignment="CENTER" />
+      <Pane prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </bottom>
 </BorderPane>

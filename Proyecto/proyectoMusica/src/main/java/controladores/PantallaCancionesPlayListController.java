@@ -5,6 +5,7 @@
  */
 package controladores;
 
+import clientes.ClienteCancion;
 import com.jfoenix.controls.JFXButton;
 import com.mycompany.proyectomusica.MainApp;
 import java.io.BufferedInputStream;
@@ -33,7 +34,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -60,13 +63,12 @@ public class PantallaCancionesPlayListController implements Initializable {
     private JFXButton btnDescargar;
     private StackPane panelPrincipal;
     private Listareproduccion lista;
-    @FXML
-    private ListView<String> lstCanciones;
-    private ArrayList<String> nombreCanciones;
     private ArrayList<Cancion> canciones;
     private ArrayList<String> rutasCanciones;
     private Properties recurso;
     private File archivoSeleccionado;
+    @FXML
+    private StackPane pnlCanciones;
 
     /**
      * Initializes the controller class.
@@ -88,7 +90,7 @@ public class PantallaCancionesPlayListController implements Initializable {
 
     @FXML
     private void descargarPlayList(ActionEvent event) {
-        if (lstCanciones.getItems() == null || lstCanciones.getItems().size() > 0) {
+        if (canciones.size() > 0) {
             FileChooser explorador = new FileChooser();
             archivoSeleccionado = explorador.showSaveDialog(null);
             if (archivoSeleccionado != null) {
@@ -171,13 +173,22 @@ public class PantallaCancionesPlayListController implements Initializable {
         WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/canciones/?id=" + lista.getIdlistareproduccion());
         canciones = (ArrayList<Cancion>) webTarget.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Cancion>>() {
         });
-        nombreCanciones = new ArrayList();
-        for (Cancion cancion : canciones) {
-            nombreCanciones.add(cancion.getNombre());
+        crearPantallaCanciones();        
+    }
+
+    public void crearPantallaCanciones() {
+        FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaCanciones.fxml"));
+        Parent root;
+        try {
+            root = (Parent) loader.load();
+            PantallaCancionesController controlador = loader.getController();
+            controlador.setCanciones(new ClienteCancion().findAll());
+            controlador.ocultarBuscar();
+            pnlCanciones.getChildren().clear();
+            pnlCanciones.getChildren().add(root);
+        } catch (IOException ex) {
+            Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        ObservableList<String> items = FXCollections.observableArrayList();
-        items.addAll(nombreCanciones);
-        lstCanciones.setItems(items);
     }
 
     public void descomprimirArchivo(String ruta, String rutaZip) {
