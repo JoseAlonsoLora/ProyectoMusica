@@ -147,7 +147,14 @@ def obtenerAlbumesArtista(request):
 	for album in listaAlbumes:
 		biblioteca = Biblioteca.objects.get(pk = album.get('biblioteca_idbiblioteca_id'))
 		if (biblioteca.publica == 1):
-			listaAlbumesFinal.append(album)
+			albumJson = {}
+			albumJson["nombre"] = album["nombre"]
+			albumJson["idalbum"] = album["idalbum"]
+			albumJson["artista_idartista"] = album["artista_idartista_id"]
+			albumJson["genero_idgenero"] = album["genero_idgenero_id"]
+			albumJson["compania"] = album["compania"]
+			albumJson["biblioteca_idbiblioteca"] = album["biblioteca_idbiblioteca_id"]
+			listaAlbumesFinal.append(albumJson)
 	return Response(listaAlbumesFinal)
 
 
@@ -155,16 +162,38 @@ def obtenerAlbumesArtista(request):
 def obtenerCancionesAlbum(request):
 	idAlbum = request.GET['id']
 	listaCanciones = {}
+	listaFinal = []
 	listaCanciones = Cancion.objects.filter(album_idalbum = idAlbum).values()
-	return Response(listaCanciones)
+	for lista in listaCanciones:
+		cancion = {}
+		cancion["nombrearchivo"] = lista["nombrearchivo"]
+		cancion["album_idalbum"] = lista["album_idalbum_id"]
+		cancion["calificacion"] = lista["calificacion"]
+		cancion["nombre"] = lista["nombre"]
+		cancion["idcancion"] = lista["idcancion"]
+		album = Album.objects.get(pk = lista["album_idalbum_id"])
+		cancion['nombreAlbum'] = album.nombre		
+		cancion['nombreArtista'] = album.artista_idartista.nombre
+		listaFinal.append(cancion)
+	return Response(listaFinal)
 
 
 @api_view(['GET'])
 def obtenerAlbumPorBiblioteca(request):
 	idBiblioteca = request.GET['id']
 	listaAlbumes = {}
+	listaAlbumesFinal = []
 	listaAlbumes = Album.objects.filter(biblioteca_idbiblioteca = idBiblioteca).values()
-	return Response(listaAlbumes)
+	for lista in listaAlbumes:
+		albumJson = {}
+		albumJson["nombre"] = lista["nombre"]
+		albumJson["idalbum"] = lista["idalbum"]
+		albumJson["artista_idartista"] = lista["artista_idartista_id"]
+		albumJson["genero_idgenero"] = lista["genero_idgenero_id"]
+		albumJson["compania"] = lista["compania"]
+		albumJson["biblioteca_idbiblioteca"] = lista["biblioteca_idbiblioteca_id"]
+		listaAlbumesFinal.append(albumJson)
+	return Response(listaAlbumesFinal)
 
 
 @api_view(['GET'])

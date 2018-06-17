@@ -43,16 +43,19 @@ public class PantallaCancionesController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        obtenerCanciones();
+        
     }
 
     @FXML
     private void buscarCancion(ActionEvent event) {
     }
 
-    public void obtenerCanciones() {
-        ClienteCancion cliente = new ClienteCancion();
-        canciones = cliente.findAll();
+    public void setCanciones(List<Cancion> canciones) {
+        this.canciones = canciones;
+        obtenerCanciones();
+    }        
+
+    public void obtenerCanciones() {        
         gridCanciones.setVgap(20);
         int filas = canciones.size() / 3;
         int auxiliar = 0;

@@ -13,20 +13,10 @@
                 <content>
                     <StackPane fx:id="pnlCanciones" prefHeight="400.0" prefWidth="1120.0" />                        
                 </content>
-            </Tab>
-            <Tab fx:id="tbArtistas" text="Artistas">
-                <content>
-                    <StackPane fx:id="pnlArtistas" prefHeight="400.0" prefWidth="1120.0" />                        
-                </content>
-            </Tab>                
+            </Tab>                         
             <Tab fx:id="tbAlbum" text="Album">
                 <content>
                     <StackPane fx:id="pnlAlbum" prefHeight="400.0" prefWidth="1120.0" />                        
-                </content>
-            </Tab>
-            <Tab fx:id="tbGenero" text="Género">
-                <content>
-                    <StackPane fx:id="pnlGenero" prefHeight="400.0" prefWidth="1120.0" />                        
                 </content>
             </Tab>
         </tabs>

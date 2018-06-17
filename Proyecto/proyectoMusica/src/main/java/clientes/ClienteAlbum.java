@@ -8,6 +8,8 @@ package clientes;
 import com.mycompany.proyectomusica.MainApp;
 import java.util.List;
 import java.util.Properties;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import modelo.Album;
@@ -69,16 +71,36 @@ public class ClienteAlbum {
     }
 
     public List<Album> findAll() throws javax.ws.rs.ClientErrorException {
-        WebTarget resource = webTarget;
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(new GenericType<List<Album>>(){});
+        String ip = recurso.getProperty("ipAddress");
+        String puerto = recurso.getProperty("portDjango");
+        Client cliente = ClientBuilder.newClient();
+        String idBiblioteca = "1";
+        WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/todosLosAlbumes/");
+        return webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(new GenericType<List<Album>>(){});
     }
 
     public void remove(String id) throws javax.ws.rs.ClientErrorException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete();
     }
-
+    
+    public List<Album> obtenerAlbumesArtista(int idArtista){
+        String ip = recurso.getProperty("ipAddress");
+        String puerto = recurso.getProperty("portDjango");
+        Client cliente = ClientBuilder.newClient();
+        WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/AlbumesPorArtista/?id="+idArtista);
+        return webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(new GenericType<List<Album>>(){});
+    }
     public void close() {
         client.close();
+    }
+    
+    public List<Album> obtenerAlbumesBiblioteca(int idBiblioteca){
+        String ip = recurso.getProperty("ipAddress");
+        String puerto = recurso.getProperty("portDjango");
+        Client cliente = ClientBuilder.newClient();
+        WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/albumesPorBiblioteca/?id="+idBiblioteca);
+        return webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(new GenericType<List<Album>>(){});
+        
     }
     
 }

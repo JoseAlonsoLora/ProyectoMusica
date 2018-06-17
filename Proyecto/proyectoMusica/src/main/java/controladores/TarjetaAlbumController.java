@@ -5,7 +5,7 @@
  */
 package controladores;
 
-import clientes.ClienteAlbum;
+import clientes.ClienteCancion;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -16,52 +16,57 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
-import modelo.Artista;
+import modelo.Album;
 
 /**
  * FXML Controller class
  *
  * @author alonso
  */
-public class TarjetaArtistaController implements Initializable {
+public class TarjetaAlbumController implements Initializable {
 
-    private Artista artista;
     @FXML
-    private StackPane pnlTarjeta;
+    private ImageView imgAlbum;
     @FXML
-    private Label lblNombreArtista;
+    private Label lblNombreAlbum;
+    private Album album;
+    @FXML
+    private StackPane pnlAlbum;
     private StackPane pnlPrincipal;
 
+    /**
+     * Initializes the controller class.
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       pnlTarjeta.getStyleClass().add("pane");
+        pnlAlbum.getStyleClass().add("pane");
     }
 
-    public void setArtista(Artista artista) {
-        this.artista = artista;
-        lblNombreArtista.setText(artista.getNombre());
+    public void setAlbum(Album album) {
+        this.album = album;
+        lblNombreAlbum.setText(album.getNombre());
     }
 
     public void setPnlPrincipal(StackPane pnlPrincipal) {
         this.pnlPrincipal = pnlPrincipal;
-    }        
+    }    
 
     @FXML
-    private void abrirAlbumes(MouseEvent event) {
-        FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaAlbum.fxml"));
+    private void abrirCanciones(MouseEvent event) {
+         FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaCanciones.fxml"));
         Parent root;
         try {
             root = (Parent) loader.load();
-            PantallaAlbumController controlador = loader.getController();
-            controlador.setPnlPincipal(pnlPrincipal);
-            controlador.setAlbumes(new ClienteAlbum().obtenerAlbumesArtista(artista.getIdartista()));
+            PantallaCancionesController controlador = loader.getController();
+            controlador.setCanciones(new ClienteCancion().obtenerCancionesAlbum(album.getIdalbum()));
             pnlPrincipal.getChildren().clear();
             pnlPrincipal.getChildren().add(root);
         } catch (IOException ex) {
             Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
 }

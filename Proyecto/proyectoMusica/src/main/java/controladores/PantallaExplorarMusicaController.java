@@ -5,13 +5,15 @@
  */
 package controladores;
 
+import clientes.ClienteAlbum;
+import clientes.ClienteArtista;
+import clientes.ClienteCancion;
 import com.jfoenix.controls.JFXTabPane;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -46,7 +48,7 @@ public class PantallaExplorarMusicaController implements Initializable {
     private Tab tbGenero;
     @FXML
     private StackPane pnlGenero;
-    
+
     private StackPane pnlPrincipal;
 
     /**
@@ -58,32 +60,43 @@ public class PantallaExplorarMusicaController implements Initializable {
         tbArtistas.setOnSelectionChanged(new EventHandler<Event>() {
             @Override
             public void handle(Event t) {
-               crearPantallaArtistas();
+                crearPantallaArtistas();
             }
         });
-    }    
+        tbAlbum.setOnSelectionChanged(new EventHandler<Event>() {
+            @Override
+            public void handle(Event t) {
+                crearPantallaAlbum();
+            }
+        });
+    }
 
     void setPnlPrincipal(StackPane pnlPrincipal) {
         this.pnlPrincipal = pnlPrincipal;
     }
-    
+
     private void crearPantallaCanciones() {
         FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaCanciones.fxml"));
         Parent root;
         try {
             root = (Parent) loader.load();
+            PantallaCancionesController controlador = loader.getController();
+            controlador.setCanciones(new ClienteCancion().findAll());
             pnlCanciones.getChildren().clear();
             pnlCanciones.getChildren().add(root);
         } catch (IOException ex) {
             Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    private void crearPantallaArtistas(){
-    FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaArtistas.fxml"));
+
+    private void crearPantallaArtistas() {
+        FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaArtistas.fxml"));
         Parent root;
         try {
             root = (Parent) loader.load();
+            PantallaArtistasController controlador = loader.getController();
+            controlador.setPnlPrincipal(pnlArtistas);
+            controlador.setArtistas(new ClienteArtista().findAll());
             pnlArtistas.getChildren().clear();
             pnlArtistas.getChildren().add(root);
         } catch (IOException ex) {
@@ -91,5 +104,19 @@ public class PantallaExplorarMusicaController implements Initializable {
         }
     }
 
-    
+    private void crearPantallaAlbum() {
+        FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaAlbum.fxml"));
+        Parent root;
+        try {
+            root = (Parent) loader.load();
+            PantallaAlbumController controlador = loader.getController();
+            controlador.setPnlPincipal(pnlAlbum);
+            controlador.setAlbumes(new ClienteAlbum().findAll());
+            pnlAlbum.getChildren().clear();
+            pnlAlbum.getChildren().add(root);
+        } catch (IOException ex) {
+            Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 }

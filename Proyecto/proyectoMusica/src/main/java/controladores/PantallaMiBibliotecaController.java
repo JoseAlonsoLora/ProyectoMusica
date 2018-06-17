@@ -5,6 +5,8 @@
  */
 package controladores;
 
+import clientes.ClienteAlbum;
+import clientes.ClienteCancion;
 import com.jfoenix.controls.JFXTabPane;
 import java.io.IOException;
 import java.net.URL;
@@ -33,19 +35,11 @@ public class PantallaMiBibliotecaController implements Initializable {
     @FXML
     private Tab tbCanciones;
     @FXML
-    private Tab tbArtistas;
-    @FXML
     private Tab tbAlbum;
-    @FXML
-    private Tab tbGenero;
     @FXML
     private StackPane pnlCanciones;
     @FXML
-    private StackPane pnlArtistas;
-    @FXML
     private StackPane pnlAlbum;
-    @FXML
-    private StackPane pnlGenero;
     private StackPane pnlPrincipal;
 
     /**
@@ -57,7 +51,7 @@ public class PantallaMiBibliotecaController implements Initializable {
         tbAlbum.setOnSelectionChanged(new EventHandler<Event>() {
             @Override
             public void handle(Event t) {
-                System.out.println("Tab Album");
+               crearPantallaAlbumes();
             }
         });
         tbCanciones.setOnSelectionChanged(new EventHandler<Event>() {
@@ -77,12 +71,28 @@ public class PantallaMiBibliotecaController implements Initializable {
         Parent root;
         try {
             root = (Parent) loader.load();
+            PantallaCancionesController controlador = loader.getController();
+            controlador.setCanciones(new ClienteCancion().obtenerCancionesBiblioteca());
             pnlCanciones.getChildren().clear();
             pnlCanciones.getChildren().add(root);
         } catch (IOException ex) {
             Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+    }
+    
+    public void crearPantallaAlbumes(){
+        FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaAlbum.fxml"));
+        Parent root;
+        try {
+            root = (Parent) loader.load();
+            PantallaAlbumController controlador = loader.getController();
+            controlador.setPnlPincipal(pnlAlbum);
+            controlador.setAlbumes(new ClienteAlbum().obtenerAlbumesBiblioteca(1));
+            pnlAlbum.getChildren().clear();
+            pnlAlbum.getChildren().add(root);
+        } catch (IOException ex) {
+            Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @FXML

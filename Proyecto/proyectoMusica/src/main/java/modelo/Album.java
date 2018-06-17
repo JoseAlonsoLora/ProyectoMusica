@@ -12,33 +12,24 @@ import java.util.List;
  * @author raymundo
  */
 public class Album {
-    private Integer idAlbum;
+    private Integer idalbum;
     private String nombre;
-    private String anoLanzamiento;
+    private String anolanzamiento;
     private String compania;
-    private Artista artistaidArtista;
-    private Biblioteca bibliotecaidBiblioteca;
-    private Genero generoidGenero;
+    private int artista_idartista;
+    private int biblioteca_idbiblioteca;
+    private int genero_idgenero;
     private List<Cancion> cancionList;
 
     public Album() {
     }
 
-    public Album(Integer idAlbum) {
-        this.idAlbum = idAlbum;
+    public Integer getIdalbum() {
+        return idalbum;
     }
 
-    public Album(Integer idAlbum, String nombre) {
-        this.idAlbum = idAlbum;
-        this.nombre = nombre;
-    }
-
-    public Integer getIdAlbum() {
-        return idAlbum;
-    }
-
-    public void setIdAlbum(Integer idAlbum) {
-        this.idAlbum = idAlbum;
+    public void setIdalbum(Integer idalbum) {
+        this.idalbum = idalbum;
     }
 
     public String getNombre() {
@@ -49,12 +40,12 @@ public class Album {
         this.nombre = nombre;
     }
 
-    public String getAnoLanzamiento() {
-        return anoLanzamiento;
+    public String getAnolanzamiento() {
+        return anolanzamiento;
     }
 
-    public void setAnoLanzamiento(String anoLanzamiento) {
-        this.anoLanzamiento = anoLanzamiento;
+    public void setAnolanzamiento(String anolanzamiento) {
+        this.anolanzamiento = anolanzamiento;
     }
 
     public String getCompania() {
@@ -65,30 +56,31 @@ public class Album {
         this.compania = compania;
     }
 
-    public Artista getArtistaidArtista() {
-        return artistaidArtista;
+    public int getArtista_idartista() {
+        return artista_idartista;
     }
 
-    public void setArtistaidArtista(Artista artistaidArtista) {
-        this.artistaidArtista = artistaidArtista;
+    public void setArtista_idartista(int artista_idartista) {
+        this.artista_idartista = artista_idartista;
     }
 
-    public Biblioteca getBibliotecaidBiblioteca() {
-        return bibliotecaidBiblioteca;
+    public int getBiblioteca_idbiblioteca() {
+        return biblioteca_idbiblioteca;
     }
 
-    public void setBibliotecaidBiblioteca(Biblioteca bibliotecaidBiblioteca) {
-        this.bibliotecaidBiblioteca = bibliotecaidBiblioteca;
+    public void setBiblioteca_idbiblioteca(int biblioteca_idbiblioteca) {
+        this.biblioteca_idbiblioteca = biblioteca_idbiblioteca;
     }
 
-    public Genero getGeneroidGenero() {
-        return generoidGenero;
+    public int getGenero_idgenero() {
+        return genero_idgenero;
     }
 
-    public void setGeneroidGenero(Genero generoidGenero) {
-        this.generoidGenero = generoidGenero;
+    public void setGenero_idgenero(int genero_idgenero) {
+        this.genero_idgenero = genero_idgenero;
     }
 
+    
     public List<Cancion> getCancionList() {
         return cancionList;
     }
@@ -96,4 +88,6 @@ public class Album {
     public void setCancionList(List<Cancion> cancionList) {
         this.cancionList = cancionList;
     }
+
+    
 }

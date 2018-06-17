@@ -16,7 +16,7 @@ public class Cancion {
     private String nombre;
     private Integer calificacion;
     private String nombrearchivo;
-    private Album album_idalbum;
+    private int album_idalbum;
     private String nombreArtista;
     private String nombreAlbum;
 
@@ -55,13 +55,15 @@ public class Cancion {
         this.nombrearchivo = nombrearchivo;
     }
 
-    public Album getAlbum_idalbum() {
+    public int getAlbum_idalbum() {
         return album_idalbum;
     }
 
-    public void setAlbum_idalbum(Album album_idalbum) {
+    public void setAlbum_idalbum(int album_idalbum) {
         this.album_idalbum = album_idalbum;
     }
+
+    
 
     public String getNombreArtista() {
         return nombreArtista;

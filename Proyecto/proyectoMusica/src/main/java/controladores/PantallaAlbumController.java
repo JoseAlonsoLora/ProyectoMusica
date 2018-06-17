@@ -20,73 +20,71 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import modelo.Artista;
+import modelo.Album;
 
 /**
  * FXML Controller class
  *
  * @author alonso
  */
-public class PantallaArtistasController implements Initializable {
+public class PantallaAlbumController implements Initializable {
 
     @FXML
     private JFXTextField txtNombreCancion;
     @FXML
     private JFXButton btnBuscarCancion;
     @FXML
-    private GridPane gridCanciones;
-
-    private List<Artista> artistas;
-    private StackPane pnlPrincipal;
+    private GridPane gridAlbumes;
+    private List<Album> albumes;
+    private StackPane pnlPincipal;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        // TODO
     }
 
-    public void setPnlPrincipal(StackPane pnlPrincipal) {
-        this.pnlPrincipal = pnlPrincipal;
+    public void setAlbumes(List<Album> albumes) {
+        this.albumes = albumes;
+        mostrarAlbumes();
     }
 
-    public void setArtistas(List<Artista> artistas) {
-        this.artistas = artistas;
-        obtenerArtistas();
+    public void setPnlPincipal(StackPane pnlPincipal) {
+        this.pnlPincipal = pnlPincipal;
     }
-        
-    public void obtenerArtistas() {
-        gridCanciones.setVgap(20);
-        int filas = artistas.size() / 3;
+
+    @FXML
+    private void buscarAlbum(ActionEvent event) {
+    }
+
+    public void mostrarAlbumes() {
+        gridAlbumes.setVgap(20);
+        int filas = albumes.size() / 3;
         int auxiliar = 0;
-        if (artistas.size() % 3 != 0) {
-            filas = ((artistas.size()) / 3) + 1;
+        if (albumes.size() % 3 != 0) {
+            filas = ((albumes.size()) / 3) + 1;
         }
 
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < 3; j++) {
-                if (auxiliar < artistas.size()) {
-                    FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/TarjetaArtista.fxml"));
+                if (auxiliar < albumes.size()) {
+                    FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/TarjetaAlbum.fxml"));
                     Parent root = null;
                     try {
                         root = (Parent) loader.load();
-                        TarjetaArtistaController controlador = loader.getController();
-                        controlador.setPnlPrincipal(pnlPrincipal);
-                        controlador.setArtista(artistas.get(auxiliar));
+                        TarjetaAlbumController controlador = loader.getController();
+                        controlador.setPnlPrincipal(pnlPincipal);
+                        controlador.setAlbum(albumes.get(auxiliar));
                     } catch (IOException ex) {
                         Logger.getLogger(PantallaCancionesController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    gridCanciones.add(root, j, i);
+                    gridAlbumes.add(root, j, i);
                     auxiliar++;
                 }
             }
         }
 
     }
-
-    @FXML
-    private void buscarArtista(ActionEvent event) {
-    }
-
 }

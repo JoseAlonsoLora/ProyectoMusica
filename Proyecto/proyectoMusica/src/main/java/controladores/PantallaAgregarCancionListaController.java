@@ -68,7 +68,6 @@ public class PantallaAgregarCancionListaController implements Initializable {
             String ip = recurso.getProperty("ipAddress");
             String puerto = recurso.getProperty("portDjango");
             WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/agregarALista/");
-            System.out.println("http://" + ip + ":" + puerto + "/agregarALista/");
             webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(listaCancion.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Información");

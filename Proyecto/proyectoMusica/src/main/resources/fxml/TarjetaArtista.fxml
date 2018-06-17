@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane id="AnchorPane" fx:id="pnlTarjeta" prefHeight="100.0" prefWidth="350.0" stylesheets="@../styles/panelCss.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.TarjetaArtistaController">
+<StackPane id="AnchorPane" fx:id="pnlTarjeta" onMouseClicked="#abrirAlbumes" prefHeight="100.0" prefWidth="350.0" stylesheets="@../styles/panelCss.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.TarjetaArtistaController">
     <cursor>
         <Cursor fx:constant="HAND" />
     </cursor>
