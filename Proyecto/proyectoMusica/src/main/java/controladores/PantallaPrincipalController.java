@@ -45,7 +45,7 @@ public class PantallaPrincipalController implements Initializable {
     @FXML
     private StackPane pnlCancion;
     private static List<Cancion> colaCanciones;
-    private static String nombreUsuario;
+    public static String nombreUsuario;
     private static List<Cancion> historial;
 
     /**
@@ -57,7 +57,6 @@ public class PantallaPrincipalController implements Initializable {
         historial = new ArrayList<>();
         pnlCancion.getStyleClass().add("panel");
         try {
-            crearPantallaMiBiblioteca();
             FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaReproducirCancion.fxml"));
             Parent root = (Parent) loader.load();
             pnlCancion.getChildren().clear();
@@ -70,8 +69,10 @@ public class PantallaPrincipalController implements Initializable {
     public void setNombreUsuario(String nombreUsuario) {
         PantallaPrincipalController.nombreUsuario = nombreUsuario;
         lblNombreUsuario.setText(nombreUsuario);
+        crearPantallaMiBiblioteca();
     }
-
+    
+    
     @FXML
     private void desplegarPantallaPlayList(javafx.event.ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaListasReproduccion.fxml"));

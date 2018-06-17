@@ -101,7 +101,7 @@ public class PantallaAgregarCancionListaController implements Initializable {
         listasReproduccionUsuario = new ArrayList();
         List<Listareproduccion> listas = clienteListaReproduccion.findAll();
         for (Listareproduccion lista : listas) {
-            if (lista.getUsuario_nombreusuario().equals("RayPerez")) {
+            if (lista.getUsuario_nombreusuario().equals(PantallaPrincipalController.nombreUsuario)) {
                 listasReproduccionUsuario.add(lista);
             }
         }

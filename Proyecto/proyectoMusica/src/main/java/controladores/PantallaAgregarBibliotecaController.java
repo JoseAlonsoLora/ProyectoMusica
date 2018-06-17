@@ -221,7 +221,7 @@ public class PantallaAgregarBibliotecaController implements Initializable {
                     ClienteBiblioteca clienteBiblioteca = new ClienteBiblioteca();
                     List<Biblioteca> bibliotecas = clienteBiblioteca.findAll();
                     for (Biblioteca biblioteca : bibliotecas) {
-                        if (biblioteca.getUsuario_nombreusuario().equals("RayPerez")) {
+                        if (biblioteca.getUsuario_nombreusuario().equals(PantallaPrincipalController.nombreUsuario)) {
                             bibliotecaUsuario = biblioteca;
                         }
                     }
@@ -242,7 +242,7 @@ public class PantallaAgregarBibliotecaController implements Initializable {
                         JSONObject cancion = new JSONObject();
                         cancion.put("nombre", nombreCancion.replace(".mp3", ""));
                         cancion.put("calificacion", 10);
-                        cancion.put("nombrearchivo", "RayPerez/" + txtAlbum.getText() + "/" + nombreCancion);
+                        cancion.put("nombrearchivo", PantallaPrincipalController.nombreUsuario+"/" + txtAlbum.getText() + "/" + nombreCancion);
                         listaCanciones.put(cancion);
                     }
                     albumJSON.put("listaCanciones", listaCanciones);
@@ -283,7 +283,7 @@ public class PantallaAgregarBibliotecaController implements Initializable {
                     barra.setZip(zip);
                     barra.setPuerto(Integer.parseInt(puerto));
                     barra.setIp(ip);
-                    barra.setRuta("RayPerez/" + txtAlbum.getText());
+                    barra.setRuta(PantallaPrincipalController.nombreUsuario+"/" + txtAlbum.getText());
                     Scene scene = new Scene(root);
                     stage.setTitle("Trabajando");
                     stage.setScene(scene);

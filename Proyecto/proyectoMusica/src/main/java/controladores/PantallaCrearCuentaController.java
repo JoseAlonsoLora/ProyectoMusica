@@ -5,22 +5,29 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.mycompany.proyectomusica.MainApp;
+import java.io.IOException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -60,6 +67,7 @@ public class PantallaCrearCuentaController implements Initializable {
     @FXML
     private Label etiquetaAdvertenciaContraseña;
     private Properties recurso;
+    private Stage stageActual;
 
     /**
      * Initializes the controller class.
@@ -79,8 +87,8 @@ public class PantallaCrearCuentaController implements Initializable {
                     ClienteUsuario clienteUsuario = new ClienteUsuario();
                     List<Usuario> usuarios;
                     usuarios = clienteUsuario.findAll();
-                    for(Usuario usuario: usuarios){
-                        if(usuario.getNombreusuario().equals(campoUsuario.getText())){
+                    for (Usuario usuario : usuarios) {
+                        if (usuario.getNombreusuario().equals(campoUsuario.getText())) {
                             usuarioValido = false;
                         }
                     }
@@ -101,6 +109,20 @@ public class PantallaCrearCuentaController implements Initializable {
                         WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/crearUsuario/");
                         webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(usuarioNuevo.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
                         mostrarMensaje("", "Registro exitoso", "La cuenta se ha registrado correctamente");
+                        try {
+                            Stage stage = new Stage();
+                            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/fxml/PantallaIniciarSesion.fxml"));
+                            Parent root = (Parent) loader.load();
+                            PantallaIniciarSesionController pantallaIniciarSesion = loader.getController();
+                            pantallaIniciarSesion.setStageActual(stage);
+                            Scene scene = new Scene(root);
+                            stage.setTitle("Iniciar sesion");
+                            stage.setScene(scene);
+                            stage.show();
+                            stageActual.close();
+                        } catch (IOException ex) {
+                            Logger.getLogger(PantallaCrearCuentaController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                 } else {
                     mostrarMensaje("", "Correo no válido", "El correo ingresado no tiene un formato válido");
@@ -272,6 +294,28 @@ public class PantallaCrearCuentaController implements Initializable {
         ButtonType botonOK = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
         advertencia.getButtonTypes().setAll(botonOK);
         advertencia.showAndWait();
+    }
+
+    @FXML
+    private void cancelar(ActionEvent event) {
+        try {
+            Stage stage = new Stage();
+            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/fxml/PantallaIniciarSesion.fxml"));
+            Parent root = (Parent) loader.load();
+            PantallaIniciarSesionController pantallaIniciarSesion = loader.getController();
+            pantallaIniciarSesion.setStageActual(stage);
+            Scene scene = new Scene(root);
+            stage.setTitle("Iniciar sesion");
+            stage.setScene(scene);
+            stage.show();
+            stageActual.close();
+        } catch (IOException ex) {
+            Logger.getLogger(PantallaCrearCuentaController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void setStageActual(Stage stageActual) {
+        this.stageActual = stageActual;
     }
 
 }

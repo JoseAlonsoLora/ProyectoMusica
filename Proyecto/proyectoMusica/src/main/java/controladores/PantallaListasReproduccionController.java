@@ -64,7 +64,6 @@ public class PantallaListasReproduccionController implements Initializable {
         recurso = MainApp.leerConfig();
         lstListas.setDepth(1);
         lstListas.setExpanded(true);
-        //usuarioActual = clienteUsuario.find("RayPerez");
         mostrarListas();
     }
 
@@ -77,7 +76,7 @@ public class PantallaListasReproduccionController implements Initializable {
         nombresListas = new ArrayList();
         List<Listareproduccion> listas = clienteLista.findAll();
         for (Listareproduccion lista : listas) {
-            if (lista.getUsuario_nombreusuario().equals("RayPerez")) {
+            if (lista.getUsuario_nombreusuario().equals(PantallaPrincipalController.nombreUsuario)) {
                 listasReproduccionUsuario.add(lista);
                 nombresListas.add(lista.getNombre());
             }
@@ -114,7 +113,7 @@ public class PantallaListasReproduccionController implements Initializable {
         if (result.isPresent()) {
             Listareproduccion nuevaLista = new Listareproduccion();
             nuevaLista.setNombre(result.get());
-            nuevaLista.setUsuario_nombreusuario("RayPerez");
+            nuevaLista.setUsuario_nombreusuario(PantallaPrincipalController.nombreUsuario);
             clienteLista.create(nuevaLista);
             FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaListasReproduccion.fxml"));
             Parent root = (Parent) loader.load();

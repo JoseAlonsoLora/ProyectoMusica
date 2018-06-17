@@ -80,7 +80,7 @@ public class PantallaIniciarSesionController implements Initializable {
             if (sesion.getResult().equals("true")) {
                 try {
                     Stage stage = new Stage();
-                    FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaPrincipal.fxml"));
+                    FXMLLoader loader = new FXMLLoader(PantallaIniciarSesionController.class.getResource("/fxml/PantallaPrincipal.fxml"));
                     Parent root = (Parent) loader.load();
                     PantallaPrincipalController pantallaPrincipal = loader.getController();
                     pantallaPrincipal.setNombreUsuario(campoUsuario.getText());
@@ -119,9 +119,10 @@ public class PantallaIniciarSesionController implements Initializable {
     private void crearCuenta(MouseEvent event) {
         try {
             Stage stage = new Stage();
-            FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaCrearCuenta.fxml"));
+            FXMLLoader loader = new FXMLLoader(PantallaIniciarSesionController.class.getResource("/fxml/PantallaCrearCuenta.fxml"));
             Parent root = (Parent) loader.load();
             PantallaCrearCuentaController pantallaCrearCuenta = loader.getController();
+            pantallaCrearCuenta.setStageActual(stage);
             Scene scene = new Scene(root);
             scene.getStylesheets().add("/styles/Styles.css");
             stage.setTitle("Crear cuenta");

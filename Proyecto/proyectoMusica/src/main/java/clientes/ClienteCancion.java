@@ -6,6 +6,7 @@
 package clientes;
 
 import com.mycompany.proyectomusica.MainApp;
+import controladores.PantallaPrincipalController;
 import java.util.List;
 import java.util.Properties;
 import javax.ws.rs.ClientErrorException;
@@ -13,6 +14,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
+import modelo.Biblioteca;
 import modelo.Cancion;
 
 /**
@@ -88,26 +90,34 @@ public class ClienteCancion {
         String ip = recurso.getProperty("ipAddress");
         String puerto = recurso.getProperty("portDjango");
         Client cliente = ClientBuilder.newClient();
-        String idBiblioteca = "1";
-        WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/cancionesPorBiblioteca/"+"?id="+ idBiblioteca);
+        ClienteBiblioteca clienteBiblioteca = new ClienteBiblioteca();
+        Biblioteca bibliotecaUsuario = null;
+        List<Biblioteca> bibliotecas = clienteBiblioteca.findAll();
+        for (Biblioteca biblioteca : bibliotecas) {
+            if (biblioteca.getUsuario_nombreusuario().equals(PantallaPrincipalController.nombreUsuario)) {
+                bibliotecaUsuario = biblioteca;
+            }
+        }
+        String idBiblioteca = String.valueOf(bibliotecaUsuario.getIdbiblioteca());
+        WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/cancionesPorBiblioteca/" + "?id=" + idBiblioteca);
         return webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(new GenericType<List<Cancion>>() {
         });
     }
-    
-    public List<Cancion> obtenerCancionesAlbum(int idAlbum){
+
+    public List<Cancion> obtenerCancionesAlbum(int idAlbum) {
         String ip = recurso.getProperty("ipAddress");
         String puerto = recurso.getProperty("portDjango");
         Client cliente = ClientBuilder.newClient();
-        WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/cancionesPorAlbum/"+"?id="+ idAlbum);
+        WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/cancionesPorAlbum/" + "?id=" + idAlbum);
         return webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(new GenericType<List<Cancion>>() {
         });
     }
-    
-    public List<Cancion> obtenerCancionesLista(int idLista){
+
+    public List<Cancion> obtenerCancionesLista(int idLista) {
         String ip = recurso.getProperty("ipAddress");
         String puerto = recurso.getProperty("portDjango");
         Client cliente = ClientBuilder.newClient();
-        WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/canciones/"+"?id="+ idLista);
+        WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/canciones/" + "?id=" + idLista);
         return webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(new GenericType<List<Cancion>>() {
         });
     }
