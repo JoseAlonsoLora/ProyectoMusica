@@ -8,6 +8,7 @@ package controladores;
 import clasesApoyo.MediaControl;
 import com.jfoenix.controls.JFXButton;
 import com.mycompany.proyectomusica.MainApp;
+import static com.sun.javafx.PlatformUtil.isWindows;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
@@ -90,7 +91,13 @@ public class TarjetaCancionController implements Initializable {
         String ip = recurso.getProperty("ipAddress");
         String puerto = recurso.getProperty("portStreaming");
         String rutaCancion = cancion.getNombrearchivo().replace("/", "-");
-        String ruta = "http://"+ip+":"+puerto+"/listen/"+rutaCancion.replace(" ", "*");
+        String rutaFinal;
+        if(isWindows()){
+            rutaFinal = rutaCancion.replace(" ", "*");
+        }else{
+            rutaFinal = rutaCancion.replace("\\s", "*");
+        }
+        String ruta = "http://"+ip+":"+puerto+"/listen/"+rutaFinal;
         Stage primaryStage = new Stage();
         primaryStage.setTitle("Embedded Media Player");
         Group root = new Group();

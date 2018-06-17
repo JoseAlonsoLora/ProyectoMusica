@@ -1,5 +1,6 @@
 package com.mycompany.proyectomusica;
 
+import controladores.PantallaIniciarSesionController;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -14,32 +15,32 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-
 public class MainApp extends Application {
-    
+
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/PantallaPrincipal.fxml"));
-        
+        FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/fxml/PantallaIniciarSesion.fxml"));
+        Parent root = (Parent) loader.load();
+        PantallaIniciarSesionController pantallaIniciarSesion = loader.getController();
+        pantallaIniciarSesion.setStageActual(stage);
         Scene scene = new Scene(root);
         scene.getStylesheets().add("/styles/Styles.css");
-        leerConfig();
-        stage.setTitle("JavaFX and Maven");
+        stage.setTitle("Iniciar sesion");
         stage.setScene(scene);
         stage.show();
     }
-    
-    public static  Properties leerConfig(){
-        
+
+    public static Properties leerConfig() {
+
         Properties recurso = new Properties();
-	try(InputStream input = new FileInputStream(System.getProperty("user.dir")+"/config.properties")){
+        try (InputStream input = new FileInputStream(System.getProperty("user.dir") + "/config.properties")) {
             recurso.load(input);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return recurso;
     }
 

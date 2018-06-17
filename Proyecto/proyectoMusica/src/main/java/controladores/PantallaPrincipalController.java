@@ -22,6 +22,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.layout.StackPane;
 import modelo.Cancion;
+import modelo.Usuario;
 
 /**
  * FXML Controller class
@@ -43,8 +44,9 @@ public class PantallaPrincipalController implements Initializable {
     @FXML
     private StackPane pnlPrincipal;
     @FXML
-    private StackPane pnlCancion;    
+    private StackPane pnlCancion;
     private static List<Cancion> colaCanciones;
+    private static String nombreUsuario;
 
     /**
      * Initializes the controller class.
@@ -62,6 +64,11 @@ public class PantallaPrincipalController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(PantallaPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void setNombreUsuario(String nombreUsuario) {
+        PantallaPrincipalController.nombreUsuario = nombreUsuario;
+        lblNombreUsuario.setText(nombreUsuario);
     }
 
     @FXML
@@ -125,8 +132,8 @@ public class PantallaPrincipalController implements Initializable {
             Logger.getLogger(PantallaPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public static void agregarCola(Cancion cancion){
+
+    public static void agregarCola(Cancion cancion) {
         colaCanciones.add(cancion);
         System.out.println(colaCanciones.size());
     }
