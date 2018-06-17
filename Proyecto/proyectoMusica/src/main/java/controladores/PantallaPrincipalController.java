@@ -22,7 +22,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.layout.StackPane;
 import modelo.Cancion;
-import modelo.Usuario;
 
 /**
  * FXML Controller class
@@ -47,6 +46,7 @@ public class PantallaPrincipalController implements Initializable {
     private StackPane pnlCancion;
     private static List<Cancion> colaCanciones;
     private static String nombreUsuario;
+    private static List<Cancion> historial;
 
     /**
      * Initializes the controller class.
@@ -54,6 +54,7 @@ public class PantallaPrincipalController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         colaCanciones = new ArrayList<>();
+        historial = new ArrayList<>();
         pnlCancion.getStyleClass().add("panel");
         try {
             crearPantallaMiBiblioteca();
@@ -134,8 +135,15 @@ public class PantallaPrincipalController implements Initializable {
     }
 
     public static void agregarCola(Cancion cancion) {
-        colaCanciones.add(cancion);
-        System.out.println(colaCanciones.size());
+        colaCanciones.add(cancion);        
+    }
+    
+    public static void agregarHistorial(Cancion cancion){
+        historial.add(cancion);
+    }
+    
+    public static List<Cancion> historial(){
+        return historial;
     }
 
 }

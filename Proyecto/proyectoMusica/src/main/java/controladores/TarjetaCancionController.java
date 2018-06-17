@@ -88,6 +88,7 @@ public class TarjetaCancionController implements Initializable {
 
     @FXML
     private void reproducirCancion(MouseEvent event) {
+        PantallaPrincipalController.agregarHistorial(cancion);
         String ip = recurso.getProperty("ipAddress");
         String puerto = recurso.getProperty("portStreaming");
         String rutaCancion = cancion.getNombrearchivo().replace("/", "-");
