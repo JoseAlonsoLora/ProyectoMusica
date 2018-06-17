@@ -29,16 +29,10 @@ public class MediaResource {
         audio = new File(url.getFile());
     }
 
-    public void cambiarRuta(Integer id) {
-        if (id == 1) {
-            String MEDIA_FILE = "/AstorPiazzolla-RomanceDelDiablo.mp3";
-            URL url = this.getClass().getResource(MEDIA_FILE);
-            audio = new File(url.getFile());
-        }else{
-            String MEDIA_FILE = "/a.mp3";
-            URL url = this.getClass().getResource(MEDIA_FILE);
-            audio = new File(url.getFile());
-        }
+    public void cambiarRuta(String ruta) {
+        String rutaCancion = ruta.replace("-", "/");
+        String rutaFinal = "C:/Users/raymu/Documents/ServidorCanciones/"+rutaCancion.replace("*", " ");
+        audio = new File(rutaFinal);
     }
 
     //A simple way to verify if the server supports range headers.
@@ -51,8 +45,8 @@ public class MediaResource {
     @GET
     @Path("{id}")
     @Produces("audio/mp3")
-    public Response streamAudio(@HeaderParam("Range") String range, @PathParam("id") Integer id) throws Exception {
-        cambiarRuta(id);
+    public Response streamAudio(@HeaderParam("Range") String range, @PathParam("id") String ruta) throws Exception {
+        cambiarRuta(ruta);
         return buildStream(audio, range);
     }
 

@@ -5,9 +5,12 @@
  */
 package controladores;
 
+import clasesApoyo.MediaControl;
 import com.jfoenix.controls.JFXButton;
+import com.mycompany.proyectomusica.MainApp;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,9 +18,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.MediaPlayer;
+import javafx.stage.Stage;
+import javafx.scene.media.Media;
 import modelo.Cancion;
 import org.controlsfx.control.PopOver;
 
@@ -27,7 +36,7 @@ import org.controlsfx.control.PopOver;
  * @author alonso
  */
 public class TarjetaCancionController implements Initializable {
-    
+
     private Cancion cancion;
     @FXML
     private Label lblNombreCancion;
@@ -39,8 +48,7 @@ public class TarjetaCancionController implements Initializable {
     private StackPane pnlTarjeta;
     @FXML
     private JFXButton bntMenuCancion;
-   
-
+    private Properties recurso;
 
     /**
      * Initializes the controller class.
@@ -48,8 +56,9 @@ public class TarjetaCancionController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         pnlTarjeta.getStyleClass().add("pane");
+        recurso = MainApp.leerConfig();
         // TODO
-    }    
+    }
 
     public void setCancion(Cancion cancion) {
         this.cancion = cancion;
@@ -76,7 +85,28 @@ public class TarjetaCancionController implements Initializable {
         pop.show(bntMenuCancion);
     }
 
+    @FXML
+    private void reproducirCancion(MouseEvent event) {
+        String ip = recurso.getProperty("ipAddress");
+        String puerto = recurso.getProperty("portStreaming");
+        String rutaCancion = cancion.getNombrearchivo().replace("/", "-");
+        String ruta = "http://"+ip+":"+puerto+"/listen/"+rutaCancion.replace(" ", "*");
+        Stage primaryStage = new Stage();
+        primaryStage.setTitle("Embedded Media Player");
+        Group root = new Group();
+        Scene scene = new Scene(root, 540, 241);
 
-    
-    
+        // create media player
+        Media media = new Media(ruta);
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setAutoPlay(true);
+
+        MediaControl mediaControl = new MediaControl(mediaPlayer);
+        scene.setRoot(mediaControl);
+
+        primaryStage.setScene(scene);
+        primaryStage.sizeToScene();
+        primaryStage.show();
+    }
+
 }

@@ -130,13 +130,14 @@ public class PantallaAgregarBibliotecaController implements Initializable {
                     while ((entrada = archivo.getNextEntry()) != null) {
                         if (!entrada.isDirectory()) {
                             String[] auxiliarArchivo = entrada.getName().split("\\.");
-                            if (auxiliarArchivo.length < 2 || !auxiliarArchivo[1].equals("mp3")) {
+                            boolean caracterInvalido = entrada.getName().contains("-") || entrada.getName().contains("*");
+                            if (auxiliarArchivo.length < 2 || !auxiliarArchivo[1].equals("mp3") || caracterInvalido) {
                                 lstCanciones.setItems(null);
                                 nombresCanciones = new ArrayList();
                                 Alert alert = new Alert(Alert.AlertType.WARNING);
                                 alert.setTitle("Información");
                                 alert.setHeaderText(null);
-                                alert.setContentText("El zip contiene algunos archivos que no cumplen con el formato .mp3");
+                                alert.setContentText("El zip contiene algunos archivos que no cumplen con el formato .mp3 \n o algunas canciones contienen  *  o  -  en el nombre ");
                                 alert.showAndWait();
                                 break;
                             } else {
