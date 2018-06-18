@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane id="AnchorPane" prefHeight="67.0" prefWidth="1120.0" style="-fx-background-color: #ecf0f1;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.PantallaReproducirCancionController">
+<StackPane id="AnchorPane" prefHeight="67.0" prefWidth="1120.0" style="-fx-background-color: #ecf0f1;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.PantallaReproducirCancionController">
    <children>
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
             <ImageView fx:id="imgAlbum" fitHeight="67.0" fitWidth="87.0" pickOnBounds="true" preserveRatio="true" />
-            <VBox prefHeight="67.0" prefWidth="435.0" spacing="15.0">
+            <VBox prefHeight="67.0" prefWidth="163.0" spacing="15.0">
                <children>
                   <Label fx:id="lblNombreCancion" text="Label">
                      <VBox.margin>
@@ -24,17 +22,7 @@
                   <Label fx:id="lblNombreArtista" text="Label" />
                </children>
             </VBox>
-            <JFXButton contentDisplay="CENTER" onAction="#reproducir" stylesheets="@../styles/botonRedondoCss.css" text="">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-               <HBox.margin>
-                  <Insets top="14.0" />
-               </HBox.margin>
-               <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="PLAY" size="15" />
-               </graphic>
-            </JFXButton>
+            <Pane fx:id="pnlReproducir" prefHeight="67.0" prefWidth="870.0" />
          </children>
       </HBox>
    </children>

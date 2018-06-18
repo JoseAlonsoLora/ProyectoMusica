@@ -19,14 +19,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Group;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.MediaPlayer;
-import javafx.stage.Stage;
 import javafx.scene.media.Media;
 import modelo.Cancion;
 import org.controlsfx.control.PopOver;
@@ -49,7 +46,7 @@ public class TarjetaCancionController implements Initializable {
     private StackPane pnlTarjeta;
     @FXML
     private JFXButton bntMenuCancion;
-    private Properties recurso;
+    private static Properties recurso;
 
     /**
      * Initializes the controller class.
@@ -89,32 +86,33 @@ public class TarjetaCancionController implements Initializable {
     @FXML
     private void reproducirCancion(MouseEvent event) {
         PantallaPrincipalController.agregarHistorial(cancion);
-        String ip = recurso.getProperty("ipAddress");
-        String puerto = recurso.getProperty("portStreaming");
         String rutaCancion = cancion.getNombrearchivo().replace("/", "-");
         String rutaFinal;
-        if(isWindows()){
+        if (isWindows()) {
             rutaFinal = rutaCancion.replace(" ", "*");
-        }else{
+        } else {
             rutaFinal = rutaCancion.replace("\\s", "*");
         }
-        String ruta = "http://"+ip+":"+puerto+"/listen/"+rutaFinal;
-        Stage primaryStage = new Stage();
-        primaryStage.setTitle("Embedded Media Player");
-        Group root = new Group();
-        Scene scene = new Scene(root, 540, 241);
+        reproducirCancion(rutaFinal);
 
-        // create media player
+    }
+
+    public static void reproducirCancion(String rutaFinal) {
+        String ip = recurso.getProperty("ipAddress");
+        String puerto = recurso.getProperty("portStreaming");
+        String ruta = "http://" + ip + ":" + puerto + "/listen/" + rutaFinal;
         Media media = new Media(ruta);
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setAutoPlay(true);
 
         MediaControl mediaControl = new MediaControl(mediaPlayer);
-        scene.setRoot(mediaControl);
 
-        primaryStage.setScene(scene);
-        primaryStage.sizeToScene();
-        primaryStage.show();
+        if (PantallaPrincipalController.mc != null) {
+            PantallaPrincipalController.mc.detenerMusica();
+        }
+        PantallaPrincipalController.mc = mediaControl;
+        PantallaReproducirCancionController.panelCompartido.getChildren().clear();
+        PantallaReproducirCancionController.panelCompartido.getChildren().add(mediaControl);
     }
 
 }

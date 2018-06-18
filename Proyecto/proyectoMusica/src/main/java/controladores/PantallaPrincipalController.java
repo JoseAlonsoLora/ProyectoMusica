@@ -5,7 +5,10 @@
  */
 package controladores;
 
+import clasesApoyo.MediaControl;
 import com.jfoenix.controls.JFXButton;
+import static com.sun.javafx.PlatformUtil.isWindows;
+import static controladores.TarjetaCancionController.reproducirCancion;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -44,15 +47,19 @@ public class PantallaPrincipalController implements Initializable {
     private StackPane pnlPrincipal;
     @FXML
     private StackPane pnlCancion;
+
     private static List<Cancion> colaCanciones;
     public static String nombreUsuario;
     private static List<Cancion> historial;
+    public static MediaControl mc;
+    private static int indiceCola;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        indiceCola = 0;
         colaCanciones = new ArrayList<>();
         historial = new ArrayList<>();
         pnlCancion.getStyleClass().add("panel");
@@ -71,8 +78,7 @@ public class PantallaPrincipalController implements Initializable {
         lblNombreUsuario.setText(nombreUsuario);
         crearPantallaMiBiblioteca();
     }
-    
-    
+
     @FXML
     private void desplegarPantallaPlayList(javafx.event.ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaListasReproduccion.fxml"));
@@ -136,15 +142,30 @@ public class PantallaPrincipalController implements Initializable {
     }
 
     public static void agregarCola(Cancion cancion) {
-        colaCanciones.add(cancion);        
+        colaCanciones.add(cancion);
     }
-    
-    public static void agregarHistorial(Cancion cancion){
+
+    public static void agregarHistorial(Cancion cancion) {
         historial.add(cancion);
     }
-    
-    public static List<Cancion> historial(){
+
+    public static List<Cancion> historial() {
         return historial;
     }
 
+    public static void reproducirCancionCola() {
+        if (!colaCanciones.isEmpty()) {
+            if (indiceCola != colaCanciones.size()) {
+                 String rutaCancion = colaCanciones.get(indiceCola).getNombrearchivo().replace("/", "-");
+                String rutaFinal;
+                if (isWindows()) {
+                    rutaFinal = rutaCancion.replace(" ", "*");
+                } else {
+                    rutaFinal = rutaCancion.replace("\\s", "*");
+                }
+                reproducirCancion(rutaFinal);
+                indiceCola++;
+            }
+        }
+    }
 }

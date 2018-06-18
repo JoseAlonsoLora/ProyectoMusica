@@ -5,6 +5,7 @@
  */
 package clasesApoyo;
 
+import controladores.PantallaPrincipalController;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -40,12 +41,13 @@ public class MediaControl extends BorderPane {
 
     public MediaControl(final MediaPlayer mp) {
         this.mp = mp;
-        setStyle("-fx-background-color: #bfc2c7;");
+        setStyle("-fx-background-color: #white;");
         mediaView = new MediaView(mp);
         Pane mvPane = new Pane() {
         };
+        mvPane.setPrefSize(650, 0);
         mvPane.getChildren().add(mediaView);
-        mvPane.setStyle("-fx-background-color: black;");
+        mvPane.setStyle("-fx-background-color: white;");
         setCenter(mvPane);
 
         mediaBar = new HBox();
@@ -116,6 +118,7 @@ public class MediaControl extends BorderPane {
                     playButton.setText(">");
                     stopRequested = true;
                     atEndOfMedia = true;
+                    PantallaPrincipalController.reproducirCancionCola();
                 }
             }
         });
@@ -231,4 +234,8 @@ public class MediaControl extends BorderPane {
             }
         }
     }
+
+   public void detenerMusica(){
+       this.mp.stop();
+   }    
 }

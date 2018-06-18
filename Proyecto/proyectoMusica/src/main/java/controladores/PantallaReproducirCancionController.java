@@ -7,11 +7,11 @@ package controladores;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 
 /**
  * FXML Controller class
@@ -26,17 +26,19 @@ public class PantallaReproducirCancionController implements Initializable {
     private Label lblNombreCancion;
     @FXML
     private Label lblNombreArtista;
+    @FXML
+    private Pane pnlReproducir;
+    public static Pane panelCompartido;
+    
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        panelCompartido = new Pane();
+        pnlReproducir.getChildren().add(panelCompartido);
     }    
 
-    @FXML
-    private void reproducir(ActionEvent event) {
-    }
     
 }
