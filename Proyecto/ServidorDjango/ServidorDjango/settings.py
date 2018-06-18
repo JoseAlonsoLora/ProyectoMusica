@@ -25,7 +25,7 @@ SECRET_KEY = 'z5pud@ibqp-adodw4!60q2$5*e2&2jj)kc)o9_*qvhbp=4q6by'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.43.221','localhost','192.168.0.40']
+ALLOWED_HOSTS = ['192.168.43.221','localhost','192.168.0.40','192.168.43.78']
 
 
 # Application definition
