@@ -13,12 +13,12 @@
    <center>
       <AnchorPane id="AnchorPane" prefHeight="434.0" prefWidth="915.0">
          <children>
-            <Label layoutX="374.0" layoutY="17.0" text="Listas de reproducción">
+            <Label layoutX="374.0" layoutY="38.0" text="Listas de reproducción">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <JFXListView fx:id="lstListas" layoutX="295.0" layoutY="49.0" stylesheets="@../styles/listView.css" prefHeight="417.0" prefWidth="339.0" />
+            <JFXListView fx:id="lstListas" layoutX="295.0" layoutY="96.0" prefHeight="417.0" prefWidth="339.0" stylesheets="@../styles/listView.css" />
             <JFXButton fx:id="btnNuvaLista" layoutX="866.0" layoutY="18.0" onAction="#crearNuevaLista" style="-fx-background-color: #252525;" text="">
                <graphic>
                   <FontAwesomeIconView fill="WHITE" glyphName="PLUS_CIRCLE" size="20" />
@@ -27,16 +27,10 @@
          </children>
       </AnchorPane>
    </center>
-   <top>
-      <Pane prefHeight="45.0" prefWidth="1120.0" BorderPane.alignment="CENTER" />
-   </top>
    <left>
       <Pane prefHeight="475.0" prefWidth="108.0" BorderPane.alignment="CENTER" />
    </left>
    <right>
       <Pane prefHeight="475.0" prefWidth="92.0" BorderPane.alignment="CENTER" />
    </right>
-   <bottom>
-      <Pane prefHeight="88.0" prefWidth="1139.0" BorderPane.alignment="CENTER" />
-   </bottom>
 </BorderPane>
