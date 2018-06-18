@@ -12,6 +12,7 @@ import com.mycompany.proyectomusica.MainApp;
 import static com.mycompany.proyectomusica.MainApp.leerConfig;
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.ConnectException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -71,33 +72,41 @@ public class PantallaIniciarSesionController implements Initializable {
             alert.setContentText("Algunos de los campos están vacíos");
             alert.showAndWait();
         } else {
-            Client cliente = ClientBuilder.newClient();
-            String ip = recurso.getProperty("ipAddress");
-            String puerto = recurso.getProperty("portDjango");
-            WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/iniciarSesion/?id=" + campoUsuario.getText().trim() + "&password=" + cifrarContrasena(campoContraseña.getText().trim()));
-            Sesion sesion = webTarget.request(MediaType.APPLICATION_JSON).get(new GenericType<Sesion>() {
-            });
-            if (sesion.getResult().equals("true")) {
-                try {
-                    Stage stage = new Stage();
-                    FXMLLoader loader = new FXMLLoader(PantallaIniciarSesionController.class.getResource("/fxml/PantallaPrincipal.fxml"));
-                    Parent root = (Parent) loader.load();
-                    PantallaPrincipalController pantallaPrincipal = loader.getController();
-                    pantallaPrincipal.setNombreUsuario(campoUsuario.getText());
-                    Scene scene = new Scene(root);
-                    scene.getStylesheets().add("/styles/Styles.css");
-                    stage.setTitle("Pantalla Principal");
-                    stage.setScene(scene);
-                    stage.show();
-                    stageActual.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(PantallaIniciarSesionController.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                Client cliente = ClientBuilder.newClient();
+                String ip = recurso.getProperty("ipAddress");
+                String puerto = recurso.getProperty("portDjango");
+                WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/iniciarSesion/?id=" + campoUsuario.getText().trim() + "&password=" + cifrarContrasena(campoContraseña.getText().trim()));
+                Sesion sesion = webTarget.request(MediaType.APPLICATION_JSON).get(new GenericType<Sesion>() {
+                });
+                if (sesion.getResult().equals("true")) {
+                    try {
+                        Stage stage = new Stage();
+                        FXMLLoader loader = new FXMLLoader(PantallaIniciarSesionController.class.getResource("/fxml/PantallaPrincipal.fxml"));
+                        Parent root = (Parent) loader.load();
+                        PantallaPrincipalController pantallaPrincipal = loader.getController();
+                        pantallaPrincipal.setNombreUsuario(campoUsuario.getText());
+                        Scene scene = new Scene(root);
+                        scene.getStylesheets().add("/styles/Styles.css");
+                        stage.setTitle("Pantalla Principal");
+                        stage.setScene(scene);
+                        stage.show();
+                        stageActual.close();
+                    } catch (IOException ex) {
+                        Logger.getLogger(PantallaIniciarSesionController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    Alert alertUsuarioInvalido = new Alert(Alert.AlertType.INFORMATION);
+                    alertUsuarioInvalido.setTitle("Información");
+                    alertUsuarioInvalido.setHeaderText(null);
+                    alertUsuarioInvalido.setContentText("El nombre de usuario y contraseña no coinciden");
+                    alertUsuarioInvalido.showAndWait();
                 }
-            } else {
-                Alert alertUsuarioInvalido = new Alert(Alert.AlertType.INFORMATION);
-                alertUsuarioInvalido.setTitle("Información");
+            } catch (Exception e) {
+                Alert alertUsuarioInvalido = new Alert(Alert.AlertType.ERROR);
+                alertUsuarioInvalido.setTitle("Error");
                 alertUsuarioInvalido.setHeaderText(null);
-                alertUsuarioInvalido.setContentText("El nombre de usuario y contraseña no coinciden");
+                alertUsuarioInvalido.setContentText("No hay conexión con el servidor");
                 alertUsuarioInvalido.showAndWait();
             }
         }

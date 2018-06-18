@@ -22,6 +22,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.StackPane;
 import modelo.Biblioteca;
@@ -70,39 +71,55 @@ public class PantallaMiBibliotecaController implements Initializable {
     }
 
     private void crearPantallaCanciones() {
-        FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaCanciones.fxml"));
-        Parent root;
         try {
-            root = (Parent) loader.load();
-            PantallaCancionesController controlador = loader.getController();
-            controlador.setCanciones(new ClienteCancion().obtenerCancionesBiblioteca());
-            pnlCanciones.getChildren().clear();
-            pnlCanciones.getChildren().add(root);
-        } catch (IOException ex) {
-            Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
+            FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaCanciones.fxml"));
+            Parent root;
+            try {
+                root = (Parent) loader.load();
+                PantallaCancionesController controlador = loader.getController();
+                controlador.setCanciones(new ClienteCancion().obtenerCancionesBiblioteca());
+                pnlCanciones.getChildren().clear();
+                pnlCanciones.getChildren().add(root);
+            } catch (IOException ex) {
+                Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (Exception e) {
+            Alert alertUsuarioInvalido = new Alert(Alert.AlertType.ERROR);
+            alertUsuarioInvalido.setTitle("Error");
+            alertUsuarioInvalido.setHeaderText(null);
+            alertUsuarioInvalido.setContentText("No hay conexión con el servidor");
+            alertUsuarioInvalido.showAndWait();
         }
     }
 
     public void crearPantallaAlbumes() {
-        FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaAlbum.fxml"));
-        Parent root;
         try {
-            root = (Parent) loader.load();
-            PantallaAlbumController controlador = loader.getController();
-            controlador.setPnlPincipal(pnlAlbum);
-            ClienteBiblioteca clienteBiblioteca = new ClienteBiblioteca();
-            Biblioteca bibliotecaUsuario = null;
-            List<Biblioteca> bibliotecas = clienteBiblioteca.findAll();
-            for (Biblioteca biblioteca : bibliotecas) {
-                if (biblioteca.getUsuario_nombreusuario().equals(PantallaPrincipalController.nombreUsuario)) {
-                    bibliotecaUsuario = biblioteca;
+            FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaAlbum.fxml"));
+            Parent root;
+            try {
+                root = (Parent) loader.load();
+                PantallaAlbumController controlador = loader.getController();
+                controlador.setPnlPincipal(pnlAlbum);
+                ClienteBiblioteca clienteBiblioteca = new ClienteBiblioteca();
+                Biblioteca bibliotecaUsuario = null;
+                List<Biblioteca> bibliotecas = clienteBiblioteca.findAll();
+                for (Biblioteca biblioteca : bibliotecas) {
+                    if (biblioteca.getUsuario_nombreusuario().equals(PantallaPrincipalController.nombreUsuario)) {
+                        bibliotecaUsuario = biblioteca;
+                    }
                 }
+                controlador.setAlbumes(new ClienteAlbum().obtenerAlbumesBiblioteca(bibliotecaUsuario.getIdbiblioteca()));
+                pnlAlbum.getChildren().clear();
+                pnlAlbum.getChildren().add(root);
+            } catch (IOException ex) {
+                Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            controlador.setAlbumes(new ClienteAlbum().obtenerAlbumesBiblioteca(bibliotecaUsuario.getIdbiblioteca()));
-            pnlAlbum.getChildren().clear();
-            pnlAlbum.getChildren().add(root);
-        } catch (IOException ex) {
-            Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            Alert alertUsuarioInvalido = new Alert(Alert.AlertType.ERROR);
+            alertUsuarioInvalido.setTitle("Error");
+            alertUsuarioInvalido.setHeaderText(null);
+            alertUsuarioInvalido.setContentText("No hay conexión con el servidor");
+            alertUsuarioInvalido.showAndWait();
         }
     }
 
@@ -111,6 +128,7 @@ public class PantallaMiBibliotecaController implements Initializable {
         FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaAgregarBiblioteca.fxml"));
         Parent root = (Parent) loader.load();
         PantallaAgregarBibliotecaController pantallaAgregarAlbum = loader.getController();
+        pantallaAgregarAlbum.setPanelPrincipal(pnlPrincipal);
         pnlPrincipal.getChildren().clear();
         pnlPrincipal.getChildren().add(root);
     }

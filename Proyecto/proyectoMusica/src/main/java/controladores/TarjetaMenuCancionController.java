@@ -17,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import modelo.Cancion;
 
@@ -26,7 +27,7 @@ import modelo.Cancion;
  * @author raymundo
  */
 public class TarjetaMenuCancionController implements Initializable {
-    
+
     @FXML
     private JFXButton btnAgregarCola;
     @FXML
@@ -39,17 +40,22 @@ public class TarjetaMenuCancionController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-    
+    }
+
     @FXML
     private void agregarCola(ActionEvent event) {
         PantallaPrincipalController.agregarCola(cancion);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Información");
+        alert.setHeaderText(null);
+        alert.setContentText("Canción agregada a la cola");
+        alert.showAndWait();
     }
-    
+
     public void setCancion(Cancion cancion) {
         this.cancion = cancion;
-    }    
-    
+    }
+
     @FXML
     private void agregarLista(ActionEvent event) {
         Stage stage = new Stage();
@@ -66,5 +72,5 @@ public class TarjetaMenuCancionController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
-    
+
 }

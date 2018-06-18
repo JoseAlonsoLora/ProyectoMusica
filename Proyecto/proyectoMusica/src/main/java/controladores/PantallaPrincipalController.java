@@ -6,6 +6,7 @@
 package controladores;
 
 import clasesApoyo.MediaControl;
+import clientes.ClienteCancion;
 import com.jfoenix.controls.JFXButton;
 import static com.sun.javafx.PlatformUtil.isWindows;
 import static controladores.TarjetaCancionController.reproducirCancion;
@@ -53,6 +54,9 @@ public class PantallaPrincipalController implements Initializable {
     private static List<Cancion> historial;
     public static MediaControl mc;
     private static int indiceCola;
+    private static int indiceRadio;
+    public static PantallaReproducirCancionController controlador;
+    public static List<Cancion> radio;
 
     /**
      * Initializes the controller class.
@@ -60,12 +64,15 @@ public class PantallaPrincipalController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         indiceCola = 0;
+        indiceRadio = 0;
+        radio = new ArrayList<>();
         colaCanciones = new ArrayList<>();
         historial = new ArrayList<>();
         pnlCancion.getStyleClass().add("panel");
         try {
             FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaReproducirCancion.fxml"));
             Parent root = (Parent) loader.load();
+            controlador = loader.getController();
             pnlCancion.getChildren().clear();
             pnlCancion.getChildren().add(root);
         } catch (IOException ex) {
@@ -103,6 +110,7 @@ public class PantallaPrincipalController implements Initializable {
         FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaAgregarBiblioteca.fxml"));
         Parent root = (Parent) loader.load();
         PantallaAgregarBibliotecaController pantallaAgregarAlbum = loader.getController();
+        pantallaAgregarAlbum.setPanelPrincipal(pnlPrincipal);
         pnlPrincipal.getChildren().clear();
         pnlPrincipal.getChildren().add(root);
     }
@@ -154,9 +162,23 @@ public class PantallaPrincipalController implements Initializable {
     }
 
     public static void reproducirCancionCola() {
-        if (!colaCanciones.isEmpty()) {
-            if (indiceCola != colaCanciones.size()) {
-                 String rutaCancion = colaCanciones.get(indiceCola).getNombrearchivo().replace("/", "-");
+        if (!colaCanciones.isEmpty() && indiceCola != colaCanciones.size()) {
+            PantallaPrincipalController.agregarHistorial(colaCanciones.get(indiceCola));
+            String rutaCancion = colaCanciones.get(indiceCola).getNombrearchivo().replace("/", "-");
+            String rutaFinal;
+            if (isWindows()) {
+                rutaFinal = rutaCancion.replace(" ", "*");
+            } else {
+                rutaFinal = rutaCancion.replace("\\s", "*");
+            }
+            reproducirCancion(rutaFinal);
+            PantallaPrincipalController.controlador.mostrarInformacion(colaCanciones.get(indiceCola).getNombreArtista(),
+                    colaCanciones.get(indiceCola).getNombre());
+            indiceCola++;
+        } else {
+            if (!radio.isEmpty() && indiceRadio != radio.size()) {
+                PantallaPrincipalController.agregarHistorial(radio.get(indiceRadio));
+                String rutaCancion = radio.get(indiceRadio).getNombrearchivo().replace("/", "-");
                 String rutaFinal;
                 if (isWindows()) {
                     rutaFinal = rutaCancion.replace(" ", "*");
@@ -164,8 +186,16 @@ public class PantallaPrincipalController implements Initializable {
                     rutaFinal = rutaCancion.replace("\\s", "*");
                 }
                 reproducirCancion(rutaFinal);
-                indiceCola++;
+                PantallaPrincipalController.controlador.mostrarInformacion(radio.get(indiceRadio).getNombreArtista(),
+                        radio.get(indiceRadio).getNombre());
+                indiceRadio++;
             }
         }
+    }
+
+    public static void buscarCancionesGenero(int idAlbum) {
+        radio.clear();
+        radio.addAll(new ClienteCancion().obtenerCancionesGenero(idAlbum));
+        indiceRadio = 0;
     }
 }

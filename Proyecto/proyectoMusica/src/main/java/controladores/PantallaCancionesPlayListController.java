@@ -90,87 +90,103 @@ public class PantallaCancionesPlayListController implements Initializable {
 
     @FXML
     private void descargarPlayList(ActionEvent event) {
-        if (canciones.size() > 0) {
-            FileChooser explorador = new FileChooser();
-            archivoSeleccionado = explorador.showSaveDialog(null);
-            if (archivoSeleccionado != null) {
-                String[] auxiliar = archivoSeleccionado.getName().split("\\.");
-                if (auxiliar.length == 1) {
-                    try {
-                        archivoSeleccionado.mkdir();
-                        rutasCanciones = new ArrayList();
-                        for (Cancion cancion : canciones) {
-                            rutasCanciones.add(cancion.getNombrearchivo());
-                        }
-                        Socket socket = new Socket(recurso.getProperty("ipAddress"), Integer.parseInt(recurso.getProperty("portFiles")));
-                        ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
-                        ObjectInputStream entrada = new ObjectInputStream(socket.getInputStream());
-                        salida.writeObject(false);
-                        salida.writeObject(rutasCanciones);
-                        byte[] archivo = (byte[]) entrada.readObject();
-                        ZipInputStream zipStream = new ZipInputStream(new ByteArrayInputStream(archivo));
-                        ZipEntry entry = null;
-                        String rutaFinal = archivoSeleccionado.getAbsolutePath();
-                        File zipNuevo = new File(rutaFinal);
-                        if (!zipNuevo.exists()) {
-                            zipNuevo.mkdirs();
-                        }
-                        Path outDir = Paths.get(rutaFinal);
-                        String entryName = "";
-                        while ((entry = zipStream.getNextEntry()) != null) {
-                            Path filePath = outDir.resolve(entry.getName());
-                            entryName = entry.getName();
-                            FileOutputStream out = new FileOutputStream(filePath.toFile());
+        try {
+            if (canciones.size() > 0) {
+                FileChooser explorador = new FileChooser();
+                archivoSeleccionado = explorador.showSaveDialog(null);
+                if (archivoSeleccionado != null) {
+                    String[] auxiliar = archivoSeleccionado.getName().split("\\.");
+                    if (auxiliar.length == 1) {
+                        try {
+                            archivoSeleccionado.mkdir();
+                            rutasCanciones = new ArrayList();
+                            for (Cancion cancion : canciones) {
+                                rutasCanciones.add(cancion.getNombrearchivo());
+                            }
+                            Socket socket = new Socket(recurso.getProperty("ipAddress"), Integer.parseInt(recurso.getProperty("portFiles")));
+                            ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
+                            ObjectInputStream entrada = new ObjectInputStream(socket.getInputStream());
+                            salida.writeObject(false);
+                            salida.writeObject(rutasCanciones);
+                            byte[] archivo = (byte[]) entrada.readObject();
+                            ZipInputStream zipStream = new ZipInputStream(new ByteArrayInputStream(archivo));
+                            ZipEntry entry = null;
+                            String rutaFinal = archivoSeleccionado.getAbsolutePath();
+                            File zipNuevo = new File(rutaFinal);
+                            if (!zipNuevo.exists()) {
+                                zipNuevo.mkdirs();
+                            }
+                            Path outDir = Paths.get(rutaFinal);
+                            String entryName = "";
+                            while ((entry = zipStream.getNextEntry()) != null) {
+                                Path filePath = outDir.resolve(entry.getName());
+                                entryName = entry.getName();
+                                FileOutputStream out = new FileOutputStream(filePath.toFile());
 
-                            byte[] byteBuff = new byte[1024];
-                            int bytesRead = 0;
-                            while ((bytesRead = zipStream.read(byteBuff)) != -1) {
-                                out.write(byteBuff, 0, bytesRead);
+                                byte[] byteBuff = new byte[1024];
+                                int bytesRead = 0;
+                                while ((bytesRead = zipStream.read(byteBuff)) != -1) {
+                                    out.write(byteBuff, 0, bytesRead);
+                                }
+
+                                out.close();
+                                zipStream.closeEntry();
                             }
 
-                            out.close();
-                            zipStream.closeEntry();
+                            zipStream.close();
+                            socket.close();
+                            descomprimirArchivo(rutaFinal, rutaFinal + "/" + entryName);
+                            Alert alert = new Alert(Alert.AlertType.WARNING);
+                            alert.setTitle("Información");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Las canciones se han descargado correctamente");
+                            alert.showAndWait();
+                            socket.close();
+                        } catch (IOException ex) {
+                            Logger.getLogger(PantallaCancionesPlayListController.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(PantallaCancionesPlayListController.class.getName()).log(Level.SEVERE, null, ex);
                         }
-
-                        zipStream.close();
-                        socket.close();
-                        descomprimirArchivo(rutaFinal, rutaFinal + "/" + entryName);
+                    } else {
                         Alert alert = new Alert(Alert.AlertType.WARNING);
                         alert.setTitle("Información");
                         alert.setHeaderText(null);
-                        alert.setContentText("Las canciones se han descargado correctamente");
+                        alert.setContentText("Debes introducir el nombre de la carpeta donde se guardaran los archivos");
                         alert.showAndWait();
-                        socket.close();
-                    } catch (IOException ex) {
-                        Logger.getLogger(PantallaCancionesPlayListController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(PantallaCancionesPlayListController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Información");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Debes introducir el nombre de la carpeta donde se guardaran los archivos");
-                    alert.showAndWait();
                 }
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Información");
+                alert.setHeaderText(null);
+                alert.setContentText("No existe ninguna cancion en la playlist");
+                alert.showAndWait();
             }
-        } else {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Información");
-            alert.setHeaderText(null);
-            alert.setContentText("No existe ninguna cancion en la playlist");
-            alert.showAndWait();
+        } catch (Exception e) {
+            Alert alertUsuarioInvalido = new Alert(Alert.AlertType.ERROR);
+            alertUsuarioInvalido.setTitle("Error");
+            alertUsuarioInvalido.setHeaderText(null);
+            alertUsuarioInvalido.setContentText("No hay conexión con el servidor");
+            alertUsuarioInvalido.showAndWait();
         }
     }
 
     public void mostrarCanciones() {
-        Client cliente = ClientBuilder.newClient();
-        String ip = recurso.getProperty("ipAddress");
-        String puerto = recurso.getProperty("portDjango");
-        WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/canciones/?id=" + lista.getIdlistareproduccion());
-        canciones = (ArrayList<Cancion>) webTarget.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Cancion>>() {
-        });
-        crearPantallaCanciones();        
+        try {
+            Client cliente = ClientBuilder.newClient();
+            String ip = recurso.getProperty("ipAddress");
+            String puerto = recurso.getProperty("portDjango");
+            WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/canciones/?id=" + lista.getIdlistareproduccion());
+            canciones = (ArrayList<Cancion>) webTarget.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Cancion>>() {
+            });
+            crearPantallaCanciones();
+        } catch (Exception e) {
+            Alert alertUsuarioInvalido = new Alert(Alert.AlertType.ERROR);
+            alertUsuarioInvalido.setTitle("Error");
+            alertUsuarioInvalido.setHeaderText(null);
+            alertUsuarioInvalido.setContentText("No hay conexión con el servidor");
+            alertUsuarioInvalido.showAndWait();
+        }
     }
 
     public void crearPantallaCanciones() {

@@ -106,7 +106,8 @@ def obtenerCancionesLista(request):
 			cancionAux["idcancion"] = cancion.idcancion
 			cancionAux['calificacion'] = cancion.calificacion
 			cancionAux['nombrearchivo'] = cancion.nombrearchivo
-			cancionAux['nombreAlbum'] = cancion.album_idalbum.nombre		
+			cancionAux['nombreAlbum'] = cancion.album_idalbum.nombre
+			cancionAux['album_idalbum'] = cancion.album_idalbum.idalbum
 			cancionAux['nombreArtista'] = cancion.album_idalbum.artista_idartista.nombre
 			listaFinal.append(cancionAux)		
 		return Response(listaFinal)
@@ -122,6 +123,7 @@ def obtenerTodasCanciones(request):
 		album = Album.objects.get(pk = cancionJson['album_idalbum'])
 		if (album.biblioteca_idbiblioteca.publica == 1):
 			cancionAux["nombre"] = cancionJson['nombre']
+			cancionAux['album_idalbum'] = cancionJson['album_idalbum']
 			cancionAux["idcancion"] = cancionJson['idcancion']
 			cancionAux['calificacion'] = cancionJson['calificacion']
 			cancionAux['nombrearchivo'] = cancionJson['nombrearchivo']
@@ -234,7 +236,8 @@ def obtenerCancionesPorBiblioteca(request):
 			cancionAux["idcancion"] = cancionJson['idcancion']
 			cancionAux['calificacion'] = cancionJson['calificacion']
 			cancionAux['nombrearchivo'] = cancionJson['nombrearchivo']
-			cancionAux['nombreAlbum'] = album.get("nombre")
+			cancionAux['album_idalbum'] = album.get('idalbum')
+			cancionAux['nombreAlbum'] = album.get('nombre')
 			artista = Artista.objects.get(pk = album.get("artista_idartista_id"))
 			cancionAux['nombreArtista'] = artista.nombre
 			listaCanciones.append(cancionAux)
@@ -284,3 +287,25 @@ def bibliotecaPublica(request):
 	biblioteca.publica = 1
 	biblioteca.save()
 	return Response({'result':'ok'})
+
+@api_view(['GET'])
+def obtenerCancionesPorGenero(request):
+	idAlbum = request.GET['id']
+	listaFinal = []
+	album = Album.objects.get(pk = idAlbum)	
+	listaAlbumes = Album.objects.filter(genero_idgenero = album.genero_idgenero.idgenero).values()
+	for album in listaAlbumes:
+		listaCanciones = {}
+		listaCanciones = Cancion.objects.filter(album_idalbum = album["idalbum"]).values()
+		for lista in listaCanciones:
+			cancion = {}
+			cancion["nombrearchivo"] = lista["nombrearchivo"]
+			cancion["album_idalbum"] = lista["album_idalbum_id"]
+			cancion["calificacion"] = lista["calificacion"]
+			cancion["nombre"] = lista["nombre"]
+			cancion["idcancion"] = lista["idcancion"]
+			album = Album.objects.get(pk = lista["album_idalbum_id"])
+			cancion['nombreAlbum'] = album.nombre		
+			cancion['nombreArtista'] = album.artista_idartista.nombre
+			listaFinal.append(cancion)
+	return Response(listaFinal)

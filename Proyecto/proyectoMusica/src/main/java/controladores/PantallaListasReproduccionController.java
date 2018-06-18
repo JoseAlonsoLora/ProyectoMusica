@@ -72,60 +72,76 @@ public class PantallaListasReproduccionController implements Initializable {
     }
 
     public void mostrarListas() {
-        listasReproduccionUsuario = new ArrayList();
-        nombresListas = new ArrayList();
-        List<Listareproduccion> listas = clienteLista.findAll();
-        for (Listareproduccion lista : listas) {
-            if (lista.getUsuario_nombreusuario().equals(PantallaPrincipalController.nombreUsuario)) {
-                listasReproduccionUsuario.add(lista);
-                nombresListas.add(lista.getNombre());
-            }
-        }
-        ObservableList<String> items = FXCollections.observableArrayList();
-        items.addAll(nombresListas);
-        lstListas.setItems(items);
-        lstListas.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                try {
-                    FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaCancionesPlayList.fxml"));
-                    Parent root = (Parent) loader.load();
-                    PantallaCancionesPlayListController pantallaCancionesPlayList = loader.getController();
-                    pantallaCancionesPlayList.setPanelPrincipal(panelPrincipal);
-                    pantallaCancionesPlayList.setLista(listasReproduccionUsuario.get(lstListas.getSelectionModel().getSelectedIndex()));
-                    panelPrincipal.getChildren().clear();
-                    panelPrincipal.getChildren().add(root);
-                } catch (IOException ex) {
-                    Logger.getLogger(PantallaListasReproduccionController.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            listasReproduccionUsuario = new ArrayList();
+            nombresListas = new ArrayList();
+            List<Listareproduccion> listas = clienteLista.findAll();
+            for (Listareproduccion lista : listas) {
+                if (lista.getUsuario_nombreusuario().equals(PantallaPrincipalController.nombreUsuario)) {
+                    listasReproduccionUsuario.add(lista);
+                    nombresListas.add(lista.getNombre());
                 }
             }
-        });
+            ObservableList<String> items = FXCollections.observableArrayList();
+            items.addAll(nombresListas);
+            lstListas.setItems(items);
+            lstListas.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                    try {
+                        FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaCancionesPlayList.fxml"));
+                        Parent root = (Parent) loader.load();
+                        PantallaCancionesPlayListController pantallaCancionesPlayList = loader.getController();
+                        pantallaCancionesPlayList.setPanelPrincipal(panelPrincipal);
+                        pantallaCancionesPlayList.setLista(listasReproduccionUsuario.get(lstListas.getSelectionModel().getSelectedIndex()));
+                        panelPrincipal.getChildren().clear();
+                        panelPrincipal.getChildren().add(root);
+                    } catch (IOException ex) {
+                        Logger.getLogger(PantallaListasReproduccionController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Alert alertUsuarioInvalido = new Alert(Alert.AlertType.ERROR);
+            alertUsuarioInvalido.setTitle("Error");
+            alertUsuarioInvalido.setHeaderText(null);
+            alertUsuarioInvalido.setContentText("No hay conexión con el servidor");
+            alertUsuarioInvalido.showAndWait();
+        }
     }
 
     @FXML
     private void crearNuevaLista(ActionEvent event) throws IOException {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Nueva lista");
-        dialog.setHeaderText("Nueva lista");
-        dialog.setContentText("Nombre de la lista:");
+        try {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Nueva lista");
+            dialog.setHeaderText("Nueva lista");
+            dialog.setContentText("Nombre de la lista:");
 
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()) {
-            Listareproduccion nuevaLista = new Listareproduccion();
-            nuevaLista.setNombre(result.get());
-            nuevaLista.setUsuario_nombreusuario(PantallaPrincipalController.nombreUsuario);
-            clienteLista.create(nuevaLista);
-            FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaListasReproduccion.fxml"));
-            Parent root = (Parent) loader.load();
-            PantallaListasReproduccionController pantallaPlayList = loader.getController();
-            pantallaPlayList.setPanelPrincipal(panelPrincipal);
-            panelPrincipal.getChildren().clear();
-            panelPrincipal.getChildren().add(root);
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Información");
-            alert.setHeaderText(null);
-            alert.setContentText("Lista creada exitosamente");
-            alert.showAndWait();
+            Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()) {
+                Listareproduccion nuevaLista = new Listareproduccion();
+                nuevaLista.setNombre(result.get());
+                nuevaLista.setUsuario_nombreusuario(PantallaPrincipalController.nombreUsuario);
+                clienteLista.create(nuevaLista);
+                FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaListasReproduccion.fxml"));
+                Parent root = (Parent) loader.load();
+                PantallaListasReproduccionController pantallaPlayList = loader.getController();
+                pantallaPlayList.setPanelPrincipal(panelPrincipal);
+                panelPrincipal.getChildren().clear();
+                panelPrincipal.getChildren().add(root);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Información");
+                alert.setHeaderText(null);
+                alert.setContentText("Lista creada exitosamente");
+                alert.showAndWait();
+            }
+        } catch (Exception e) {
+            Alert alertUsuarioInvalido = new Alert(Alert.AlertType.ERROR);
+            alertUsuarioInvalido.setTitle("Error");
+            alertUsuarioInvalido.setHeaderText(null);
+            alertUsuarioInvalido.setContentText("No hay conexión con el servidor");
+            alertUsuarioInvalido.showAndWait();
         }
     }
 

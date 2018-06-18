@@ -84,45 +84,53 @@ public class PantallaCrearCuentaController implements Initializable {
         if (!verificarCamposVacios(campoNombre, campoApellido, campoCorreo, campoUsuario, campoContraseña)) {
             if (!verificarLongitudExcedida(campoNombre, campoApellido, campoCorreo, campoUsuario)) {
                 if (validarCorreo(campoCorreo.getText().trim())) {
-                    ClienteUsuario clienteUsuario = new ClienteUsuario();
-                    List<Usuario> usuarios;
-                    usuarios = clienteUsuario.findAll();
-                    for (Usuario usuario : usuarios) {
-                        if (usuario.getNombreusuario().equals(campoUsuario.getText())) {
-                            usuarioValido = false;
+                    try {
+                        ClienteUsuario clienteUsuario = new ClienteUsuario();
+                        List<Usuario> usuarios;
+                        usuarios = clienteUsuario.findAll();
+                        for (Usuario usuario : usuarios) {
+                            if (usuario.getNombreusuario().equals(campoUsuario.getText())) {
+                                usuarioValido = false;
+                            }
                         }
-                    }
-                    clienteUsuario.close();
-                    if (!usuarioValido) {
-                        mostrarMensaje("Usuario existente", "El nombre de usuario elegido ya se encuentra en uso", "El nombre de usuario elegido ya se encuentra en uso");
-                    } else {
-                        JSONObject usuarioNuevo = new JSONObject();
-                        usuarioNuevo.put("nombres", campoNombre.getText().trim());
-                        usuarioNuevo.put("contrasena", cifrarContrasena(campoContraseña.getText()));
-                        usuarioNuevo.put("nombreUsuario", campoUsuario.getText().trim());
-                        usuarioNuevo.put("apellidos", campoApellido.getText().trim());
-                        usuarioNuevo.put("correo", campoCorreo.getText().trim());
+                        clienteUsuario.close();
+                        if (!usuarioValido) {
+                            mostrarMensaje("Usuario existente", "El nombre de usuario elegido ya se encuentra en uso", "El nombre de usuario elegido ya se encuentra en uso");
+                        } else {
+                            JSONObject usuarioNuevo = new JSONObject();
+                            usuarioNuevo.put("nombres", campoNombre.getText().trim());
+                            usuarioNuevo.put("contrasena", cifrarContrasena(campoContraseña.getText()));
+                            usuarioNuevo.put("nombreUsuario", campoUsuario.getText().trim());
+                            usuarioNuevo.put("apellidos", campoApellido.getText().trim());
+                            usuarioNuevo.put("correo", campoCorreo.getText().trim());
 
-                        Client cliente = ClientBuilder.newClient();
-                        String ip = recurso.getProperty("ipAddress");
-                        String puerto = recurso.getProperty("portDjango");
-                        WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/crearUsuario/");
-                        webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(usuarioNuevo.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
-                        mostrarMensaje("", "Registro exitoso", "La cuenta se ha registrado correctamente");
-                        try {
-                            Stage stage = new Stage();
-                            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/fxml/PantallaIniciarSesion.fxml"));
-                            Parent root = (Parent) loader.load();
-                            PantallaIniciarSesionController pantallaIniciarSesion = loader.getController();
-                            pantallaIniciarSesion.setStageActual(stage);
-                            Scene scene = new Scene(root);
-                            stage.setTitle("Iniciar sesion");
-                            stage.setScene(scene);
-                            stage.show();
-                            stageActual.close();
-                        } catch (IOException ex) {
-                            Logger.getLogger(PantallaCrearCuentaController.class.getName()).log(Level.SEVERE, null, ex);
+                            Client cliente = ClientBuilder.newClient();
+                            String ip = recurso.getProperty("ipAddress");
+                            String puerto = recurso.getProperty("portDjango");
+                            WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/crearUsuario/");
+                            webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(usuarioNuevo.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
+                            mostrarMensaje("", "Registro exitoso", "La cuenta se ha registrado correctamente");
+                            try {
+                                Stage stage = new Stage();
+                                FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/fxml/PantallaIniciarSesion.fxml"));
+                                Parent root = (Parent) loader.load();
+                                PantallaIniciarSesionController pantallaIniciarSesion = loader.getController();
+                                pantallaIniciarSesion.setStageActual(stage);
+                                Scene scene = new Scene(root);
+                                stage.setTitle("Iniciar sesion");
+                                stage.setScene(scene);
+                                stage.show();
+                                stageActual.close();
+                            } catch (IOException ex) {
+                                Logger.getLogger(PantallaCrearCuentaController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
+                    } catch (Exception e) {
+                        Alert alertUsuarioInvalido = new Alert(Alert.AlertType.ERROR);
+                        alertUsuarioInvalido.setTitle("Error");
+                        alertUsuarioInvalido.setHeaderText(null);
+                        alertUsuarioInvalido.setContentText("No hay conexión con el servidor");
+                        alertUsuarioInvalido.showAndWait();
                     }
                 } else {
                     mostrarMensaje("", "Correo no válido", "El correo ingresado no tiene un formato válido");
