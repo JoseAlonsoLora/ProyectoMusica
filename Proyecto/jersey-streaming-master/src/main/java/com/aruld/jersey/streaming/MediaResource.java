@@ -31,7 +31,8 @@ public class MediaResource {
 
     public void cambiarRuta(String ruta) {
         String rutaCancion = ruta.replace("-", "/");
-        String rutaFinal = "C:/Users/raymu/Documents/ServidorCanciones/"+rutaCancion.replace("*", " ");
+        String rutaFinal = "/home/raymundo170/ServidorCanciones/"+rutaCancion.replace("*", " ");
+        System.out.println(rutaFinal);
         audio = new File(rutaFinal);
     }
 

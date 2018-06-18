@@ -52,7 +52,7 @@ public class Sesion implements Runnable {
 
                 ZipInputStream zipStream = new ZipInputStream(new ByteArrayInputStream(archivo));
                 ZipEntry entry = null;
-                String rutaFinal = "C:/Users/raymu/Documents/ServidorCanciones/" + rutaGuardado;
+                String rutaFinal = "/home/raymundo170/ServidorCanciones/" + rutaGuardado;
                 File zipNuevo = new File(rutaFinal);
                 if (!zipNuevo.exists()) {
                     zipNuevo.mkdirs();
@@ -136,8 +136,8 @@ public class Sesion implements Runnable {
 
     public void enviarCanciones() {
         try {
-            String rutaGuardado = "C:/Users/raymu/Documents/ServidorCanciones/";
-            File archivoZip = new File("C:/Users/raymu/Documents/Sexto semestre/fichero.zip");
+            String rutaGuardado = "/home/raymundo170/ServidorCanciones/";
+            File archivoZip = new File("/home/raymundo170/ServidorCanciones/fichero.zip");
             archivoZip.createNewFile();
             ZipOutputStream os = new ZipOutputStream(new FileOutputStream(archivoZip.getAbsolutePath()));
             for (String ruta : rutasCanciones) {
