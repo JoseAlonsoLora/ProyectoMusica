@@ -110,6 +110,7 @@ public class PantallaPrincipalController implements Initializable {
         FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaAgregarBiblioteca.fxml"));
         Parent root = (Parent) loader.load();
         PantallaAgregarBibliotecaController pantallaAgregarAlbum = loader.getController();
+        pantallaAgregarAlbum.setPanelPrincipal(pnlPrincipal);
         pnlPrincipal.getChildren().clear();
         pnlPrincipal.getChildren().add(root);
     }

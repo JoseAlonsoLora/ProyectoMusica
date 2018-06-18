@@ -7,12 +7,18 @@ package controladores;
 
 import clasesApoyo.HiloCargaCanciones;
 import com.jfoenix.controls.JFXProgressBar;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
@@ -36,6 +42,7 @@ public class BarraProgresoController implements Initializable {
     private JFXProgressBar progressBar;
     @FXML
     private Label labelTipoCarga;
+    private StackPane pnlPrincipal;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -79,12 +86,26 @@ public class BarraProgresoController implements Initializable {
     }
 
     public void cargaCompleta() {
-        stageActual.close();
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Información");
-        alert.setHeaderText(null);
-        alert.setContentText("Album creado exitosamente");
-        alert.showAndWait();
+        try {
+            stageActual.close();
+            FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaAgregarBiblioteca.fxml"));
+            Parent root = (Parent) loader.load();
+            PantallaAgregarBibliotecaController pantallaAgregarAlbum = loader.getController();
+            pantallaAgregarAlbum.setPanelPrincipal(pnlPrincipal);
+            pnlPrincipal.getChildren().clear();
+            pnlPrincipal.getChildren().add(root);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Información");
+            alert.setHeaderText(null);
+            alert.setContentText("Album creado exitosamente");
+            alert.showAndWait();
+        } catch (IOException ex) {
+            Logger.getLogger(BarraProgresoController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void setPnlPrincipal(StackPane pnlPrincipal) {
+        this.pnlPrincipal = pnlPrincipal;
     }
 
 }

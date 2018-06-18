@@ -36,6 +36,7 @@ import javafx.stage.FileChooser;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -76,6 +77,7 @@ public class PantallaAgregarBibliotecaController implements Initializable {
     private Biblioteca bibliotecaUsuario;
     private File archivoSeleccionado;
     private Properties recurso;
+    private StackPane panelPrincipal;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -115,6 +117,10 @@ public class PantallaAgregarBibliotecaController implements Initializable {
             alertUsuarioInvalido.setContentText("No hay conexión con el servidor");
             alertUsuarioInvalido.showAndWait();
         }
+    }
+    
+    public void setPanelPrincipal(StackPane panelPrincipal){
+        this.panelPrincipal = panelPrincipal;
     }
 
     @FXML
@@ -297,6 +303,7 @@ public class PantallaAgregarBibliotecaController implements Initializable {
                         BarraProgresoController barra = loader.getController();
                         barra.setTipo("Cargando canciones");
                         barra.setStageActual(stage);
+                        barra.setPnlPrincipal(panelPrincipal);
                         barra.setZip(zip);
                         barra.setPuerto(Integer.parseInt(puerto));
                         barra.setIp(ip);
@@ -369,7 +376,7 @@ public class PantallaAgregarBibliotecaController implements Initializable {
     private void limitarAlbum(KeyEvent event) {
         char caracter = event.getCharacter().charAt(0);
         limitarCaracteres(event, txtAlbum, 20);
-        if (!Character.isLetterOrDigit(caracter)) {
+        if (!Character.isLetterOrDigit(caracter) && !Character.isSpaceChar(caracter)) {
             event.consume();
         }
     }
