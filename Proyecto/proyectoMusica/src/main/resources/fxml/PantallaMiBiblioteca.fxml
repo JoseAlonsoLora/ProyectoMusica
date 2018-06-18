@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTabPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -21,6 +20,5 @@
             </Tab>
         </tabs>
     </JFXTabPane>
-   <JFXButton onAction="#crearNuevoAlbum" text="Nuevo album" />
 
 </StackPane>
