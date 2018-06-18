@@ -210,13 +210,15 @@ def obtenerAlbumPorGenero(request):
 	listaAlbumes = Album.objects.filter(genero_idgenero = idGenero).values()
 	for album in listaAlbumes:
 		albumJson = {}
-		albumJson["nombre"] = album["nombre"]
-		albumJson["idalbum"] = album["idalbum"]
-		albumJson["artista_idartista"] = album["artista_idartista_id"]
-		albumJson["genero_idgenero"] = album["genero_idgenero_id"]
-		albumJson["compania"] = album["compania"]
-		albumJson["biblioteca_idbiblioteca"] = album["biblioteca_idbiblioteca_id"]
-		listaAlbumesFinal.append(albumJson)
+		biblioteca = Biblioteca.objects.get(pk = album["biblioteca_idbiblioteca_id"])
+		if biblioteca.publica == 1:
+			albumJson["nombre"] = album["nombre"]
+			albumJson["idalbum"] = album["idalbum"]
+			albumJson["artista_idartista"] = album["artista_idartista_id"]
+			albumJson["genero_idgenero"] = album["genero_idgenero_id"]
+			albumJson["compania"] = album["compania"]
+			albumJson["biblioteca_idbiblioteca"] = album["biblioteca_idbiblioteca_id"]
+			listaAlbumesFinal.append(albumJson)
 	return Response(listaAlbumesFinal)
 
 

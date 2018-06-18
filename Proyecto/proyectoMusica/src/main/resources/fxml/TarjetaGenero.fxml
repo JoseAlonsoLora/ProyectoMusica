@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane id="AnchorPane" fx:id="pnlGenero" onMouseClicked="#mostrarAlbumesGenero" prefHeight="153.0" prefWidth="182.0" stylesheets="@../styles/panelCss.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.TarjetaGeneroController">
+   <children>
+       <StackPane style="-fx-background-color: #D1F2EB;">
+           <children>
+               <Label fx:id="lblNombreGenero" layoutX="75.0" layoutY="68.0" text="Label" />
+           </children>
+       </StackPane>      
+   </children>
+   <cursor>
+      <Cursor fx:constant="HAND" />
+   </cursor>
+</StackPane>

@@ -45,6 +45,7 @@ public class PantallaMiBibliotecaController implements Initializable {
     @FXML
     private StackPane pnlAlbum;
     private StackPane pnlPrincipal;
+    
 
     /**
      * Initializes the controller class.

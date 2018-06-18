@@ -8,6 +8,7 @@ package controladores;
 import clientes.ClienteAlbum;
 import clientes.ClienteArtista;
 import clientes.ClienteCancion;
+import clientes.ClienteGenero;
 import com.jfoenix.controls.JFXTabPane;
 import java.io.IOException;
 import java.net.URL;
@@ -76,6 +77,13 @@ public class PantallaExplorarMusicaController implements Initializable {
                 crearPantallaCanciones();
             }
         });
+
+        tbGenero.setOnSelectionChanged(new EventHandler<Event>() {
+            @Override
+            public void handle(Event t) {
+               crearPantallaGenero();
+            }
+        });
     }
 
     void setPnlPrincipal(StackPane pnlPrincipal) {
@@ -127,6 +135,29 @@ public class PantallaExplorarMusicaController implements Initializable {
         }
     }
 
+    private void crearPantallaGenero(){
+        try {
+            FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaGenero.fxml"));
+            Parent root;
+            try {
+                root = (Parent) loader.load();
+                PantallaGeneroController controlador = loader.getController();                
+                controlador.setPnlPincipal(pnlGenero);
+                controlador.setGeneros(new ClienteGenero().findAll());
+                pnlGenero.getChildren().clear();
+                pnlGenero.getChildren().add(root);
+            } catch (IOException ex) {
+                Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (Exception e) {
+            Alert alertUsuarioInvalido = new Alert(Alert.AlertType.ERROR);
+            alertUsuarioInvalido.setTitle("Error");
+            alertUsuarioInvalido.setHeaderText(null);
+            alertUsuarioInvalido.setContentText("No hay conexión con el servidor");
+            alertUsuarioInvalido.showAndWait();
+        }
+    }
+    
     private void crearPantallaAlbum() {
         try {
             FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaAlbum.fxml"));

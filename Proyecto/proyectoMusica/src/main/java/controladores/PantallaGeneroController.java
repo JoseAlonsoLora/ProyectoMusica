@@ -5,38 +5,31 @@
  */
 package controladores;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import modelo.Album;
+import modelo.Genero;
 
 /**
  * FXML Controller class
  *
  * @author alonso
  */
-public class PantallaAlbumController implements Initializable {
+public class PantallaGeneroController implements Initializable {
 
     @FXML
-    private JFXTextField txtNombreCancion;
-    @FXML
-    private JFXButton btnBuscarCancion;
-    @FXML
-    private GridPane gridAlbumes;
-    private List<Album> albumes;
+    private GridPane gridGeneros;
     private StackPane pnlPincipal;
+    private List<Genero> generos;
 
     /**
      * Initializes the controller class.
@@ -46,46 +39,43 @@ public class PantallaAlbumController implements Initializable {
         // TODO
     }
 
-    public void setAlbumes(List<Album> albumes) {
-        this.albumes = albumes;
-        mostrarAlbumes();
-    }
-
     public void setPnlPincipal(StackPane pnlPincipal) {
         this.pnlPincipal = pnlPincipal;
     }
-
-    @FXML
-    private void buscarAlbum(ActionEvent event) {
-    }
-
-    public void mostrarAlbumes() {
-        gridAlbumes.setVgap(20);
-        gridAlbumes.setHgap(20);
-        int filas = albumes.size() / 3;
+    
+    public void mostrarGeneros(){
+        gridGeneros.setVgap(20);
+        gridGeneros.setHgap(20);
+        int filas = generos.size() / 3;
         int auxiliar = 0;
-        if (albumes.size() % 3 != 0) {
-            filas = ((albumes.size()) / 3) + 1;
+        if (generos.size() % 3 != 0) {
+            filas = ((generos.size()) / 3) + 1;
         }
 
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < 3; j++) {
-                if (auxiliar < albumes.size()) {
-                    FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/TarjetaAlbum.fxml"));
+                if (auxiliar < generos.size()) {
+                    FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/TarjetaGenero.fxml"));
                     Parent root = null;
                     try {
                         root = (Parent) loader.load();
-                        TarjetaAlbumController controlador = loader.getController();
-                        controlador.setPnlPrincipal(pnlPincipal);
-                        controlador.setAlbum(albumes.get(auxiliar));
+                        TarjetaGeneroController controlador = loader.getController();
+                        controlador.setPnlPincipal(pnlPincipal);
+                        controlador.setGenero(generos.get(auxiliar));
                     } catch (IOException ex) {
                         Logger.getLogger(PantallaCancionesController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    gridAlbumes.add(root, j, i);
+                    gridGeneros.add(root, j, i);
                     auxiliar++;
                 }
             }
         }
-
+        
+        
     }
+
+    public void setGeneros(List<Genero> generos) {
+        this.generos = generos;
+        mostrarGeneros();
+    }        
 }

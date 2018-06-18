@@ -103,4 +103,13 @@ public class ClienteAlbum {
         
     }
     
+    public List<Album> obtenerAlbumesGenero(int idGenero){
+        String ip = recurso.getProperty("ipAddress");
+        String puerto = recurso.getProperty("portDjango");
+        Client cliente = ClientBuilder.newClient();
+        WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/obtenerAlbumPorGenero/?id="+idGenero);
+        return webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(new GenericType<List<Album>>(){});
+        
+    }
+    
 }

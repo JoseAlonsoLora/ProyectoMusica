@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Properties;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import modelo.Biblioteca;
@@ -76,6 +77,22 @@ public class ClienteBiblioteca {
 
     public void remove(String id) throws ClientErrorException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete();
+    }
+    
+    public void cambiarEstadoPublica(int idBiblioteca){
+        String ip = recurso.getProperty("ipAddress");
+        String puerto = recurso.getProperty("portDjango");
+        Client cliente = ClientBuilder.newClient();
+        WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/bibliotecaPublica/?id="+idBiblioteca);
+        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get();
+    }
+    
+    public void cambiarEstadoPrivada(int idBiblioteca){
+        String ip = recurso.getProperty("ipAddress");
+        String puerto = recurso.getProperty("portDjango");
+        Client cliente = ClientBuilder.newClient();
+        WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/bibliotecaPrivada/?id="+idBiblioteca);
+        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get();
     }
 
     public void close() {

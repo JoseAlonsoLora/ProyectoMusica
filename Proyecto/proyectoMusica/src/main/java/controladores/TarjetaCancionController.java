@@ -91,7 +91,7 @@ public class TarjetaCancionController implements Initializable {
         if (isWindows()) {
             rutaFinal = rutaCancion.replace(" ", "*");
         } else {
-            rutaFinal = rutaCancion.replace("\\s", "*");
+            rutaFinal = rutaCancion.replaceAll("\\s", "*");
         }
         PantallaPrincipalController.buscarCancionesGenero(cancion.getAlbum_idalbum());
         reproducirCancion(rutaFinal);
