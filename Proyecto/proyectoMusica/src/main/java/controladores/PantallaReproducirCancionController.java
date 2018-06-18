@@ -38,7 +38,13 @@ public class PantallaReproducirCancionController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         panelCompartido = new Pane();
         pnlReproducir.getChildren().add(panelCompartido);
-    }    
+        lblNombreArtista.setText("");
+        lblNombreCancion.setText("");
+    }
+    public void mostrarInformacion(String nombreArtista, String nombreCancion){
+        lblNombreArtista.setText(nombreArtista);
+        lblNombreCancion.setText(nombreCancion);
+    }
 
     
 }

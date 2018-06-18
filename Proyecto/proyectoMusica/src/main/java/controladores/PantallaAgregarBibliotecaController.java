@@ -91,22 +91,30 @@ public class PantallaAgregarBibliotecaController implements Initializable {
     }
 
     public void cargarDatos() {
-        artistas = clienteArtista.findAll();
-        generos = clienteGenero.findAll();
-        for (Artista artista : artistas) {
-            nombresArtistas.add(artista.getNombre());
+        try {
+            artistas = clienteArtista.findAll();
+            generos = clienteGenero.findAll();
+            for (Artista artista : artistas) {
+                nombresArtistas.add(artista.getNombre());
+            }
+            for (Genero genero : generos) {
+                nombresGeneros.add(genero.getNombre());
+            }
+            ObservableList<String> itemsArtistas = FXCollections.observableArrayList();
+            itemsArtistas.addAll(nombresArtistas);
+            cmbArtistas.setItems(itemsArtistas);
+            ObservableList<String> itemsGeneros = FXCollections.observableArrayList();
+            itemsGeneros.addAll(nombresGeneros);
+            cmbGeneros.setItems(itemsGeneros);
+            clienteGenero.close();
+            clienteArtista.close();
+        } catch (Exception e) {
+            Alert alertUsuarioInvalido = new Alert(Alert.AlertType.ERROR);
+            alertUsuarioInvalido.setTitle("Error");
+            alertUsuarioInvalido.setHeaderText(null);
+            alertUsuarioInvalido.setContentText("No hay conexión con el servidor");
+            alertUsuarioInvalido.showAndWait();
         }
-        for (Genero genero : generos) {
-            nombresGeneros.add(genero.getNombre());
-        }
-        ObservableList<String> itemsArtistas = FXCollections.observableArrayList();
-        itemsArtistas.addAll(nombresArtistas);
-        cmbArtistas.setItems(itemsArtistas);
-        ObservableList<String> itemsGeneros = FXCollections.observableArrayList();
-        itemsGeneros.addAll(nombresGeneros);
-        cmbGeneros.setItems(itemsGeneros);
-        clienteGenero.close();
-        clienteArtista.close();
     }
 
     @FXML
@@ -180,32 +188,40 @@ public class PantallaAgregarBibliotecaController implements Initializable {
 
     @FXML
     private void agregarArtista(ActionEvent event) {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Nuevo artista");
-        dialog.setHeaderText("Nuevo artista");
-        dialog.setContentText("Nombre del artista:");
+        try {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Nuevo artista");
+            dialog.setHeaderText("Nuevo artista");
+            dialog.setContentText("Nombre del artista:");
 
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()) {
-            Artista artista = new Artista();
-            artista.setNombre(result.get());
-            clienteArtista = new ClienteArtista();
-            clienteArtista.create(artista);
-            clienteArtista.close();
-            clienteArtista = new ClienteArtista();
-            nombresArtistas = new ArrayList();
-            artistas = clienteArtista.findAll();
-            for (Artista artistaAux : artistas) {
-                nombresArtistas.add(artistaAux.getNombre());
+            Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()) {
+                Artista artista = new Artista();
+                artista.setNombre(result.get());
+                clienteArtista = new ClienteArtista();
+                clienteArtista.create(artista);
+                clienteArtista.close();
+                clienteArtista = new ClienteArtista();
+                nombresArtistas = new ArrayList();
+                artistas = clienteArtista.findAll();
+                for (Artista artistaAux : artistas) {
+                    nombresArtistas.add(artistaAux.getNombre());
+                }
+                ObservableList<String> itemsArtistas = FXCollections.observableArrayList();
+                itemsArtistas.addAll(nombresArtistas);
+                cmbArtistas.setItems(itemsArtistas);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Información");
+                alert.setHeaderText(null);
+                alert.setContentText("Artista creado exitosamente");
+                alert.showAndWait();
             }
-            ObservableList<String> itemsArtistas = FXCollections.observableArrayList();
-            itemsArtistas.addAll(nombresArtistas);
-            cmbArtistas.setItems(itemsArtistas);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Información");
-            alert.setHeaderText(null);
-            alert.setContentText("Artista creado exitosamente");
-            alert.showAndWait();
+        } catch (Exception e) {
+            Alert alertUsuarioInvalido = new Alert(Alert.AlertType.ERROR);
+            alertUsuarioInvalido.setTitle("Error");
+            alertUsuarioInvalido.setHeaderText(null);
+            alertUsuarioInvalido.setContentText("No hay conexión con el servidor");
+            alertUsuarioInvalido.showAndWait();
         }
     }
 
@@ -215,108 +231,109 @@ public class PantallaAgregarBibliotecaController implements Initializable {
 
     @FXML
     private void guardarAlbum(ActionEvent event) throws IOException {
-        if (!verificarCamposVacios()) {
-            if (!verificarArchivoSubido()) {
-                if (!verificarLongitudCampos()) {
-                    ClienteBiblioteca clienteBiblioteca = new ClienteBiblioteca();
-                    List<Biblioteca> bibliotecas = clienteBiblioteca.findAll();
-                    for (Biblioteca biblioteca : bibliotecas) {
-                        if (biblioteca.getUsuario_nombreusuario().equals(PantallaPrincipalController.nombreUsuario)) {
-                            bibliotecaUsuario = biblioteca;
+        try {
+            if (!verificarCamposVacios()) {
+                if (!verificarArchivoSubido()) {
+                    if (!verificarLongitudCampos()) {
+                        ClienteBiblioteca clienteBiblioteca = new ClienteBiblioteca();
+                        List<Biblioteca> bibliotecas = clienteBiblioteca.findAll();
+                        for (Biblioteca biblioteca : bibliotecas) {
+                            if (biblioteca.getUsuario_nombreusuario().equals(PantallaPrincipalController.nombreUsuario)) {
+                                bibliotecaUsuario = biblioteca;
+                            }
                         }
-                    }
 
-                    JSONObject albumJSON = new JSONObject();
-                    albumJSON.put("nombre", txtAlbum.getText());
-                    albumJSON.put("anoLanzamiento", txtAnio.getText());
-                    albumJSON.put("compania", txtCompania.getText());
-                    albumJSON.put("idArtista", artistas.get(cmbArtistas.getSelectionModel()
-                            .getSelectedIndex()).getIdartista());
-                    System.out.println("id artista: "+ artistas.get(cmbArtistas.getSelectionModel()
-                            .getSelectedIndex()).getIdartista());
-                    albumJSON.put("idGenero", generos.get(cmbGeneros.getSelectionModel()
-                            .getSelectedIndex()).getIdgenero());
-                    albumJSON.put("idBiblioteca", bibliotecaUsuario.getIdbiblioteca());
-                    JSONArray listaCanciones = new JSONArray();
-                    for (String nombreCancion : nombresCanciones) {
-                        JSONObject cancion = new JSONObject();
-                        cancion.put("nombre", nombreCancion.replace(".mp3", ""));
-                        cancion.put("calificacion", 10);
-                        cancion.put("nombrearchivo", PantallaPrincipalController.nombreUsuario+"/" + txtAlbum.getText() + "/" + nombreCancion);
-                        listaCanciones.put(cancion);
-                    }
-                    albumJSON.put("listaCanciones", listaCanciones);
-                    String ip = recurso.getProperty("ipAddress");
-                    String puerto = recurso.getProperty("portDjango");
-                    File archivoCanciones = new File(archivoSeleccionado.getAbsolutePath());
-                    if (archivoCanciones.exists()) {
-                        Client cliente = ClientBuilder.newClient();
+                        JSONObject albumJSON = new JSONObject();
+                        albumJSON.put("nombre", txtAlbum.getText());
+                        albumJSON.put("anoLanzamiento", txtAnio.getText());
+                        albumJSON.put("compania", txtCompania.getText());
+                        albumJSON.put("idArtista", artistas.get(cmbArtistas.getSelectionModel()
+                                .getSelectedIndex()).getIdartista());
+                        System.out.println("id artista: " + artistas.get(cmbArtistas.getSelectionModel()
+                                .getSelectedIndex()).getIdartista());
+                        albumJSON.put("idGenero", generos.get(cmbGeneros.getSelectionModel()
+                                .getSelectedIndex()).getIdgenero());
+                        albumJSON.put("idBiblioteca", bibliotecaUsuario.getIdbiblioteca());
+                        JSONArray listaCanciones = new JSONArray();
+                        for (String nombreCancion : nombresCanciones) {
+                            JSONObject cancion = new JSONObject();
+                            cancion.put("nombre", nombreCancion.replace(".mp3", ""));
+                            cancion.put("calificacion", 10);
+                            cancion.put("nombrearchivo", PantallaPrincipalController.nombreUsuario + "/" + txtAlbum.getText() + "/" + nombreCancion);
+                            listaCanciones.put(cancion);
+                        }
+                        albumJSON.put("listaCanciones", listaCanciones);
+                        String ip = recurso.getProperty("ipAddress");
+                        String puerto = recurso.getProperty("portDjango");
+                        File archivoCanciones = new File(archivoSeleccionado.getAbsolutePath());
+                        if (archivoCanciones.exists()) {
+                            Client cliente = ClientBuilder.newClient();
 
-                        WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/crearAlbum/");
-                        webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(albumJSON.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
-                    }
+                            WebTarget webTarget = cliente.target("http://" + ip + ":" + puerto + "/crearAlbum/");
+                            webTarget.request(MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(albumJSON.toMap(), javax.ws.rs.core.MediaType.APPLICATION_JSON));
+                        }
 
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(byteArrayOutputStream);
-                    ZipOutputStream zipOutputStream = new ZipOutputStream(bufferedOutputStream);
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(byteArrayOutputStream);
+                        ZipOutputStream zipOutputStream = new ZipOutputStream(bufferedOutputStream);
 
-                    zipOutputStream.putNextEntry(new ZipEntry(archivoCanciones.getName()));
-                    FileInputStream fileInputStream = new FileInputStream(archivoCanciones);
-                    byte[] buffer = new byte[1024];
-                    int byteRead;
-                    while ((byteRead = fileInputStream.read(buffer)) > 0) {
-                        zipOutputStream.write(buffer, 0, byteRead);
-                    }
-                    fileInputStream.close();
-                    if (zipOutputStream != null) {
-                        zipOutputStream.finish();
-                        zipOutputStream.flush();
-                    }
-                    byte[] zip = byteArrayOutputStream.toByteArray();
-                    puerto = recurso.getProperty("portFiles");
-                    Stage stage = new Stage();
-                    FXMLLoader loader = new FXMLLoader(PantallaAgregarBibliotecaController.class.getResource("/fxml/BarraProgreso.fxml"));
-                    Parent root = loader.load();
-                    BarraProgresoController barra = loader.getController();
-                    barra.setTipo("Cargando canciones");
-                    barra.setStageActual(stage);
-                    barra.setZip(zip);
-                    barra.setPuerto(Integer.parseInt(puerto));
-                    barra.setIp(ip);
-                    barra.setRuta(PantallaPrincipalController.nombreUsuario+"/" + txtAlbum.getText());
-                    Scene scene = new Scene(root);
-                    stage.setTitle("Trabajando");
-                    stage.setScene(scene);
-                    stage.show();
-                    barra.setTipoCarga(true);
-//                    Socket socket = new Socket(ip, Integer.parseInt(puerto));
-//                    ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
-//                    ObjectInputStream entrada = new ObjectInputStream(socket.getInputStream());
-//                    salida.writeObject(true);
-//                    salida.writeObject("RayPerez/" + txtAlbum.getText());
-//                    salida.writeObject(zip);
-//                    socket.close();
+                        zipOutputStream.putNextEntry(new ZipEntry(archivoCanciones.getName()));
+                        FileInputStream fileInputStream = new FileInputStream(archivoCanciones);
+                        byte[] buffer = new byte[1024];
+                        int byteRead;
+                        while ((byteRead = fileInputStream.read(buffer)) > 0) {
+                            zipOutputStream.write(buffer, 0, byteRead);
+                        }
+                        fileInputStream.close();
+                        if (zipOutputStream != null) {
+                            zipOutputStream.finish();
+                            zipOutputStream.flush();
+                        }
+                        byte[] zip = byteArrayOutputStream.toByteArray();
+                        puerto = recurso.getProperty("portFiles");
+                        Stage stage = new Stage();
+                        FXMLLoader loader = new FXMLLoader(PantallaAgregarBibliotecaController.class.getResource("/fxml/BarraProgreso.fxml"));
+                        Parent root = loader.load();
+                        BarraProgresoController barra = loader.getController();
+                        barra.setTipo("Cargando canciones");
+                        barra.setStageActual(stage);
+                        barra.setZip(zip);
+                        barra.setPuerto(Integer.parseInt(puerto));
+                        barra.setIp(ip);
+                        barra.setRuta(PantallaPrincipalController.nombreUsuario + "/" + txtAlbum.getText());
+                        Scene scene = new Scene(root);
+                        stage.setTitle("Trabajando");
+                        stage.setScene(scene);
+                        stage.show();
+                        barra.setTipoCarga(true);
 
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Información");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Algunos campos sobrepasan el límite de caracteres");
+                        alert.showAndWait();
+                    }
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Información");
                     alert.setHeaderText(null);
-                    alert.setContentText("Algunos campos sobrepasan el límite de caracteres");
+                    alert.setContentText("Debe seleccionar un archivo valido de canciones");
                     alert.showAndWait();
                 }
             } else {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Información");
                 alert.setHeaderText(null);
-                alert.setContentText("Debe seleccionar un archivo valido de canciones");
+                alert.setContentText("Algunos campos estan vacios");
                 alert.showAndWait();
             }
-        } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Información");
-            alert.setHeaderText(null);
-            alert.setContentText("Algunos campos estan vacios");
-            alert.showAndWait();
+        } catch (Exception e) {
+            Alert alertUsuarioInvalido = new Alert(Alert.AlertType.ERROR);
+            alertUsuarioInvalido.setTitle("Error");
+            alertUsuarioInvalido.setHeaderText(null);
+            alertUsuarioInvalido.setContentText("No hay conexión con el servidor");
+            alertUsuarioInvalido.showAndWait();
         }
     }
 

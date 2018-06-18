@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -52,21 +53,29 @@ public class TarjetaAlbumController implements Initializable {
 
     public void setPnlPrincipal(StackPane pnlPrincipal) {
         this.pnlPrincipal = pnlPrincipal;
-    }    
+    }
 
     @FXML
     private void abrirCanciones(MouseEvent event) {
-         FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaCanciones.fxml"));
-        Parent root;
         try {
-            root = (Parent) loader.load();
-            PantallaCancionesController controlador = loader.getController();
-            controlador.setCanciones(new ClienteCancion().obtenerCancionesAlbum(album.getIdalbum()));
-            pnlPrincipal.getChildren().clear();
-            pnlPrincipal.getChildren().add(root);
-        } catch (IOException ex) {
-            Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
+            FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaCanciones.fxml"));
+            Parent root;
+            try {
+                root = (Parent) loader.load();
+                PantallaCancionesController controlador = loader.getController();
+                controlador.setCanciones(new ClienteCancion().obtenerCancionesAlbum(album.getIdalbum()));
+                pnlPrincipal.getChildren().clear();
+                pnlPrincipal.getChildren().add(root);
+            } catch (IOException ex) {
+                Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (Exception e) {
+            Alert alertUsuarioInvalido = new Alert(Alert.AlertType.ERROR);
+            alertUsuarioInvalido.setTitle("Error");
+            alertUsuarioInvalido.setHeaderText(null);
+            alertUsuarioInvalido.setContentText("No hay conexión con el servidor");
+            alertUsuarioInvalido.showAndWait();
         }
     }
-    
+
 }

@@ -20,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.StackPane;
 
@@ -69,6 +70,12 @@ public class PantallaExplorarMusicaController implements Initializable {
                 crearPantallaAlbum();
             }
         });
+        tbCanciones.setOnSelectionChanged(new EventHandler<Event>() {
+            @Override
+            public void handle(Event t) {
+                crearPantallaCanciones();
+            }
+        });
     }
 
     void setPnlPrincipal(StackPane pnlPrincipal) {
@@ -76,46 +83,70 @@ public class PantallaExplorarMusicaController implements Initializable {
     }
 
     private void crearPantallaCanciones() {
-        FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaCanciones.fxml"));
-        Parent root;
         try {
-            root = (Parent) loader.load();
-            PantallaCancionesController controlador = loader.getController();
-            controlador.setCanciones(new ClienteCancion().findAll());
-            pnlCanciones.getChildren().clear();
-            pnlCanciones.getChildren().add(root);
-        } catch (IOException ex) {
-            Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
+            FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaCanciones.fxml"));
+            Parent root;
+            try {
+                root = (Parent) loader.load();
+                PantallaCancionesController controlador = loader.getController();
+                controlador.setCanciones(new ClienteCancion().findAll());
+                pnlCanciones.getChildren().clear();
+                pnlCanciones.getChildren().add(root);
+            } catch (IOException ex) {
+                Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (Exception e) {
+            Alert alertUsuarioInvalido = new Alert(Alert.AlertType.ERROR);
+            alertUsuarioInvalido.setTitle("Error");
+            alertUsuarioInvalido.setHeaderText(null);
+            alertUsuarioInvalido.setContentText("No hay conexión con el servidor");
+            alertUsuarioInvalido.showAndWait();
         }
     }
 
     private void crearPantallaArtistas() {
-        FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaArtistas.fxml"));
-        Parent root;
         try {
-            root = (Parent) loader.load();
-            PantallaArtistasController controlador = loader.getController();
-            controlador.setPnlPrincipal(pnlArtistas);
-            controlador.setArtistas(new ClienteArtista().findAll());
-            pnlArtistas.getChildren().clear();
-            pnlArtistas.getChildren().add(root);
-        } catch (IOException ex) {
-            Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
+            FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaArtistas.fxml"));
+            Parent root;
+            try {
+                root = (Parent) loader.load();
+                PantallaArtistasController controlador = loader.getController();
+                controlador.setPnlPrincipal(pnlArtistas);
+                controlador.setArtistas(new ClienteArtista().findAll());
+                pnlArtistas.getChildren().clear();
+                pnlArtistas.getChildren().add(root);
+            } catch (IOException ex) {
+                Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (Exception e) {
+            Alert alertUsuarioInvalido = new Alert(Alert.AlertType.ERROR);
+            alertUsuarioInvalido.setTitle("Error");
+            alertUsuarioInvalido.setHeaderText(null);
+            alertUsuarioInvalido.setContentText("No hay conexión con el servidor");
+            alertUsuarioInvalido.showAndWait();
         }
     }
 
     private void crearPantallaAlbum() {
-        FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaAlbum.fxml"));
-        Parent root;
         try {
-            root = (Parent) loader.load();
-            PantallaAlbumController controlador = loader.getController();
-            controlador.setPnlPincipal(pnlAlbum);
-            controlador.setAlbumes(new ClienteAlbum().findAll());
-            pnlAlbum.getChildren().clear();
-            pnlAlbum.getChildren().add(root);
-        } catch (IOException ex) {
-            Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
+            FXMLLoader loader = new FXMLLoader(PantallaPrincipalController.class.getResource("/fxml/PantallaAlbum.fxml"));
+            Parent root;
+            try {
+                root = (Parent) loader.load();
+                PantallaAlbumController controlador = loader.getController();
+                controlador.setPnlPincipal(pnlAlbum);
+                controlador.setAlbumes(new ClienteAlbum().findAll());
+                pnlAlbum.getChildren().clear();
+                pnlAlbum.getChildren().add(root);
+            } catch (IOException ex) {
+                Logger.getLogger(PantallaMiBibliotecaController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (Exception e) {
+            Alert alertUsuarioInvalido = new Alert(Alert.AlertType.ERROR);
+            alertUsuarioInvalido.setTitle("Error");
+            alertUsuarioInvalido.setHeaderText(null);
+            alertUsuarioInvalido.setContentText("No hay conexión con el servidor");
+            alertUsuarioInvalido.showAndWait();
         }
     }
 

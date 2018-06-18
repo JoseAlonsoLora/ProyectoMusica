@@ -93,7 +93,10 @@ public class TarjetaCancionController implements Initializable {
         } else {
             rutaFinal = rutaCancion.replace("\\s", "*");
         }
+        PantallaPrincipalController.buscarCancionesGenero(cancion.getAlbum_idalbum());
         reproducirCancion(rutaFinal);
+        PantallaPrincipalController.controlador.mostrarInformacion(cancion.getNombreArtista(),
+                cancion.getNombre());
 
     }
 
