@@ -101,7 +101,7 @@ public class TarjetaCancionController implements Initializable {
     }
 
     public static void reproducirCancion(String rutaFinal) {
-        String ip = recurso.getProperty("ipAddress");
+        String ip = recurso.getProperty("ipMusica");
         String puerto = recurso.getProperty("portStreaming");
         String ruta = "http://" + ip + ":" + puerto + "/listen/" + rutaFinal;
         Media media = new Media(ruta);

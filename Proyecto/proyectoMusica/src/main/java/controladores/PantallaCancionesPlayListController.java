@@ -103,7 +103,7 @@ public class PantallaCancionesPlayListController implements Initializable {
                             for (Cancion cancion : canciones) {
                                 rutasCanciones.add(cancion.getNombrearchivo());
                             }
-                            Socket socket = new Socket(recurso.getProperty("ipAddress"), Integer.parseInt(recurso.getProperty("portFiles")));
+                            Socket socket = new Socket(recurso.getProperty("ipMusica"), Integer.parseInt(recurso.getProperty("portFiles")));
                             ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
                             ObjectInputStream entrada = new ObjectInputStream(socket.getInputStream());
                             salida.writeObject(false);

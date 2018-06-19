@@ -296,6 +296,7 @@ public class PantallaAgregarBibliotecaController implements Initializable {
                             zipOutputStream.flush();
                         }
                         byte[] zip = byteArrayOutputStream.toByteArray();
+                        String ipMusica = recurso.getProperty("ipMusica");
                         puerto = recurso.getProperty("portFiles");
                         Stage stage = new Stage();
                         FXMLLoader loader = new FXMLLoader(PantallaAgregarBibliotecaController.class.getResource("/fxml/BarraProgreso.fxml"));
@@ -306,7 +307,7 @@ public class PantallaAgregarBibliotecaController implements Initializable {
                         barra.setPnlPrincipal(panelPrincipal);
                         barra.setZip(zip);
                         barra.setPuerto(Integer.parseInt(puerto));
-                        barra.setIp(ip);
+                        barra.setIp(ipMusica);
                         barra.setRuta(PantallaPrincipalController.nombreUsuario + "/" + txtAlbum.getText());
                         Scene scene = new Scene(root);
                         stage.setTitle("Trabajando");
